@@ -14,25 +14,17 @@
 
 export default function convertBytesToHuman(bytes) {
   const prefix = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'ExB']
-  let measure = '';
-  if (typeof bytes !== 'number' || bytes < 0) {
+  if (typeof bytes !== 'number' || bytes < 0 || isNaN(bytes)) {
     return false;
   }
 
-  if (bytes > 0) {
+  if (bytes === 0) { return '0 B' }
+  const sizeBytes = Math.floor(Math.log(bytes) / Math.log(1024));
+  const exactSize = (bytes / Math.pow(1024, sizeBytes));
+  const measure = sizeBytes >= prefix.length ? '...' : prefix[sizeBytes];
+  const value =Number.isInteger(exactSize) ? exactSize : exactSize.toFixed(2);
 
-    const sizeBytes = Math.floor(Math.log(bytes) / Math.log(1024));
-    const exactSize = (bytes / Math.pow(1024, sizeBytes));
-    if (sizeBytes >= prefix.length) {
-      measure = '...'
-    }
-    else {
-      measure = prefix[sizeBytes]
-    }
-    return `${Number.isInteger(exactSize)? exactSize : exactSize.toFixed(2)} ${measure}`;
-  }
-  else {
-    return '0 B';
-  }
+  return `${value} ${measure}`;
+
 
 }

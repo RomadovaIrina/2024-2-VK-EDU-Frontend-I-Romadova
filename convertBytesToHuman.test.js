@@ -11,8 +11,12 @@ import convertBytesToHuman from './convertBytesToHuman';
 
 test('Возвращает false для неправильного типа данных', () => {
   expect(convertBytesToHuman('string')).toBe(false);
-  expect(convertBytesToHuman(-1)).toBe(false);
-  expect(convertBytesToHuman("hfh")).toBe(false);
+  expect(convertBytesToHuman(NaN)).toBe(false);
+  expect(convertBytesToHuman(true)).toBe(false);
+  expect(convertBytesToHuman(123465n)).toBe(false);
+  expect(convertBytesToHuman(Symbol('test'))).toBe(false);
+  expect(convertBytesToHuman(Object)).toBe(false);
+  expect(convertBytesToHuman({name:"test"})).toBe(false);
 });
 
 test('Возвращает корректное значение для чисел', () => {
