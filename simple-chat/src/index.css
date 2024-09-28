@@ -8,6 +8,15 @@ html {
     box-sizing: inherit;
 }
 
+:root {
+    --form-bg-color: rgb(201, 177, 248);
+    --form-border-color: rgb(192, 171, 231);
+    --form-box-shadow: 0px -2px 5px var(--form-bg-color);
+    --form-border-radius: 20px;
+    --transition-duration: 0.3s;
+    --sendButton-color: rgb(142, 36, 170);
+}
+
 body {
     margin: 0;
     background-color: #eee7e7;
@@ -16,4 +25,97 @@ body {
     font-family: Helvetica, Arial, sans-serif;
     font-weight: 400;
     line-height: 20px;
+}
+
+main {
+    margin-top: 10px;
+}
+
+
+/* Стиль для области чата */
+.ui {
+    list-style-type: none;
+    padding: 0 10px;
+    margin: 10px 0;
+    max-height: calc(100vh - 80px);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+/* Сообщение */
+.message {
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+    max-width: 70%;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    word-wrap: break-word;
+}
+
+.message-header {
+    font-weight: bold;
+    color: var(--sendButton-color); 
+    margin-bottom: 5px;
+}
+
+.message-body {
+    font-size: 17px;
+    color: #333;
+}
+
+.message-footer {
+    display: flex;
+    align-items: right; 
+    font-size: 12px;
+    margin-top: 10px; 
+    color: #888; 
+    justify-content: space-between;
+}
+
+
+.form {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    padding: 15px;
+    width: 100%;
+    align-items: center;
+    background-color: var(--form-bg-color);
+    border-top: 2px solid var(--form-border-color);
+    box-shadow: var(--form-box-shadow);
+    z-index: 100;
+}
+
+
+.form-input {
+    flex: 1;
+    padding: 15px;
+    border-radius: 20px;
+    background-color: #ebe9ea;
+    font-size: 20px;
+    border: none;
+    outline: none;
+}
+
+.sendButton {
+    color: var(--sendButton-color);
+    border: none;
+    padding: 10px;
+    margin-left: 5px;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+
+
+
+.sendButton:hover {
+    background-color: var(--form-bg-color);
+    cursor: pointer;
+    
+}
+
+.material-icons {
+    font-size: 30px;
 }

@@ -2,10 +2,9 @@
   "name": "vkedu",
   "version": "1.0.0",
   "description": "",
-  "main": "./index.js",
+  "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --mode=development --hot",
-    "build": "webpack --mode=development"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "me",
   "license": "ISC",
@@ -13,9 +12,10 @@
     "@babel/core": "^7.25.2",
     "@babel/preset-env": "^7.25.4",
     "babel-jest": "^29.7.0",
-    "jest": "^29.7.0",
-    "webpack": "^5.95.0",
-    "webpack-cli": "^5.1.4"
+    "jest": "^29.7.0"
+  },
+  "scripts": {
+    "test": "jest"
   },
   "jest": {
     "transform": {
