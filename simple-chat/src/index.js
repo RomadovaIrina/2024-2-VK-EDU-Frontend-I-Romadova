@@ -12,9 +12,9 @@ const messagesStorage = JSON.parse(localStorage.getItem('chatMessages')) || [];
 const loadMessages = () => {
     messageBox.innerHTML = '';
     const part = document.createDocumentFragment();
-    messagesStorage.forEach((messageData) => { 
+    messagesStorage.forEach((messageData) => {
         const elemnt_part = makeElement(messageData);
-        part.appendChild(elemnt_part); 
+        part.appendChild(elemnt_part);
     });
 
     messageBox.appendChild(part)
@@ -24,19 +24,21 @@ const handleSubmit = (event) => {
     event.preventDefault();
     const messageText = input.value.trim();
     const messageTime = new Date().toLocaleString();
-    if (messageText) {
-        const messageData = {
-            sender: userName,
-            text: messageText,
-            time: messageTime
-        };
-        messagesStorage.push(messageData);
-        localStorage.setItem('chatMessages', JSON.stringify(messagesStorage));
-        const elemnt_part = makeElement(messageData);
-        messageBox.appendChild(elemnt_part);
-        input.value = '';
+    if (!messageText) {
+        return;
     }
+    const messageData = {
+        sender: userName,
+        text: messageText,
+        time: messageTime
+    };
+    messagesStorage.push(messageData);
+    localStorage.setItem('chatMessages', JSON.stringify(messagesStorage));
+    const elemnt_part = makeElement(messageData);
+    messageBox.appendChild(elemnt_part);
+    input.value = '';
     input.focus();
+    messageBox.scrollTop = messageBox.scrollHeight;
 };
 
 const handleKeyPress = (event) => {
@@ -50,22 +52,18 @@ const makeElement = (messageData) => {
     const elemnt_part = document.createElement('li');
     elemnt_part.classList.add('message');
 
-
     const messageHeader = document.createElement('div');
     messageHeader.classList.add('message-header');
     messageHeader.textContent = messageData.sender;
 
-    // Создаем тело сообщения
     const messageBody = document.createElement('div');
     messageBody.classList.add('message-body');
     messageBody.textContent = messageData.text;
 
-    // Создаем подвал сообщения
     const messageFooter = document.createElement('div');
     messageFooter.classList.add('message-footer');
     messageFooter.textContent = `${messageData.time}`;
 
-    // Добавляем все части в элемент сообщения
     elemnt_part.appendChild(messageHeader);
     elemnt_part.appendChild(messageBody);
     elemnt_part.appendChild(messageFooter);
