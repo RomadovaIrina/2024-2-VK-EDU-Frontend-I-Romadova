@@ -17,8 +17,22 @@ html {
     --sendButton-color: rgb(142, 36, 170);
 }
 
-body {
+html, body {
+    height: 100%;
     margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+
+body {
     background-color: #eee7e7;
     color: #333;
     font-size: 15px;
@@ -27,18 +41,16 @@ body {
     line-height: 20px;
 }
 
-main {
-    margin-top: 10px;
+footer {
+    display: flex;
 }
-
 
 /* Стиль для области чата */
 .ui {
     list-style-type: none;
     padding: 0 10px;
-    margin: 10px 0;
-    max-height: calc(100vh - 80px);
-    overflow-y: auto;
+    max-height: calc(100vh - 95px);
+    overflow-y: scroll;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -53,18 +65,18 @@ main {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     word-wrap: break-word;
 }
-
+/* Имя */
 .message-header {
     font-weight: bold;
     color: var(--sendButton-color); 
     margin-bottom: 5px;
 }
-
+/* Текст */
 .message-body {
     font-size: 17px;
     color: #333;
 }
-
+/* Дата */
 .message-footer {
     display: flex;
     align-items: right; 
@@ -73,22 +85,18 @@ main {
     color: #888; 
     justify-content: space-between;
 }
-
-
+/* форма, коробка */
 .form {
     display: flex;
-    position: fixed;
-    bottom: 0;
     padding: 15px;
+    margin-top: 10px;
     width: 100%;
     align-items: center;
     background-color: var(--form-bg-color);
     border-top: 2px solid var(--form-border-color);
     box-shadow: var(--form-box-shadow);
-    z-index: 100;
 }
-
-
+/* поле ввода */
 .form-input {
     flex: 1;
     padding: 15px;
@@ -98,7 +106,7 @@ main {
     border: none;
     outline: none;
 }
-
+/* кнопки */
 .sendButton {
     color: var(--sendButton-color);
     border: none;
