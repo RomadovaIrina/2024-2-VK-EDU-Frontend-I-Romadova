@@ -3,12 +3,25 @@ import Head from  './Head/head.js';
 import ChatPlace from './ChatPlace/chatPlace.js';
 // import {FloatingButton} from './FloatButton/floatButton'
 
-const example_chats = [
-    { name: "first chat", time: "01:00" },
-    { name: "second chat", time: "10:00" }
+const exampleChats = [
+    {
+        avatar: '../tempAvatar/av.png',
+        name: "first chat",
+        lastMessage: "some text",
+        time: "01:00",
+        isRead: true
+    },
+    {
+        avatar: 'avatar2.png',
+        name: "second chat",
+        lastMessage: "some more text",
+        time: "10:00",
+        isRead: false
+    }
 ];
 
-localStorage.setItem('chats', JSON.stringify(example_chats));
+
+localStorage.setItem('chats', JSON.stringify(exampleChats));
 
 const chatList = document.querySelector('.ui');
 const addChat = document.querySelector('.add-chat');
@@ -22,8 +35,8 @@ document.querySelector('main').insertBefore(topBar, chatList);
 const loadChats = () => {
     chatList.innerHTML = '';
     const fragment = document.createDocumentFragment();
-    chatBox.forEach(({ name, time }) => {
-        const chat = ChatPlace({ name, time });
+    chatBox.forEach(({ avatar, name, lastMessage, time, isRead }) => {
+        const chat = ChatPlace({ avatar, name, lastMessage, time, isRead });
         fragment.appendChild(chat);
     });
     chatList.appendChild(fragment);
@@ -31,42 +44,21 @@ const loadChats = () => {
 
 };
 
-
-const makeChat = (chatData) => {
-    const chatEl = document.createElement('li');
-    chatEl.classList.add('chat-place');
-
-    const chatName = document.createElement('div');
-    chatName.classList.add('chat-name');
-    chatName.textContent = chatData.name;
-
-    // Время последнего сообщения (если будет в будущем)
-    const chatTime = document.createElement('div');
-    chatTime.classList.add('chat-time');
-    chatTime.textContent = chatData.time;
-
-    chatEl.appendChild(chatName);
-    chatEl.appendChild(chatTime);
-
-    return chatEl;
-};
-
 const handleAddChat = () => {
-    const newChatName = prompt("Введите название нового чата:"); // Имитация ввода нового чата
-    if (!newChatName) return; // Не добавляем пустой чат
+    const newChatName = prompt("Введите название нового чата:");
+    if (!newChatName) return;
 
-    const chatTime = new Date().toLocaleString(); // Время создания чата
+    const chatTime = new Date().toLocaleString();
     const newChat = { name: newChatName, time: chatTime };
 
-    chatsStorage.push(newChat); // Добавляем новый чат в массив
-    localStorage.setItem('chats', JSON.stringify(chatsStorage)); // Обновляем LocalStorage
+    chatsStorage.push(newChat);
+    localStorage.setItem('chats', JSON.stringify(chatsStorage));
 
-    const newChatElement = makeChat(newChat); // Создаем элемент нового чата
-    chatList.appendChild(newChatElement); // Добавляем новый чат в DOM
+    const newChatElement = makeChat(newChat);
+    chatList.appendChild(newChatElement); 
 };
 
-// Добавляем обработчик на кнопку добавления чата
 addChat.addEventListener('click', handleAddChat);
 
-// Загрузка чатов при открытии страницы
+
 loadChats();
