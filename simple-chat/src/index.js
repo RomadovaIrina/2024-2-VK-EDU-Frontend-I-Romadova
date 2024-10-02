@@ -1,4 +1,9 @@
 import './index.css';
+import Head from './Head/head';
+
+
+
+
 
 const form = document.querySelector('form');
 const input = document.querySelector('.form-input');
@@ -6,6 +11,15 @@ const messageBox = document.querySelector('.ui');
 const userName = 'Unknown'; // Заглушка для имени пользователя
 
 const messagesStorage = JSON.parse(localStorage.getItem('chatMessages')) || [];
+
+
+const goToChatList = () => {
+    window.location.href = 'chatList.html'; // Перенаправление на страницу со списком чатов
+};
+
+const topBar = Head(true, goToChatList);
+document.querySelector('main').insertBefore(topBar, messageBox);
+
 
 
 
