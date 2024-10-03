@@ -49,8 +49,7 @@ module.exports = {
                     {
                         loader: 'file-loader',
                         options: {
-                            name: '[name].[ext]', // Оставляем оригинальные имена файлов
-                            outputPath: 'images/', // Путь для изображений в сборке
+                            name: 'images/[name].[ext]',  // Путь для изображений в сборке
                         },
                     },
                 ],

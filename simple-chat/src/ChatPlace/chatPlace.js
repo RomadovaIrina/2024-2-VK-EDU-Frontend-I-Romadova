@@ -1,11 +1,12 @@
 import './chatPlace.css';
+import defaultAvatar from '../aaa/a.png';
 
 const ChatPlace = ({ avatar, name, lastMessage, time, isRead }) => {
     const chat = document.createElement('li');
     chat.classList.add('chat-place');
 
     const chatImage = document.createElement('img');
-    chatImage.src = avatar;
+    chatImage.src = avatar || defaultAvatar;
     chatImage.classList.add('chat-image');
 
     const chatComponents = document.createElement('div');
@@ -40,7 +41,6 @@ const ChatPlace = ({ avatar, name, lastMessage, time, isRead }) => {
     }
 
     chatComponents.appendChild(chatFooter);
-
 
     return chat;
 };

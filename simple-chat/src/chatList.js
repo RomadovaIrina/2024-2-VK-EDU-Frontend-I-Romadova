@@ -1,18 +1,18 @@
 import './chatList.css'
-import Head from  './Head/head.js';
+import Head from './Head/head.js';
 import ChatPlace from './ChatPlace/chatPlace.js';
 // import {FloatingButton} from './FloatButton/floatButton'
 
 const exampleChats = [
     {
-        avatar: '../tempAvatar/av.png',
+        avatar: '',
         name: "first chat",
         lastMessage: "some text",
         time: "01:00",
         isRead: true
     },
     {
-        avatar: 'avatar2.png',
+        avatar: '',
         name: "second chat",
         lastMessage: "some more text",
         time: "10:00",
@@ -49,13 +49,19 @@ const handleAddChat = () => {
     if (!newChatName) return;
 
     const chatTime = new Date().toLocaleString();
-    const newChat = { name: newChatName, time: chatTime };
+    const newChat = {
+        name: newChatName,
+        time: chatTime,
+        lastMessage: '',
+        isRead: false,
+        avatar: ''
+    };
 
-    chatsStorage.push(newChat);
+    chatBox.push(newChat);
     localStorage.setItem('chats', JSON.stringify(chatsStorage));
 
-    const newChatElement = makeChat(newChat);
-    chatList.appendChild(newChatElement); 
+    const newChatElement = ChatPlace(newChat);
+    chatList.appendChild(newChatElement);
 };
 
 addChat.addEventListener('click', handleAddChat);
