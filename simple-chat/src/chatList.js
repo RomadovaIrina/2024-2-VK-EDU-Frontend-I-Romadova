@@ -17,6 +17,92 @@ const exampleChats = [
         lastMessage: "some more text",
         time: "10:00",
         isRead: false
+    },
+    {
+        avatar: '',
+        name: "first cht",
+        lastMessage: "sometext",
+        time: "01:00",
+        isRead: true
+    },
+    {
+        avatar: '',
+        name: "secod chat",
+        lastMessage: "sme more text",
+        time: "10:00",
+        isRead: false
+    },
+    {
+        avatar: '',
+        name: "fi chat",
+        lastMessage: "some t",
+        time: "01:00",
+        isRead: true
+    },
+    {
+        avatar: '',
+        name: "second chat",
+        lastMessage: "some more text",
+        time: "10:00",
+        isRead: false
+    },
+    
+    {
+        avatar: '',
+        name: "first cht",
+        lastMessage: "sometext",
+        time: "01:00",
+        isRead: true
+    },
+    {
+        avatar: '',
+        name: "secod chat",
+        lastMessage: "sme more text",
+        time: "10:00",
+        isRead: false
+    },
+    {
+        avatar: '',
+        name: "fi chat",
+        lastMessage: "some t",
+        time: "01:00",
+        isRead: true
+    },
+    {
+        avatar: '',
+        name: "second chat",
+        lastMessage: "some more text",
+        time: "10:00",
+        isRead: false
+    },
+    
+    {
+        avatar: '',
+        name: "first cht",
+        lastMessage: "sometext",
+        time: "01:00",
+        isRead: true
+    },
+    {
+        avatar: '',
+        name: "secod chat",
+        lastMessage: "sme more text",
+        time: "10:00",
+        isRead: false
+    },
+    {
+        avatar: '',
+        name: "fi chat",
+        lastMessage: "some t",
+        time: "01:00",
+        isRead: true
+    },
+    {
+        avatar: '',
+        name: "second chat",
+        lastMessage: "some more text",
+        time: "10:00",
+        isRead: false
     }
 ];
 
@@ -25,6 +111,8 @@ localStorage.setItem('chats', JSON.stringify(exampleChats));
 
 const chatList = document.querySelector('.ui');
 const addChat = document.querySelector('.add-chat');
+const goBack = document.querySelector('.go-back');
+
 
 const chatBox = JSON.parse(localStorage.getItem('chats')) || [];
 
@@ -64,7 +152,12 @@ const handleAddChat = () => {
     chatList.appendChild(newChatElement);
 };
 
-addChat.addEventListener('click', handleAddChat);
 
+const handleGoback = () => {
+    window.history.back();
+}
+
+addChat.addEventListener('click', handleAddChat);
+goBack.addEventListener('click', handleGoback);
 
 loadChats();

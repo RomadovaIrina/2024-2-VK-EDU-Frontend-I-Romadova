@@ -10,6 +10,7 @@ const form = document.querySelector('form');
 const input = document.querySelector('.form-input');
 const messageBox = document.querySelector('.ui');
 
+
 const userName = 'Test user'; // Заглушка для имени пользователя
 const userPic = '';
 
