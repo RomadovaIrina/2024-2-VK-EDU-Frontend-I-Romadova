@@ -1,4 +1,4 @@
-const makeMessage = ({sender, text, time}) => {
+const makeMessage = ({id, sender, text, time}) => {
     const elemnt_part = document.createElement('li');
     elemnt_part.classList.add('message');
 

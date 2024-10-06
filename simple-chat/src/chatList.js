@@ -4,7 +4,7 @@ import ChatPlace from './components/ChatPlace/chatPlace.js';
 
 const EXAMPLE_CHATS = [
     {
-        // chat_id: 1,
+        chat_id: 1,
         avatar: '',
         name: "first chat",
         lastMessage: "some text",
@@ -12,7 +12,7 @@ const EXAMPLE_CHATS = [
         isRead: true
     },
     {
-        // chat_id: 2,
+        chat_id: 2,
         avatar: '',
         name: "second chat",
         lastMessage: "some more text",

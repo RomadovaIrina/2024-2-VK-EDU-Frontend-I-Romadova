@@ -53,7 +53,7 @@ const loadMessages = (messages) => {
 const makeNewMessage = (content) =>{
     const messageTime = new Date().toLocaleString();
     const messageData = {
-        // message_id: 1,
+        message_id: 1,
         sender: userName,
         text: content,
         time: messageTime
