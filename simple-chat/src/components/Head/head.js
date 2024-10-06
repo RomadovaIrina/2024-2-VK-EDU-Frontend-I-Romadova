@@ -1,8 +1,8 @@
 import './head.css';
-import defaultAvatar from '../aaa/a.png';
+import defaultAvatar from '../../temp_image/temp.png';
 
 const Head = (isChatOpen, isChatList, userPic, userName = "Unknown") => {
-    const head = document.createElement('div');
+    const head = document.createElement('header');
     head.classList.add('top-bar');
 
     const menuIcon = document.createElement('span');
@@ -19,11 +19,6 @@ const Head = (isChatOpen, isChatList, userPic, userName = "Unknown") => {
     
     head.appendChild(menuIcon);
     if (isChatOpen) {
-        // const avatarImg = document.createElement('img');
-        // avatarImg.src = userPic || defaultAvatar;
-        // avatarImg.classList.add('chat-avatar'); 
-        // head.appendChild(avatarImg);
-        // menuIcon.addEventListener('click', isChatList);
         const userInfo = document.createElement('div');
         userInfo.classList.add('user-info');
 

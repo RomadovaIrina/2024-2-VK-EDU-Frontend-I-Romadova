@@ -1,6 +1,6 @@
 import './index.css';
-import Head from './Head/head';
-import makeMessage from './makeMessage/makeMessage';
+import Head from './components/Head/head';
+import makeMessage from './components/makeMessage/makeMessage';
 
 
 
@@ -14,7 +14,17 @@ const messageBox = document.querySelector('.ui');
 const userName = 'Test user'; // Заглушка для имени пользователя
 const userPic = '';
 
-const messagesStorage = JSON.parse(localStorage.getItem('chatMessages')) || [];
+
+const getMessages= () => {
+    return JSON.parse(localStorage.getItem('chatMessages')) || [];
+};
+
+const saveMessage = (messages) => {
+    localStorage.setItem('chatMessages', JSON.stringify(messages));
+}
+
+const messageStorage = getMessages();
+
 
 
 const goToChatList = () => {
@@ -27,10 +37,10 @@ document.querySelector('main').insertBefore(topBar, messageBox);
 
 
 
-const loadMessages = () => {
+const loadMessages = (messages) => {
     messageBox.innerHTML = '';
     const part = document.createDocumentFragment();
-    messagesStorage.forEach(({sender, text, time}) => {
+    messages.forEach(({sender, text, time}) => {
         const elemnt_part = makeMessage({sender, text, time});
         part.appendChild(elemnt_part);
     });
@@ -38,22 +48,42 @@ const loadMessages = () => {
     messageBox.appendChild(part)
 };
 
+
+
+const makeNewMessage = (content) =>{
+    const messageTime = new Date().toLocaleString();
+    const messageData = {
+        // message_id: 1,
+        sender: userName,
+        text: content,
+        time: messageTime
+    };
+    return messageData;
+}
+
+const placeMessage = (message) => {
+    const element_part = makeMessage(message);
+    messageBox.appendChild(element_part);
+}
+
+const pushToStorage = (data) => {
+    const messageBox = getMessages();
+    messageBox.push(data);
+    saveMessage(messageBox);
+}
+
 const handleSubmit = (event) => {
     event.preventDefault();
     const messageText = input.value.trim();
-    const messageTime = new Date().toLocaleString();
     if (!messageText) {
         return;
     }
-    const messageData = {
-        sender: userName,
-        text: messageText,
-        time: messageTime
-    };
-    messagesStorage.push(messageData);
-    localStorage.setItem('chatMessages', JSON.stringify(messagesStorage));
-    const elemnt_part = makeMessage({sender, text, time});
-    messageBox.appendChild(elemnt_part);
+    
+    const messageData = makeNewMessage(messageText);
+    pushToStorage(messageData);
+    placeMessage(messageData);
+
+
     input.value = '';
     input.focus();
     messageBox.scrollTop = messageBox.scrollHeight;
@@ -72,4 +102,4 @@ form.addEventListener('submit', handleSubmit);
 form.addEventListener('keydown', handleKeyPress);
 
 // Загрузка при открытии
-loadMessages();
+loadMessages(messageStorage);

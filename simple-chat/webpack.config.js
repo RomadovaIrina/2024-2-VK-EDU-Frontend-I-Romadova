@@ -73,5 +73,8 @@ module.exports = {
     ],
     resolve: {
         extensions: ['.js', '.css'], // Можно не указывать расширения при импорте
+    },
+    devServer: {
+        historyApiFallback: true, // Включаем поддержку маршрутизации
     }
 };
