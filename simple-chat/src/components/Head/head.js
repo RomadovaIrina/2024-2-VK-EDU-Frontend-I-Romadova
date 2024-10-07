@@ -30,14 +30,13 @@ const Head = (isChatOpen, isChatList, userPic, userName = "Unknown") => {
         title.classList.add('messenger');
         title.textContent = userName;
 
-        // Вставляем аватарку и имя в обертку
+
         userInfo.appendChild(avatarImg);
         userInfo.appendChild(title);
         head.appendChild(userInfo);
 
         menuIcon.addEventListener('click', isChatList);
     }
-    // head.appendChild(title);
     head.appendChild(searchIcon);
 
     return head;

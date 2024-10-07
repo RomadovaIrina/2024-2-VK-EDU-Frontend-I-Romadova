@@ -1,7 +1,15 @@
-import './chatList.css'
+
+import './chatList.css';
 import Head from './components/Head/head.js';
 import ChatPlace from './components/ChatPlace/chatPlace.js';
 
+const saveChats = (chats) => {
+    localStorage.setItem('chats', JSON.stringify(chats));
+};
+
+const getChats = () => {
+    return JSON.parse(localStorage.getItem('chats')) || [];
+};
 const EXAMPLE_CHATS = [
     {
         chat_id: 1,
@@ -21,15 +29,7 @@ const EXAMPLE_CHATS = [
     }
 ];
 
-const saveChats = (chats) => {
-    localStorage.setItem('chats', JSON.stringify(chats));
-};
 
-const getChats = () => {
-    return JSON.parse(localStorage.getItem('chats')) || [];
-};
-
-saveChats(EXAMPLE_CHATS);
 
 const chatList = document.querySelector('.ui');
 const addChat = document.querySelector('.add-chat');
@@ -37,7 +37,6 @@ const goBack = document.querySelector('.go-back');
 
 
 const chatBox = getChats();
-
 const topBar = Head(false);
 document.querySelector('main').insertBefore(topBar, chatList);
 
@@ -45,30 +44,23 @@ document.querySelector('main').insertBefore(topBar, chatList);
 const loadChats = (chats) => {
     chatList.innerHTML = '';
     const fragment = document.createDocumentFragment();
-    chats.forEach(({ avatar, name, lastMessage, time, isRead }) => {
-        const chat = ChatPlace({ avatar, name, lastMessage, time, isRead });
+    chats.forEach(({ chat_id, avatar, name, lastMessage, time, isRead }) => {
+        const chat = ChatPlace({ chat_id, avatar, name, lastMessage, time, isRead });
+        chat.addEventListener('click', () => {
+            window.location.href = `index.html?chat_id=${chat_id}&user=${userName}`;
+        });
+        
         fragment.appendChild(chat);
     });
     chatList.appendChild(fragment);
-
-
 };
 
-const pushToStorage = (chat) => {
-    const chatBox = getChats()
+const makeNewChat = (chat) => {
+    const chatBox = getChats();
     chatBox.push(chat);
     saveChats(chatBox);
-}
-
-const placeNew = (chat) => {
-    const newChatElement = ChatPlace(chat);
-    chatList.appendChild(newChatElement);
-}
-
-const makeNewChat = (chat) => {
-    pushToStorage(chat);
-    placeNew(chat);
-}
+    loadChats(chatBox);
+};
 
 const handleAddChat = () => {
     const newChatName = prompt("Введите название нового чата:");
@@ -76,6 +68,7 @@ const handleAddChat = () => {
 
     const chatTime = new Date().toLocaleString();
     const newChat = {
+        chat_id: chatBox.length + 1,
         name: newChatName,
         time: chatTime,
         lastMessage: '',
@@ -83,15 +76,9 @@ const handleAddChat = () => {
         avatar: ''
     };
     makeNewChat(newChat);
-
 };
 
-
-const handleGoback = () => {
-    window.history.back();
-}
-
 addChat.addEventListener('click', handleAddChat);
-goBack.addEventListener('click', handleGoback);
+goBack.addEventListener('click', () => window.history.back());
 
 loadChats(chatBox);

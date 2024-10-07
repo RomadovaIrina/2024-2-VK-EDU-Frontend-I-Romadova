@@ -42,8 +42,10 @@ const ChatPlace = ({chat_id, avatar, name, lastMessage, time, isRead }) => {
 
     chatComponents.appendChild(chatFooter);
 
-
-
+    // Добавляем обработчик клика для перехода в чат
+    chat.addEventListener('click', () => {
+        window.location.href = `index.html?chat_id=${chat_id}`;
+    });
 
     return chat;
 };

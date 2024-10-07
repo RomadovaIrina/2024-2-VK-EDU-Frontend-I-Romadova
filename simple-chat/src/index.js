@@ -2,33 +2,32 @@ import './index.css';
 import Head from './components/Head/head';
 import makeMessage from './components/makeMessage/makeMessage';
 
-
-
-
-
 const form = document.querySelector('form');
 const input = document.querySelector('.form-input');
 const messageBox = document.querySelector('.ui');
 
 
-const userName = 'Test user'; // Заглушка для имени пользователя
+const urlParams = new URLSearchParams(window.location.search);
+const chat_ID = urlParams.get('chat_id');
+const userName = 'Test user'; 
 const userPic = '';
 
 
-const getMessages= () => {
-    return JSON.parse(localStorage.getItem('chatMessages')) || [];
+const getMessages= (chat_ID) => {
+    const allMessages = JSON.parse(localStorage.getItem('chatMessages')) || [];
+    return allMessages.filter(message => message.chat_id === parseInt(chat_ID, 10));
 };
 
 const saveMessage = (messages) => {
     localStorage.setItem('chatMessages', JSON.stringify(messages));
 }
 
-const messageStorage = getMessages();
+const messageStorage = getMessages(chat_ID);
 
 
 
 const goToChatList = () => {
-    window.location.href = 'chatList.html'; // Перенаправление на страницу со списком чатов
+    window.location.href = 'chatList.html'; 
 };
 
 const topBar = Head(true, goToChatList, userPic, userName);
@@ -53,7 +52,8 @@ const loadMessages = (messages) => {
 const makeNewMessage = (content) =>{
     const messageTime = new Date().toLocaleString();
     const messageData = {
-        message_id: 1,
+        message_id: Date.now(), // Уникальный ID сообщения
+        chat_id: parseInt(chatId, 10),  // Привязка к текущему чату
         sender: userName,
         text: content,
         time: messageTime
