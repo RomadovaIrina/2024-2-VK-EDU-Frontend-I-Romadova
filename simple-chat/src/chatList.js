@@ -10,26 +10,6 @@ const saveChats = (chats) => {
 const getChats = () => {
     return JSON.parse(localStorage.getItem('chats')) || [];
 };
-const EXAMPLE_CHATS = [
-    {
-        chat_id: 1,
-        avatar: '',
-        name: "first chat",
-        lastMessage: "some text",
-        time: "01:00",
-        isRead: true
-    },
-    {
-        chat_id: 2,
-        avatar: '',
-        name: "second chat",
-        lastMessage: "some more text",
-        time: "10:00",
-        isRead: false
-    }
-];
-
-
 
 const chatList = document.querySelector('.ui');
 const addChat = document.querySelector('.add-chat');

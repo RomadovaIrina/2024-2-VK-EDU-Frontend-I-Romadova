@@ -53,7 +53,7 @@ const makeNewMessage = (content) =>{
     const messageTime = new Date().toLocaleString();
     const messageData = {
         message_id: Date.now(), // Уникальный ID сообщения
-        chat_id: parseInt(chatId, 10),  // Привязка к текущему чату
+        chat_id: parseInt(chat_ID, 10),  // Привязка к текущему чату
         sender: userName,
         text: content,
         time: messageTime
