@@ -13,10 +13,11 @@ module.exports = {
     context: SRC_PATH,
     entry: {
         index: './index.js',
+        chatList: './chatList.js'
     },
     output: {
         path: BUILD_PATH,
-        filename: 'bundle.js'
+        filename: '[name].bundle.js'
     },
     module: {
         strictExportPresence: true,
@@ -34,23 +35,22 @@ module.exports = {
                 ],
             },
             {
-                test: /shadow\.css$/,
+                test: /\.css$/, // Правило для CSS файлов
                 include: SRC_PATH,
                 use: [
-                    {
-                        loader: 'css-loader'
-                    },
+                    MiniCSSExtractPlugin.loader, // Извлекаем CSS в отдельные файлы
+                    'css-loader', // Обрабатываем CSS
                 ],
             },
             {
-                test: /index\.css$/,
+                test: /\.(png|jpg|gif|svg)$/, // Правило для обработки изображений
                 include: SRC_PATH,
                 use: [
                     {
-                        loader: MiniCSSExtractPlugin.loader,
-                    },
-                    {
-                        loader: 'css-loader',
+                        loader: 'file-loader',
+                        options: {
+                            name: 'images/[name].[ext]',  // Путь для изображений в сборке
+                        },
                     },
                 ],
             },
@@ -58,11 +58,23 @@ module.exports = {
     },
     plugins: [
         new MiniCSSExtractPlugin({
-            filename: 'style.css',
+            filename: '[name].css', // Генерация файлов стилей для каждой страницы
         }),
         new HTMLWebpackPlugin({
-            filename: 'index.html',
-            template: './index.html'
+            filename: 'index.html',          // Сборка файла index.html
+            template: './index.html',        // Шаблон для главной страницы
+            chunks: ['index'],               // Подключаем только index.js
+        }),
+        new HTMLWebpackPlugin({
+            filename: 'chatList.html',       // Сборка файла chatList.html
+            template: './chatList.html',     // Шаблон для страницы чатов
+            chunks: ['chatList'],            // Подключаем только chatList.js
         })
-    ]
+    ],
+    resolve: {
+        extensions: ['.js', '.css'], // Можно не указывать расширения при импорте
+    },
+    devServer: {
+        historyApiFallback: true, // Включаем поддержку маршрутизации
+    }
 };
