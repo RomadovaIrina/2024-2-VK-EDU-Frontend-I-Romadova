@@ -8,21 +8,24 @@ const messageBox = document.querySelector('.ui');
 
 
 const urlParams = new URLSearchParams(window.location.search);
-const chat_ID = urlParams.get('chat_id');
+const currChatId = urlParams.get('chatId');
+
+
 const userName = 'Test user'; 
 const userPic = '';
 
 
-const getMessages= (chat_ID) => {
+
+const getMessages= (currChatId) => {
     const allMessages = JSON.parse(localStorage.getItem('chatMessages')) || [];
-    return allMessages.filter(message => message.chat_id === parseInt(chat_ID, 10));
+    return allMessages.filter(message => message.chatId === parseInt(currChatId, 10));
 };
 
 const saveMessage = (messages) => {
     localStorage.setItem('chatMessages', JSON.stringify(messages));
 }
 
-const messageStorage = getMessages(chat_ID);
+const messageStorage = getMessages(currChatId);
 
 
 
@@ -52,8 +55,8 @@ const loadMessages = (messages) => {
 const makeNewMessage = (content) =>{
     const messageTime = new Date().toLocaleString();
     const messageData = {
-        message_id: Date.now(), // Уникальный ID сообщения
-        chat_id: parseInt(chat_ID, 10),  // Привязка к текущему чату
+        message_id: Date.now(), 
+        chatId: parseInt(currChatId, 10),
         sender: userName,
         text: content,
         time: messageTime
@@ -61,13 +64,15 @@ const makeNewMessage = (content) =>{
     return messageData;
 }
 
+
+
 const placeMessage = (message) => {
     const element_part = makeMessage(message);
     messageBox.appendChild(element_part);
 }
 
 const pushToStorage = (data) => {
-    const messageBox = getMessages();
+    const messageBox = getMessages(currChatId);
     messageBox.push(data);
     saveMessage(messageBox);
 }
@@ -79,6 +84,7 @@ const handleSubmit = (event) => {
         return;
     }
     
+
     const messageData = makeNewMessage(messageText);
     pushToStorage(messageData);
     placeMessage(messageData);
