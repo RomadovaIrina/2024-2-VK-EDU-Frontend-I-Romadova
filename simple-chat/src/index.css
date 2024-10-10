@@ -109,7 +109,7 @@ footer {
 /* кнопки */
 .sendButton {
     color: var(--sendButton-color);
-    border: none;
+    border: 2px solid rgba(141, 36, 170, 0);
     padding: 10px;
     margin-left: 5px;
     border-radius: 50%;
@@ -121,8 +121,26 @@ footer {
 .sendButton:hover {
     background-color: var(--form-bg-color);
     cursor: pointer;
+    animation: pulse-hover 0.6s infinite;
     
 }
+
+
+@keyframes pulse-hover {
+    0% {
+        transform: scale(1);
+        border-color: rgba(141, 36, 170, 0.007); /* Исходный цвет границы */
+    }
+    50% {
+        transform: scale(1.05); /* Увеличение размера */
+        border-color: rgba(159, 22, 197, 0.308); /* Цвет границы при пульсации */
+    }
+    100% {
+        transform: scale(1);
+        border-color: rgba(141, 36, 170, 0); /* Возврат к исходному цвету */
+    }
+}
+
 
 .material-icons {
     font-size: 30px;
