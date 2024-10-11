@@ -29,43 +29,15 @@ main {
     right: 20px;
     color: white;
     box-shadow: 0 2px 5px rgba(39, 13, 56, 0.514);
-    transition: background-color 0.3s ease, transform 0.3s;
-}
-
-.pulse {
-    background-color: #731b99;
-    border: none;
-    border-radius: 50%;
-    padding: 10px;
-    transition: background-color 0.3s, transform 0.3s;
-    
-}
-
-@keyframes pulse-blue {
-    0% {
-        transform: scale(1);
-        background-color: #731b99; 
-        box-shadow: 0 2px 5px rgba(39, 13, 56, 0.514);
-    }
-    50% {
-        transform: scale(1.1);
-        background-color: #a358c4; 
-        box-shadow: 0 4px 7px rgba(26, 8, 39, 0.658);
-    }
-    100% {
-        transform: scale(1);
-        background-color: #731b99;
-        box-shadow: 0 2px 5px rgba(39, 13, 56, 0.514);
-    }
+    transition: background-color 0.3s ease;
 }
 
 .add-chat .material-icons {
     font-size: 30px;
 }
 
-.add-chat:hover  {
-    background-color: #a358c4;
-    animation: pulse-blue 1s infinite; 
+.add-chat:hover {
+    background-color: #bc65e0;
 }
 
 .messenger {
@@ -88,13 +60,11 @@ main {
     right: 20px;
     color: white;
     box-shadow: 0 2px 5px rgba(39, 13, 56, 0.514);
-    transition: background-color 0.3s ease, transform 0.7s;
+    transition: background-color 0.3s ease;
 }
 
 .go-back:hover {
     background-color: #bc65e0;
-    animation: pulse 0.6 infinite;
-    transform: rotate(1turn);
 }
 .go-back .material-icons {
     font-size: 30px;
@@ -159,7 +129,7 @@ footer {
     box-shadow: -2px 2px 5px 2px rgba(0, 0, 0, 0.1);
     background-color: rgb(217, 198, 247);
     margin-bottom: 7px;
-    transition: background-color 0.3s, transform 0.3s;
+    transition: background-color 0.3s;
     width: 90%;
     margin-left: 2%;
 }
@@ -167,7 +137,6 @@ footer {
 .chat-place:hover {
     background-color: rgb(173, 151, 209);
     cursor: pointer;
-    transform: scale(1.05);
 }
 
 
