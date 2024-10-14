@@ -24,10 +24,10 @@ document.querySelector('main').insertBefore(topBar, chatList);
 const loadChats = (chats) => {
     chatList.innerHTML = '';
     const fragment = document.createDocumentFragment();
-    chats.forEach(({ chat_id, avatar, name, lastMessage, time, isRead }) => {
-        const chat = ChatPlace({ chat_id, avatar, name, lastMessage, time, isRead });
+    chats.forEach(({ chatId, avatar, name, lastMessage, time, isRead }) => {
+        const chat = ChatPlace({ chatId, avatar, name, lastMessage, time, isRead });
         chat.addEventListener('click', () => {
-            window.location.href = `index.html?chat_id=${chat_id}&user=${userName}`;
+            window.location.href = `index.html?chat_id=${chatId}&user=${userName}`;
         });
         
         fragment.appendChild(chat);
@@ -48,7 +48,7 @@ const handleAddChat = () => {
 
     const chatTime = new Date().toLocaleString();
     const newChat = {
-        chat_id: chatBox.length + 1,
+        chatId: chatBox.length + 1,
         name: newChatName,
         time: chatTime,
         lastMessage: '',
