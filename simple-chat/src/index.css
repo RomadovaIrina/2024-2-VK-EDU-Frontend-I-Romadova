@@ -129,19 +129,43 @@ footer {
 @keyframes pulse-hover {
     0% {
         transform: scale(1);
-        border-color: rgba(141, 36, 170, 0.007); /* Исходный цвет границы */
-    }
+        border-color: rgba(141, 36, 170, 0.007); }
     50% {
-        transform: scale(1.05); /* Увеличение размера */
-        border-color: rgba(159, 22, 197, 0.308); /* Цвет границы при пульсации */
+        transform: scale(1.05); 
+        border-color: rgba(159, 22, 197, 0.308); 
     }
     100% {
         transform: scale(1);
-        border-color: rgba(141, 36, 170, 0); /* Возврат к исходному цвету */
-    }
+        border-color: rgba(141, 36, 170, 0); }
 }
 
 
 .material-icons {
     font-size: 30px;
+}
+
+
+
+
+@keyframes message-fly {
+    
+    0%{
+        opacity: 0;
+        transform: translateX(-50%);
+        scale: 0.2;
+    }
+    0%{
+        opacity: 0;
+        transform: translateX(-25%);
+        scale: 0.7;
+    }
+    100%{
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+
+.message-fly {
+    animation: message-fly 0.4s ease-out;
 }

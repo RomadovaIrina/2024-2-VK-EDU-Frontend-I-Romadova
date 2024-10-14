@@ -18,6 +18,7 @@ const makeMessage = ({id, sender, text, time}) => {
     elemnt_part.appendChild(messageBody);
     elemnt_part.appendChild(messageFooter);
 
+
     return elemnt_part;
 
 };

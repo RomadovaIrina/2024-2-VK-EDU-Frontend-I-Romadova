@@ -68,6 +68,13 @@ const makeNewMessage = (content) =>{
 
 const placeMessage = (message) => {
     const element_part = makeMessage(message);
+
+    element_part.classList.add('message-fly');
+    setTimeout(() => {
+        element_part.classList.remove('message-fly');
+    }, 400);
+
+    messageBox.appendChild(element_part);
     messageBox.appendChild(element_part);
 }
 
