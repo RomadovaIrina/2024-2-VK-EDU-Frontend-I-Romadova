@@ -37,7 +37,7 @@ const ChatPage = ({ chatId, userId, goToChatList }) => {
         const messageData = {
             message_id: Date.now(),
             chatId: chatId,
-            sender:'Unknown', //пока что отправитель такой
+            sender: 'Unknown', //пока что отправитель такой, иначе не работает
             text: content,
             time: messageTime
         };
