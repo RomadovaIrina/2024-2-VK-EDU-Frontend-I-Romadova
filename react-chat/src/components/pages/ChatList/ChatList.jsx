@@ -3,6 +3,7 @@ import './ChatList.css';
 
 import ChatPlace from "../../ChatPlace/ChatPlace";
 import {getByID} from "../../../consts/users.js"
+import HeadBar from "../../HeadBar/HeadBar.jsx";
 
 import EditIcon from '@mui/icons-material/Edit';
 
