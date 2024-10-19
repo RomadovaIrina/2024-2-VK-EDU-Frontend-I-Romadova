@@ -1,7 +1,7 @@
 import './chatPlace.css';
 import defaultAvatar from '../../temp_image/temp.png';
 
-const ChatPlace = ({chat_id, avatar, name, lastMessage, time, isRead }) => {
+const ChatPlace = ({chatId, avatar, name, lastMessage, time, isRead }) => {
     const chat = document.createElement('li');
     chat.classList.add('chat-place');
 
@@ -44,7 +44,7 @@ const ChatPlace = ({chat_id, avatar, name, lastMessage, time, isRead }) => {
 
     // Добавляем обработчик клика для перехода в чат
     chat.addEventListener('click', () => {
-        window.location.href = `index.html?chat_id=${chat_id}`;
+        window.location.href = `index.html?chatId=${chatId}`;
     });
 
     return chat;
