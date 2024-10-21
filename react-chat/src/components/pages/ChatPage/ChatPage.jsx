@@ -7,7 +7,6 @@ import MakeMessage from "../../MakeMessage";
 import { getByID } from "../../../consts/users";
 
 import SendIcon from '@mui/icons-material/Send'
-import HeadBar from "../../HeadBar/HeadBar";
 
 
 const ChatPage = ({ chatId, userId, goToChatList }) => {
@@ -37,7 +36,7 @@ const ChatPage = ({ chatId, userId, goToChatList }) => {
         const messageData = {
             message_id: Date.now(),
             chatId: chatId,
-            sender: 'Unknown', //пока что отправитель такой, иначе не работает
+            sender: user ? user.name : 'Unknown',
             text: content,
             time: messageTime
         };
@@ -55,9 +54,7 @@ const ChatPage = ({ chatId, userId, goToChatList }) => {
         saveMessage(updatedMessages);
         setMessages(updatedMessages);
         setInputValue('');
-        if (inputFocus.current) {
-            inputFocus.current.focus();
-        }
+        inputFocus.current.focus();
     };
 
 
@@ -67,12 +64,6 @@ const ChatPage = ({ chatId, userId, goToChatList }) => {
 
     return (
         <div>
-             <HeadBar
-                isChatOpen={true}
-                userPic={user?.avatar}
-                userName={user?.name || 'Unknown'}
-                goBackToChatList={goToChatList}
-            />
             <main>
                 <ul className="ui">
                     {messages.map(({ sender, text, time }, index) => (
@@ -95,7 +86,7 @@ const ChatPage = ({ chatId, userId, goToChatList }) => {
                         }}
                     />
                     <button className="sendButton pulse" type="submit">
-                        <SendIcon sx={{ fontSize: 48 }} />
+                        <SendIcon sx={{ fontSize: 48 }}/>
                     </button>
                 </form>
             </footer>

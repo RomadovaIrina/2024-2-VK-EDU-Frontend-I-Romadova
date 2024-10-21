@@ -41,15 +41,13 @@ function App() {
 
   return (
     <>
+      <HeadBar
+        isChatOpen={currentPage === 'chatPage'}
+        isChatList={currentPage === 'chatList'}
+        goBackToChatList={goToChatList}
+      />
       {currentPage === 'chatList' ? (
-         <>
-         <HeadBar 
-           isChatOpen={currentPage === 'chatPage'}
-           isChatList={currentPage === 'chatList'}
-           goBackToChatList={goToChatList} 
-         />
-         <ChatList onChatClick={openExactChat} goHome={goHome} />
-       </>
+        <ChatList onChatClick={openExactChat} goHome={goHome} />
       ) : (
         <ChatPage chatId={activeChat} userId={activeUserId} goToChatList={goToChatList} />
       )}
