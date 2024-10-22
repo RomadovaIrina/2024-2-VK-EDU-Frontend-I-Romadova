@@ -3,15 +3,16 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+
+
+"homepage": "https://RomadovaIrina.github.io/react-chat", 
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
-      "start": "react-scripts start",
-      "build": "react-scripts build"
+    "deploy": "gh-pages -d dist" 
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
@@ -32,6 +33,5 @@
     "eslint-plugin-react-refresh": "^0.4.12",
     "globals": "^15.9.0",
     "vite": "^5.4.8"
-  },
-  "homepage": "https://myusername.github.io/my-app"
+  }
 }
