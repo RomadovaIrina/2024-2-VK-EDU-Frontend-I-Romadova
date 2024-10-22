@@ -7,7 +7,7 @@ import DoneAllIcon from '@mui/icons-material/DoneAll';
 const ChatPlace = ({chatId, avatar, name, lastMessage, time, isRead , onClick}) => {
     
     return (
-        <li className='chat-place'
+        <div className='chat-place'
         onClick={() => onClick(chatId)}>
         <img src={avatar || DEFAULT_AVATAR} className='chat-image'/>
         <div className='chat-components'>
@@ -19,7 +19,7 @@ const ChatPlace = ({chatId, avatar, name, lastMessage, time, isRead , onClick}) 
                 <DoneAllIcon className="read-status read" style={{ color: 'green' }} />}
             </div>
         </div>
-        </li>
+        </div>
     );
 };
 

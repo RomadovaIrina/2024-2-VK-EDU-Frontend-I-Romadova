@@ -50,7 +50,9 @@ const ChatList = ({ onChatClick, goHome }) => {
   }
 
   return (
+    <main>
     <div className="chat-list">
+      <ul>
         {chats.map((chat) => (
           <ChatPlace
             key={chat.chatId}
@@ -63,12 +65,14 @@ const ChatList = ({ onChatClick, goHome }) => {
             onClick={() => handleChatClick(chat.chatId)}
           />
         ))}
-      <footer className="chatList-footer">
+        </ul>
+      <div className="chatList-button">
       <button className="add-chat pulse" onClick={handleAddChat}>
       <EditIcon className="edit-icon" />
       </button>
-      </footer>
+      </div>
     </div>
+    </main>
   );
 };
 

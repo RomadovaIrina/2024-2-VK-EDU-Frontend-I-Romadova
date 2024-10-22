@@ -15,6 +15,8 @@ const ChatPage = ({ chatId, userId, goToChatList }) => {
     const [inputValue, setInputValue] = useState('');
     const user = getByID(userId)
     const inputFocus = useRef(null);
+    const [lastMessageId, setLastMessageId] = useState(null);
+    const messagesEndRef = useRef(null);
 
 
     const saveMessage = (messages) => {
@@ -30,6 +32,13 @@ const ChatPage = ({ chatId, userId, goToChatList }) => {
         const loadedMessages = getMessages(chatId)
         setMessages(loadedMessages);
     }, [chatId])
+
+    useEffect(() => {
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView(); 
+        }
+    }, [messages]);
+
 
     const makeNewMessage = (content) => {
         const messageTime = new Date().toLocaleString();
@@ -54,7 +63,11 @@ const ChatPage = ({ chatId, userId, goToChatList }) => {
         saveMessage(updatedMessages);
         setMessages(updatedMessages);
         setInputValue('');
-        inputFocus.current.focus();
+        setLastMessageId(messageData.message_id);
+        if (inputFocus.current) {
+
+            inputFocus.current.focus();
+        }
     };
 
 
@@ -63,12 +76,14 @@ const ChatPage = ({ chatId, userId, goToChatList }) => {
     }
 
     return (
-        <div>
+        <div className="chat-content">
             <main>
                 <ul className="ui">
-                    {messages.map(({ sender, text, time }, index) => (
-                        <MakeMessage key={index} sender={sender} text={text} time={time} />
+                    {messages.map(({ sender, text, time, message_id }, index) => (
+                        <MakeMessage key={index} sender={sender} text={text} time={time} isLastMessage={message_id === lastMessageId} />
                     ))}
+
+                    <div ref={messagesEndRef} />
                 </ul>
 
             </main>
@@ -86,11 +101,11 @@ const ChatPage = ({ chatId, userId, goToChatList }) => {
                         }}
                     />
                     <button className="sendButton pulse" type="submit">
-                        <SendIcon sx={{ fontSize: 48 }}/>
+                        <SendIcon sx={{ fontSize: 36 }} />
                     </button>
                 </form>
             </footer>
-        </div >
+        </div>
     );
 
 

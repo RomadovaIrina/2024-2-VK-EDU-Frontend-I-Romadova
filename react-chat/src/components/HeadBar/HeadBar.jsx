@@ -12,7 +12,8 @@ const HeadBar = ({ isChatOpen, isChatList, goBackToChatList, userPic, userName =
             {isChatOpen ? (
                 <>
                     <ArrowBackIcon
-                        className="menu-icon"
+                        className="arrow"
+                        sx={{ fontSize: 40 }}
                         onClick={goBackToChatList}
                     />
                     <div className='user-info'>
@@ -22,9 +23,9 @@ const HeadBar = ({ isChatOpen, isChatList, goBackToChatList, userPic, userName =
                 </>
             ) : isChatList ? (
                 <>
-                   <MenuIcon className="menu-icon" />
+                   <MenuIcon className="menu-icon" sx={{ fontSize: 40 }}/>
                     <span className='messenger'>Messenger</span>
-                    <SearchIcon className="search-icon" />
+                    <SearchIcon className="search-icon" sx={{ fontSize: 40 }}/>
                 </>
             ) : null}
         </header>

@@ -10,6 +10,7 @@
     transition: background-color 0.3s, transform 0.3s;
     width: 90%;
     margin-left: 2%;
+    height: 9vh;
 }
 
 .chat-place:hover {

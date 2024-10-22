@@ -10,6 +10,7 @@
     color: white;
     box-shadow: 0 2px 5px rgba(39, 13, 56, 0.514);
     transition: background-color 0.3s ease, transform 0.3s;
+    position: fixed;
 }
 
 .pulse {
@@ -40,7 +41,7 @@
 }
 
 .add-chat .edit-icon {
-    font-size: 30px;
+    font-size: 38px;
 }
 
 .add-chat:hover  {
@@ -74,12 +75,17 @@
     font-size: 30px;
 }
 
-.chatList-footer {
+.chatList-button {
     display: flex;
     flex-direction: column;
     gap: 10px;
     justify-content: flex-end;
     align-items: flex-end; 
     padding: 20px;
+    position: relative;
 }
 
+.chat-list {
+    height: 100vh;
+    margin-top: 10px;
+}

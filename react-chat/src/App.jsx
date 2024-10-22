@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 
 
@@ -12,7 +10,6 @@ import { initializeUsers } from './consts/users';
 
 
 function App() {
-  const [count, setCount] = useState(0)
   const [currentPage, setCurrentPage] = useState('chatList');
   const [activeChat, setActiveChat] = useState(null);
   const [activeUserId, setActiveUserId] = useState(null);
@@ -40,7 +37,7 @@ function App() {
   }
 
   return (
-    <>
+    <div className='constent'>
       <HeadBar
         isChatOpen={currentPage === 'chatPage'}
         isChatList={currentPage === 'chatList'}
@@ -51,7 +48,7 @@ function App() {
       ) : (
         <ChatPage chatId={activeChat} userId={activeUserId} goToChatList={goToChatList} />
       )}
-    </>
+      </div>
   );
 }
 
