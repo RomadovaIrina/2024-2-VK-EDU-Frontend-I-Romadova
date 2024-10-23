@@ -6,7 +6,6 @@
   "homepage": "https://romadovairina.github.io/2024-2-VK-EDU-Frontend-I-Romadova/",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
