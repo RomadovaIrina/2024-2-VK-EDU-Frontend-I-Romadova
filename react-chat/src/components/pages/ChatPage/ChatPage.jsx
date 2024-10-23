@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import './ChatPage.css'
 import MakeMessage from "../../MakeMessage";
 
-import { getByID } from "../../../consts/users";
+import { getByID} from "../../../mockUsers.js"
 
 import SendIcon from '@mui/icons-material/Send'
 
@@ -23,8 +23,12 @@ const ChatPage = ({ chatId, userId, goToChatList }) => {
         localStorage.setItem('chatMessages', JSON.stringify(messages));
     };
 
+    const getAllMessages = () => {
+        return JSON.parse(localStorage.getItem('chatMessages')) || [];
+    }
+
     const getMessages = (chatId) => {
-        const allMessages = JSON.parse(localStorage.getItem('chatMessages')) || [];
+        const allMessages = getAllMessages();
         return allMessages.filter(message => message.chatId === chatId);
     };
 
@@ -34,9 +38,7 @@ const ChatPage = ({ chatId, userId, goToChatList }) => {
     }, [chatId])
 
     useEffect(() => {
-        if (messagesEndRef.current) {
-            messagesEndRef.current.scrollIntoView(); 
-        }
+        messagesEndRef?.current.scrollIntoView();
     }, [messages]);
 
 
@@ -45,7 +47,7 @@ const ChatPage = ({ chatId, userId, goToChatList }) => {
         const messageData = {
             message_id: Date.now(),
             chatId: chatId,
-            sender: user ? user.name : 'Unknown',
+            sender: user?.user.name ?? 'Unknown',
             text: content,
             time: messageTime
         };
@@ -75,6 +77,10 @@ const ChatPage = ({ chatId, userId, goToChatList }) => {
         setInputValue(event.target.value)
     }
 
+    const handleOnClick = (event) => {
+        if (event.key === 'Enter') handleSubmit(event);
+    }
+
     return (
         <div className="chat-content">
             <main>
@@ -96,9 +102,7 @@ const ChatPage = ({ chatId, userId, goToChatList }) => {
                         value={inputValue}
                         onChange={handleInputChange}
                         placeholder="Введите сообщение..."
-                        onKeyDown={(event) => {
-                            if (event.key === 'Enter') handleSubmit(event);
-                        }}
+                        onKeyDown={handleOnClick}
                     />
                     <button className="sendButton pulse" type="submit">
                         <SendIcon sx={{ fontSize: 36 }} />

@@ -2,16 +2,24 @@ import React, { useEffect, useState } from "react";
 import './ChatList.css';
 
 import ChatPlace from "../../ChatPlace/ChatPlace";
-import {getByID} from "../../../consts/users.js"
+import { getByID} from "../../../mockUsers.js"
 
 import EditIcon from '@mui/icons-material/Edit';
 
 
-const ChatList = ({ onChatClick, goHome }) => {
+const ChatList = (props) => {
+  const { onChatClick, goHome } = props;
   const [chats, setChats] = useState([]);
 
+  const getChats = () => {
+    return JSON.parse(localStorage.getItem("chats")) || [];
+  }
+  const saveChats = (chats) => {
+    localStorage.setItem("chats", JSON.stringify(chats));
+  }
+
   useEffect(() => {
-    const chatBox = JSON.parse(localStorage.getItem("chats")) || [];
+    const chatBox = getChats();
     setChats(chatBox);
   }, []);
 
@@ -41,7 +49,7 @@ const ChatList = ({ onChatClick, goHome }) => {
 
     const updatedChats = [...chats, newChat];
     setChats(updatedChats);
-    localStorage.setItem("chats", JSON.stringify(updatedChats));
+    saveChats(updatedChats);
   };
 
   const handleChatClick = (chatID) => {
@@ -51,27 +59,22 @@ const ChatList = ({ onChatClick, goHome }) => {
 
   return (
     <main>
-    <div className="chat-list">
-      <ul>
-        {chats.map((chat) => (
-          <ChatPlace
-            key={chat.chatId}
-            chatId={chat.chatId}
-            avatar={chat.avatar}
-            name={chat.name}
-            lastMessage={chat.lastMessage}
-            time={chat.time}
-            isRead={chat.isRead}
-            onClick={() => handleChatClick(chat.chatId)}
-          />
-        ))}
+      <div className="chat-list">
+        <ul>
+          {chats.map((chat) => (
+            <ChatPlace
+              key={chat.chatId}
+              {...chat}
+              onClick={() => handleChatClick(chat.chatId)}
+            />
+          ))}
         </ul>
-      <div className="chatList-button">
-      <button className="add-chat pulse" onClick={handleAddChat}>
-      <EditIcon className="edit-icon" />
-      </button>
+        <div className="chatList-button">
+          <button type="button" className="add-chat pulse" onClick={handleAddChat}>
+            <EditIcon className="edit-icon" />
+          </button>
+        </div>
       </div>
-    </div>
     </main>
   );
 };

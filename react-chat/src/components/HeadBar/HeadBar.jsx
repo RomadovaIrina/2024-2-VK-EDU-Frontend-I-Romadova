@@ -7,6 +7,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 
 const HeadBar = ({ isChatOpen, isChatList, goBackToChatList, userPic, userName = "Unknown" }) => {
+    const userPicture = userPic || DEFAULT_AVATAR;
     return (
         <header className='top-bar'>
             {isChatOpen ? (
@@ -17,7 +18,7 @@ const HeadBar = ({ isChatOpen, isChatList, goBackToChatList, userPic, userName =
                         onClick={goBackToChatList}
                     />
                     <div className='user-info'>
-                        <img src={userPic || DEFAULT_AVATAR} className='chat-avatar' alt='avatar' />
+                        <img src={userPicture}  className='chat-avatar' alt='avatar' />
                         <span className='messenger'>{userName}</span>
                     </div>
                 </>

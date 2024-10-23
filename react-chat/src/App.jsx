@@ -6,15 +6,20 @@ import ChatList from './components/pages/ChatList/ChatList';
 import HeadBar from './components/HeadBar/HeadBar';
 import ChatPage from './components/pages/ChatPage/ChatPage';
 
-import { initializeUsers } from './consts/users';
+import { USERS } from './mockUsers.js';
 
 
 function App() {
   const [currentPage, setCurrentPage] = useState('chatList');
   const [activeChat, setActiveChat] = useState(null);
   const [activeUserId, setActiveUserId] = useState(null);
+
+  const initializeUsers = (users) => {
+    localStorage.setItem('users', JSON.stringify(users));
+  };
+
   useEffect(() => {
-    initializeUsers();
+    initializeUsers(USERS);
   }, []);
 
   const goToChatList = () => {
@@ -36,6 +41,13 @@ function App() {
     setCurrentPage('chatPage')
   }
 
+  const pageContent =
+    currentPage === 'chatList' ? (
+      <ChatList onChatClick={openExactChat} goHome={goHome} />
+    ) : (
+      <ChatPage chatId={activeChat} userId={activeUserId} goToChatList={goToChatList} />
+    );
+
   return (
     <div className='constent'>
       <HeadBar
@@ -43,12 +55,8 @@ function App() {
         isChatList={currentPage === 'chatList'}
         goBackToChatList={goToChatList}
       />
-      {currentPage === 'chatList' ? (
-        <ChatList onChatClick={openExactChat} goHome={goHome} />
-      ) : (
-        <ChatPage chatId={activeChat} userId={activeUserId} goToChatList={goToChatList} />
-      )}
-      </div>
+      {pageContent}
+    </div>
   );
 }
 
