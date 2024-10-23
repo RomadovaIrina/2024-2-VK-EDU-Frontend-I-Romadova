@@ -2,35 +2,21 @@ import React from 'react';
 import './HeadBar.css';
 import DEFAULT_AVATAR from '../../../public/temp.png';
 
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
-
-const HeadBar = ({ isChatOpen, isChatList, goBackToChatList, userPic, userName = "Unknown" }) => {
+const HeadBar = ({ leftPlace, centerPlace, rightPlace, userPic, userName }) => {
     const userPicture = userPic || DEFAULT_AVATAR;
     return (
         <header className='top-bar'>
-            {isChatOpen ? (
-                <>
-                    <ArrowBackIcon
-                        className="arrow"
-                        sx={{ fontSize: 40 }}
-                        onClick={goBackToChatList}
-                    />
-                    <div className='user-info'>
-                        <img src={userPicture}  className='chat-avatar' alt='avatar' />
-                        <span className='messenger'>{userName}</span>
+            <div className='left-place'>{leftPlace}</div>
+            <div className='center-place'>
+                {centerPlace || (
+                    <div className="user-info">
+                        <img src={userPicture} className="chat-avatar" alt="avatar" />
+                        <span className="messenger">{userName}</span>
                     </div>
-                </>
-            ) : isChatList ? (
-                <>
-                   <MenuIcon className="menu-icon" sx={{ fontSize: 40 }}/>
-                    <span className='messenger'>Messenger</span>
-                    <SearchIcon className="search-icon" sx={{ fontSize: 40 }}/>
-                </>
-            ) : null}
+                )}
+            </div>
+            <div className='right-place'>{rightPlace}</div>
         </header>
     );
 };
-
 export default HeadBar;

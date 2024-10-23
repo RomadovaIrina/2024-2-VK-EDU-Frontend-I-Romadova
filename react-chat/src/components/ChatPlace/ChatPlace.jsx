@@ -19,17 +19,17 @@ const ChatPlace = (props) => {
 
     return (
         <div className='chat-place'
-        onClick={() => onClick(chatId)}>
-        <img src={userPicture} className='chat-image'/>
-        <div className='chat-components'>
-            <div className='chat-name'>{name}</div>
-            <div className='last-sent'>{lastMessage}</div>
-            <div className='chat-footer'>
-                <div className='chat-time'>{time}</div>
-                {isRead && 
-                <DoneAllIcon className="read-status read" style={{ color: 'green' }} />}
+            onClick={() => onClick(chatId)}>
+            <img src={userPicture} className='chat-image' />
+            <div className='chat-components'>
+                <div className='chat-name'>{name}</div>
+                <div className='last-sent'>{lastMessage}</div>
+                <div className='chat-footer'>
+                    <div className='chat-time'>{time}</div>
+                    {isRead &&
+                        <DoneAllIcon className="read-status read" style={{ color: 'green' }} />}
+                </div>
             </div>
-        </div>
         </div>
     );
 };

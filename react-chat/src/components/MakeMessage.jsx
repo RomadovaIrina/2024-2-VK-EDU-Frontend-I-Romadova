@@ -1,14 +1,17 @@
 import React from "react";
+import classNames from "classnames"
 
-const MakeMessage = ({id, sender, text, time, isLastMessage}) => {
-  const classParams = `message ${isLastMessage ? 'message-fly' : ''}`;
-    return (
-        <li className={classParams}>
+const MakeMessage = ({ id, sender, text, time, isLastMessage }) => {
+  const classParamsLIB = classNames('message', {
+    'message-fly': isLastMessage
+  });
+  return (
+    <li className={classParamsLIB}>
       <div className="message-header">{sender}</div>
       <div className="message-body">{text}</div>
       <div className="message-footer">{time}</div>
-        </li>
-    );
+    </li>
+  );
 }
 
 export default MakeMessage;

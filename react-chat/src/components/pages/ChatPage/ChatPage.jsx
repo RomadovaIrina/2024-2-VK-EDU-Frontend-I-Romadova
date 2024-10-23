@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import './ChatPage.css'
 import MakeMessage from "../../MakeMessage";
 
-import { getByID} from "../../../mockUsers.js"
+import { getByID } from "../../../mockUsers.js"
 
 import SendIcon from '@mui/icons-material/Send'
 
@@ -14,7 +14,7 @@ const ChatPage = ({ chatId, userId, goToChatList }) => {
     const [messages, setMessages] = useState([]);
     const [inputValue, setInputValue] = useState('');
     const user = getByID(userId)
-    const inputFocus = useRef(null);
+    const inputPalce = useRef(null);
     const [lastMessageId, setLastMessageId] = useState(null);
     const messagesEndRef = useRef(null);
 
@@ -38,7 +38,9 @@ const ChatPage = ({ chatId, userId, goToChatList }) => {
     }, [chatId])
 
     useEffect(() => {
-        messagesEndRef?.current.scrollIntoView();
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
+        }
     }, [messages]);
 
 
@@ -65,11 +67,8 @@ const ChatPage = ({ chatId, userId, goToChatList }) => {
         saveMessage(updatedMessages);
         setMessages(updatedMessages);
         setInputValue('');
+        inputPalce.current?.focus();
         setLastMessageId(messageData.message_id);
-        if (inputFocus.current) {
-
-            inputFocus.current.focus();
-        }
     };
 
 
@@ -84,12 +83,13 @@ const ChatPage = ({ chatId, userId, goToChatList }) => {
     return (
         <div className="chat-content">
             <main>
-                <ul className="ui">
-                    {messages.map(({ sender, text, time, message_id }, index) => (
-                        <MakeMessage key={index} sender={sender} text={text} time={time} isLastMessage={message_id === lastMessageId} />
+                <ul className="ui" ref={messagesEndRef}>
+                    {messages.map(({ message_id, ...props }) => (
+                        <MakeMessage key={message_id}
+                            isLastMessage={message_id === lastMessageId}
+                            {...props} />
                     ))}
 
-                    <div ref={messagesEndRef} />
                 </ul>
 
             </main>

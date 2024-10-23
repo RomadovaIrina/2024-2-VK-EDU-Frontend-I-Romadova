@@ -3,22 +3,21 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-
-
-"homepage": "https://romadovairina.github.io/2024-2-VK-EDU-Frontend-I-Romadova/", 
+  "homepage": "https://romadovairina.github.io/2024-2-VK-EDU-Frontend-I-Romadova/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist" 
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^6.1.4",
     "@mui/material": "^6.1.4",
+    "classnames": "^2.5.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

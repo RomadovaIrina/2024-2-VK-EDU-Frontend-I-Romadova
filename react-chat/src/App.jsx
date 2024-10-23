@@ -6,13 +6,18 @@ import ChatList from './components/pages/ChatList/ChatList';
 import HeadBar from './components/HeadBar/HeadBar';
 import ChatPage from './components/pages/ChatPage/ChatPage';
 
-import { USERS } from './mockUsers.js';
+import { getByID, USERS } from './mockUsers.js';
+
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import MenuIcon from '@mui/icons-material/Menu';
+import SearchIcon from '@mui/icons-material/Search';
 
 
 function App() {
   const [currentPage, setCurrentPage] = useState('chatList');
   const [activeChat, setActiveChat] = useState(null);
   const [activeUserId, setActiveUserId] = useState(null);
+  const [chatUserId, setChatUserId] = useState(null);
 
   const initializeUsers = (users) => {
     localStorage.setItem('users', JSON.stringify(users));
@@ -30,8 +35,9 @@ function App() {
     setCurrentPage('home');
   };
 
-  const handleChatClick = (chatId) => {
+  const handleChatClick = (chatId, chatUserId) => {
     setActiveChat(chatId);
+    setChatter(chatUserId);
     setCurrentPage('chatPage');
   };
 
@@ -45,16 +51,38 @@ function App() {
     currentPage === 'chatList' ? (
       <ChatList onChatClick={openExactChat} goHome={goHome} />
     ) : (
-      <ChatPage chatId={activeChat} userId={activeUserId} goToChatList={goToChatList} />
+      <ChatPage chatId={activeChat} userId={chatUserId} goToChatList={goToChatList} />
     );
+
+  const chatUser = chatUserId ? getByID(chatUserId) : null;
+
+
+  const headerContent = currentPage === 'chatList' ?
+    (
+      {
+        leftPlace: <MenuIcon className="menu-icon" sx={{ fontSize: 40 }} />,
+        centerPlace: <span className='messenger'>Messenger</span>,
+        rightPlace: <SearchIcon className="search-icon" sx={{ fontSize: 40 }} />,
+        userPic: null,
+        userName: null
+      }
+
+    ) : (
+      {
+        leftPlace: <ArrowBackIcon className="arrow"
+          sx={{ fontSize: 40 }}
+          onClick={goToChatList} />,
+        centerPlace: null,
+        rightPlace: null,
+        userPic: chatUser?.chatUser.avatar ?? null,
+        userName: chatUser?.chatUser.name ?? 'Unknown'
+      }
+    );
+
 
   return (
     <div className='constent'>
-      <HeadBar
-        isChatOpen={currentPage === 'chatPage'}
-        isChatList={currentPage === 'chatList'}
-        goBackToChatList={goToChatList}
-      />
+      <HeadBar {...headerContent} />
       {pageContent}
     </div>
   );

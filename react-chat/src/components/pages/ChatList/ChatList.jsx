@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import './ChatList.css';
 
 import ChatPlace from "../../ChatPlace/ChatPlace";
-import { getByID} from "../../../mockUsers.js"
+import { getByID } from "../../../mockUsers.js"
 
 import EditIcon from '@mui/icons-material/Edit';
 
