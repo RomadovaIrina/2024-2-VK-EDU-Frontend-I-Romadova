@@ -6,17 +6,14 @@ import { getByID } from "../../../mockUsers.js"
 
 import EditIcon from '@mui/icons-material/Edit';
 
+import { getChats, saveChats} from "../../../api/chats/chats.js";
+
 
 const ChatList = (props) => {
   const { onChatClick, goHome } = props;
   const [chats, setChats] = useState([]);
 
-  const getChats = () => {
-    return JSON.parse(localStorage.getItem("chats")) || [];
-  }
-  const saveChats = (chats) => {
-    localStorage.setItem("chats", JSON.stringify(chats));
-  }
+ 
 
   useEffect(() => {
     const chatBox = getChats();

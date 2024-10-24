@@ -8,29 +8,23 @@ import { getByID } from "../../../mockUsers.js"
 
 import SendIcon from '@mui/icons-material/Send'
 
+import { saveMessage, getAllMessages, getMessages } from "../../../api/messages/messages.js";
+
 
 const ChatPage = ({ chatId, userId, goToChatList }) => {
 
     const [messages, setMessages] = useState([]);
     const [inputValue, setInputValue] = useState('');
-    const user = getByID(userId)
     const inputPalce = useRef(null);
     const [lastMessageId, setLastMessageId] = useState(null);
+    const [user, setUser] = useState(null);
+
     const messagesEndRef = useRef(null);
 
-
-    const saveMessage = (messages) => {
-        localStorage.setItem('chatMessages', JSON.stringify(messages));
-    };
-
-    const getAllMessages = () => {
-        return JSON.parse(localStorage.getItem('chatMessages')) || [];
-    }
-
-    const getMessages = (chatId) => {
-        const allMessages = getAllMessages();
-        return allMessages.filter(message => message.chatId === chatId);
-    };
+    useEffect(() => {
+        const foundUser = getByID(userId);
+        setUser(foundUser); 
+    }, [userId]);
 
     useEffect(() => {
         const loadedMessages = getMessages(chatId)
