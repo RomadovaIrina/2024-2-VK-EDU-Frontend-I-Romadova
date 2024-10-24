@@ -5,12 +5,12 @@
   "type": "module",
   "homepage": "https://romadovairina.github.io/2024-2-VK-EDU-Frontend-I-Romadova",
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "preview": "vite preview"
   },
 
   "dependencies": {
