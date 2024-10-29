@@ -1,22 +1,17 @@
 import React from 'react';
-import './HeadBar.css';
-import DEFAULT_AVATAR from '../../../public/temp.png';
+import styles from "./HeadBar.module.scss";
 
 const HeadBar = ({ leftPlace, centerPlace, rightPlace, userPic, userName }) => {
-    const userPicture = userPic || DEFAULT_AVATAR;
+
     return (
-        <header className='top-bar'>
-            <div className='left-place'>{leftPlace}</div>
-            <div className='center-place'>
-                {centerPlace || (
-                    <div className="user-info">
-                        <img src={userPicture} className="chat-avatar" alt="avatar" />
-                        <span className="messenger">{userName}</span>
-                    </div>
-                )}
+        <header className={styles.topBar}>
+            <div className={styles.leftPlace}>{leftPlace}</div>
+            <div className={styles.centerPlace}>
+                {centerPlace}
             </div>
-            <div className='right-place'>{rightPlace}</div>
+            <div className={styles.rightPlace}>{rightPlace}</div>
         </header>
     );
 };
+
 export default HeadBar;

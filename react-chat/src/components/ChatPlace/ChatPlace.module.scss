@@ -1,11 +1,13 @@
-.chat-place {
+@use '../../styles/variables' as vars;
+
+.chatPlace {
     display: flex;
     align-items: center;
     padding: 10px;
     border-radius: 10px 10px 10px 0;
-    border: 2px solid #a159bd;
+    border: 2px solid vars.$chat-border;
     box-shadow: -2px 2px 5px 2px rgba(0, 0, 0, 0.1);
-    background-color: rgb(217, 198, 247);
+    background-color: vars.$background-color-fill-light;
     margin-bottom: 7px;
     transition: background-color 0.3s, transform 0.3s;
     width: 90%;
@@ -13,36 +15,34 @@
     height: 9vh;
 }
 
-.chat-place:hover {
+.chatPlace:hover {
     background-color: rgb(173, 151, 209);
     cursor: pointer;
     transform: scale(1.05);
 }
 
-
-.chat-image {
+.chatImage {
     border-radius: 50%;
     width: 50px;
     height: 50px;
     margin-right: 20px;
-    border: 1px solid rgb(102, 9, 114);
+    border: 1px solid vars.$border-line-color;
 }
 
-.chat-components {
+.chatComponents {
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
-.chat-name {
+.chatName {
     font-size: 20px;
     font-family: "Rubik";
     font-weight: bold;
-    color: rgb(114, 27, 138);
+    color: vars.$text-names();
 }
 
-
-.last-sent {
+.lastSent {
     font-size: 16px;
     margin-left: 5px;
     margin-top: 3px;
@@ -50,19 +50,19 @@
     overflow: hidden;
 }
 
-.chat-footer {
+.chatFooter {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-top: 5px;
 }
 
-.chat-time {
+.chatTime {
     font-size: 12px;
     color: rgb(83, 83, 83);
 }
 
-.read-status {
+.readStatus {
     font-size: 18px;
     color: #a159bd;
 }

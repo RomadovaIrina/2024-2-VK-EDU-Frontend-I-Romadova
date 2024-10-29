@@ -1,114 +1,110 @@
-import React from "react";
-import { useEffect, useState, useRef } from "react";
-
-import './ChatPage.css'
+import React, { useEffect, useState, useRef } from "react";
+import styles from './ChatPage.module.scss';
 import MakeMessage from "../../MakeMessage";
-
+import SendIcon from '@mui/icons-material/Send';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { getMessages, saveMessage } from "../../../api/messages/messages.js"
 import { getByID } from "../../../mockUsers.js"
 
-import SendIcon from '@mui/icons-material/Send'
+import HeadBar from "../../HeadBar/HeadBar.jsx";
+import { useParams, useNavigate } from 'react-router-dom';
+import DEFAULT_AVATAR from '../../../../public/temp.png'
 
-import { saveMessage, getAllMessages, getMessages } from "../../../api/messages/messages.js";
+const ChatPage = () => {
+  const { chatId, userId } = useParams();
+  const [messages, setMessages] = useState([]);
+  const [inputValue, setInputValue] = useState('');
+  const inputPalce = useRef(null);
+  const [lastMessageId, setLastMessageId] = useState(null);
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
+  const messagesEndRef = useRef(null);
 
-const ChatPage = ({ chatId, userId, goToChatList }) => {
+  useEffect(() => {
+    console.log("ChatPage mounted with userId:", userId, "chatId:", chatId);
+    const foundUser = getByID(userId);
+    setUser(foundUser);
+  }, [userId]);
 
-    const [messages, setMessages] = useState([]);
-    const [inputValue, setInputValue] = useState('');
-    const inputPalce = useRef(null);
-    const [lastMessageId, setLastMessageId] = useState(null);
-    const [user, setUser] = useState(null);
+  useEffect(() => {
+    const loadedMessages = getMessages(chatId); // Загружаем сообщения из localStorage
+    setMessages(loadedMessages);
+  }, [chatId]);
 
-    const messagesEndRef = useRef(null);
-
-    useEffect(() => {
-        const foundUser = getByID(userId);
-        setUser(foundUser); 
-    }, [userId]);
-
-    useEffect(() => {
-        const loadedMessages = getMessages(chatId)
-        setMessages(loadedMessages);
-    }, [chatId])
-
-    useEffect(() => {
-        if (messagesEndRef.current) {
-            messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
-        }
-    }, [messages]);
-
-
-    const makeNewMessage = (content) => {
-        const messageTime = new Date().toLocaleString();
-        const messageData = {
-            message_id: Date.now(),
-            chatId: chatId,
-            sender: user?.user.name ?? 'Unknown',
-            text: content,
-            time: messageTime
-        };
-        return messageData;
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
     }
+  }, [messages]);
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const messageText = inputValue.trim();
-        if (!messageText) {
-            return;
-        }
-        const messageData = makeNewMessage(messageText);
-        const updatedMessages = [...messages, messageData];
-        saveMessage(updatedMessages);
-        setMessages(updatedMessages);
-        setInputValue('');
-        inputPalce.current?.focus();
-        setLastMessageId(messageData.message_id);
+
+  const makeNewMessage = (content) => {
+    const messageTime = new Date().toLocaleString();
+    const messageData = {
+      message_id: Date.now(),
+      chatId: chatId,
+      sender: user?.name ?? 'Вы',
+      text: content,
+      time: messageTime
     };
+    return messageData;
+  }
 
-
-    const handleInputChange = (event) => {
-        setInputValue(event.target.value)
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const messageText = inputValue.trim();
+    if (!messageText) {
+      return;
     }
-
-    const handleOnClick = (event) => {
-        if (event.key === 'Enter') handleSubmit(event);
-    }
-
-    return (
-        <div className="chat-content">
-            <main>
-                <ul className="ui" ref={messagesEndRef}>
-                    {messages.map(({ message_id, ...props }) => (
-                        <MakeMessage key={message_id}
-                            isLastMessage={message_id === lastMessageId}
-                            {...props} />
-                    ))}
-
-                </ul>
-
-            </main>
-            <footer>
-                <form onSubmit={handleSubmit} className="message-form">
-                    <input
-                        type="text"
-                        autoFocus
-                        className="form-input"
-                        value={inputValue}
-                        onChange={handleInputChange}
-                        placeholder="Введите сообщение..."
-                        onKeyDown={handleOnClick}
-                    />
-                    <button className="sendButton pulse" type="submit">
-                        <SendIcon sx={{ fontSize: 36 }} />
-                    </button>
-                </form>
-            </footer>
-        </div>
-    );
+    const newMessage = makeNewMessage(messageText);
+    saveMessage(newMessage);
+    setMessages(allMessages => [...allMessages, newMessage]);
+    setInputValue('');
+    setLastMessageId(newMessage.message_id);
+    inputPalce.current?.focus();
+  };
 
 
-
+  return (
+    <div className={styles.chatContent}>
+      <HeadBar
+        userPic={user?.avatar ?? null}
+        userName={user?.name ?? 'Unknown'}
+        leftPlace={
+          <ArrowBackIcon className={styles.arrow} sx={{ fontSize: 40 }} onClick={() => navigate('/')} />
+        }
+        centerPlace={
+          <div className={styles.userInfo}>
+            <img src={user?.avatar || DEFAULT_AVATAR} className={styles.chatAvatar} alt="avatar" />
+            <span className={styles.messenger}>{user?.name ?? 'Unknown'}</span>
+          </div>}
+      />
+      <main>
+        <ul className={styles.messagePos} ref={messagesEndRef}>
+          {messages.map(({ message_id, ...props }) => (
+            <MakeMessage key={message_id}
+              isLastMessage={message_id === lastMessageId}
+              {...props} />
+          ))}
+        </ul>
+      </main>
+      <footer>
+        <form onSubmit={handleSubmit} className={styles.messageForm}>
+          <input
+            type="text"
+            className={styles.formInput}
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            placeholder="Введите сообщение..."
+          />
+          <button className={styles.sendButton} type="submit">
+            <SendIcon sx={{ fontSize: 36 }} />
+          </button>
+        </form>
+      </footer>
+    </div>
+  );
 };
-
 
 export default ChatPage;

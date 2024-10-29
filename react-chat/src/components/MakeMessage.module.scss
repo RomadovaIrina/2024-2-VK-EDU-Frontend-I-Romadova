@@ -1,0 +1,61 @@
+@use '../styles/variables.scss' as vars;
+
+.message {
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+    max-width: 70%;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    word-wrap: break-word;
+  }
+  
+  /* Имя отправителя */
+  .messageHeader {
+    font-weight: bold;
+    font-family: "Rubik";
+    color: vars.$text-names;
+    margin-bottom: 5px;
+  }
+  
+  /* Текст сообщения */
+  .messageBody {
+    font-size: 17px;
+    color: #655e5e;
+    font-family: "Arial";
+  }
+  
+  /* Дата сообщения */
+  .messageFooter {
+    font-size: 12px;
+    color: #888;
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+
+@keyframes messageFly {
+
+  0% {
+    opacity: 0;
+    transform: translateX(-50%);
+    scale: 0.2;
+  }
+
+  0% {
+    opacity: 0;
+    transform: translateX(-25%);
+    scale: 0.7;
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+
+.messageFly {
+  animation: messageFly 0.4s ease-out;
+}

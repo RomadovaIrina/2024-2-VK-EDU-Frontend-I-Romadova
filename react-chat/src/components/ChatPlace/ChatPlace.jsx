@@ -1,6 +1,6 @@
 import React from 'react';
-import './ChatPlace.css'
-import DEFAULT_AVATAR from '../../../public/temp.png'
+import styles from "./ChatPlace.module.scss";
+import DEFAULT_AVATAR from '../../../public/temp.png';
 
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 
@@ -18,16 +18,14 @@ const ChatPlace = (props) => {
     const userPicture = avatar || DEFAULT_AVATAR;
 
     return (
-        <div className='chat-place'
-            onClick={() => onClick(chatId)}>
-            <img src={userPicture} className='chat-image' />
-            <div className='chat-components'>
-                <div className='chat-name'>{name}</div>
-                <div className='last-sent'>{lastMessage}</div>
-                <div className='chat-footer'>
-                    <div className='chat-time'>{time}</div>
-                    {isRead &&
-                        <DoneAllIcon className="read-status read" style={{ color: 'green' }} />}
+        <div className={styles.chatPlace} onClick={() => onClick(chatId)}>
+            <img src={userPicture} className={styles.chatImage} alt="User avatar" />
+            <div className={styles.chatComponents}>
+                <div className={styles.chatName}>{name}</div>
+                <div className={styles.lastSent}>{lastMessage}</div>
+                <div className={styles.chatFooter}>
+                    <div className={styles.chatTime}>{time}</div>
+                    {isRead && <DoneAllIcon className={styles.readStatus} style={{ color: 'green' }} />}
                 </div>
             </div>
         </div>

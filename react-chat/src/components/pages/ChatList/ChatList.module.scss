@@ -1,5 +1,7 @@
-.add-chat {
-    background-color: #7b1fa2;
+@use '../../../styles/variables' as vars;
+
+.addChat {
+    background-color: vars.$icons-color;
     border: none;
     padding: 10px;
     border-radius: 50%;
@@ -17,22 +19,19 @@
     border-radius: 50%;
     padding: 10px;
     transition: background-color 0.3s, transform 0.3s;
-
 }
 
-@keyframes pulse-blue {
+@keyframes pulseBlue {
     0% {
         transform: scale(1);
         background-color: #731b99;
         box-shadow: 0 2px 5px rgba(39, 13, 56, 0.514);
     }
-
     50% {
         transform: scale(1.1);
         background-color: #a358c4;
         box-shadow: 0 4px 7px rgba(26, 8, 39, 0.658);
     }
-
     100% {
         transform: scale(1);
         background-color: #731b99;
@@ -40,13 +39,13 @@
     }
 }
 
-.add-chat .edit-icon {
+.addChat .editIcon {
     font-size: 38px;
 }
 
-.add-chat:hover {
+.addChat:hover {
     background-color: #a358c4;
-    animation: pulse-blue 1s infinite;
+    animation: pulseBlue 1s infinite;
 }
 
 .messenger {
@@ -54,8 +53,8 @@
     font-family: monospace;
 }
 
-.go-back {
-    background-color: #7b1fa2;
+.goBack {
+    background-color: vars.$icons-color;
     border: none;
     padding: 10px;
     border-radius: 50%;
@@ -66,17 +65,17 @@
     transition: background-color 0.3s ease, transform 0.7s;
 }
 
-.go-back:hover {
+.goBack:hover {
     background-color: #bc65e0;
     animation: pulse 0.6 infinite;
     transform: rotate(1turn);
 }
 
-.go-back .material-icons {
+.goBack {
     font-size: 30px;
 }
 
-.chatList-button {
+.chatListButton {
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -86,7 +85,25 @@
     position: relative;
 }
 
-.chat-list {
+.chatList {
     height: 100vh;
     margin-top: 10px;
+}
+
+
+.menuIcon,
+.searchIcon,
+.arrow {
+  color: rgb(255, 195, 255);
+  cursor: pointer;
+}
+
+.messenger {
+  font-weight: 500;
+  font-size: 28px;
+  font-family: "Montserrat";
+}
+
+a {
+    text-decoration: none;
 }

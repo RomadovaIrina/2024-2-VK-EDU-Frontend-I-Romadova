@@ -1,23 +1,22 @@
-.top-bar {
+@use '../../styles/variables' as vars;
+
+.topBar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px;
-    background-color: #8921b6;
+    background-color: vars.$background-color-top;
     color: #eee7e7;
     margin-bottom: 20px;
     box-shadow: 0 1px 2px rgba(80, 5, 80, 0.521);
 }
 
-.menu-icon,
-.search-icon,
+.menuIcon,
+.searchIcon,
 .arrow {
     color: rgb(255, 195, 255);
     cursor: pointer;
 }
-
-
-
 
 .messenger {
     font-weight: 500;
@@ -25,23 +24,12 @@
     font-family: "Montserrat";
 }
 
-
-.chat-avatar {
+.chatAvatar {
     width: 55px;
     height: 55px;
-    border-radius: 50%;
+    border-radius: vars.$round-radius;
     margin-right: 10px;
     object-fit: cover;
-    border: 1px solid rgb(102, 9, 114);
-    box-shadow: 1px 2px #8921b6;
-}
-
-.user-info {
-    display: flex;
-    flex-direction: line;
-    align-items: center;
-    margin-left: 10px;
-    flex-grow: 1;
-
-    margin-left: 50px;
+    border: 1px solid vars.$border-line-color;
+    box-shadow: 1px 2px vars.$background-color-top;
 }

@@ -1,40 +1,7 @@
-/* Сообщение */
-.message {
-  background-color: white;
-  padding: 10px;
-  border-radius: 10px;
-  max-width: 70%;
-  position: relative;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  word-wrap: break-word;
-}
-
-/* Имя отправителя */
-.message-header {
-  font-weight: bold;
-  font-family: "Rubik";
-  color: rgb(142, 36, 170);
-  margin-bottom: 5px;
-}
-
-/* Текст сообщения */
-.message-body {
-  font-size: 17px;
-  color: #333;
-  font-family: "Arial";
-}
-
-/* Дата сообщения */
-.message-footer {
-  font-size: 12px;
-  color: #888;
-  margin-top: 10px;
-  display: flex;
-  justify-content: space-between;
-}
+@use '../../../styles/variables' as vars;
 
 /* Форма отправки сообщения */
-.message-form {
+.messageForm {
   display: flex;
   padding: 15px;
   margin-top: 10px;
@@ -47,7 +14,7 @@
 }
 
 /* Поле ввода */
-.form-input {
+.formInput {
   flex: 1;
   padding: 15px;
   border-radius: 20px;
@@ -55,6 +22,7 @@
   font-size: 20px;
   border: none;
   outline: none;
+  color: rgb(84, 84, 92);
 }
 
 /* Кнопка отправки */
@@ -71,10 +39,10 @@
 .sendButton:hover {
   background-color: rgb(201, 177, 248);
   cursor: pointer;
-  animation: pulse-hover 0.6s infinite;
+  animation: pulseHover 0.6s infinite;
 }
 
-@keyframes pulse-hover {
+@keyframes pulseHover {
   0% {
     transform: scale(1);
     border-color: rgba(141, 36, 170, 0.007);
@@ -92,32 +60,9 @@
 }
 
 
-@keyframes message-fly {
-
-  0% {
-    opacity: 0;
-    transform: translateX(-50%);
-    scale: 0.2;
-  }
-
-  0% {
-    opacity: 0;
-    transform: translateX(-25%);
-    scale: 0.7;
-  }
-
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
 
 
-.message-fly {
-  animation: message-fly 0.4s ease-out;
-}
-
-.ui {
+.messagePos {
   list-style-type: none;
   padding: 0 10px;
   overflow-y: scroll;
@@ -126,7 +71,42 @@
   gap: 15px;
 }
 
-.chat-content {
+.chatContent {
   height: calc(100vh - 10vh);
   ;
+}
+
+
+.menuIcon,
+.searchIcon,
+.arrow {
+  color: rgb(255, 195, 255);
+  cursor: pointer;
+}
+
+.messenger {
+  font-weight: 500;
+  font-size: 28px;
+  font-family: "Montserrat";
+}
+
+
+.chatAvatar {
+  width: 55px;
+  height: 55px;
+  border-radius: vars.$round-radius;
+  margin-right: 10px;
+  object-fit: cover;
+  border: 1px solid vars.$border-line-color;
+  box-shadow: 1px 2px vars.$background-color-top;
+}
+
+
+.userInfo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: 10px;
+  flex-grow: 1;
+  margin-left: 50px;
 }

@@ -1,91 +1,34 @@
-import { useState, useEffect } from 'react'
-import './App.css'
+import { useState, useEffect } from 'react';
+import {HashRouter as Router, Link, Route, Routes} from 'react-router-dom'
 
+import styles from './App.module.scss';
 
 import ChatList from './components/pages/ChatList/ChatList';
-import HeadBar from './components/HeadBar/HeadBar';
 import ChatPage from './components/pages/ChatPage/ChatPage';
+import ProfilePage from './components/pages/ProfilePage/ProfilePage';
 
 import { getByID, USERS } from './mockUsers.js';
 
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
-
-
 function App() {
-  const [currentPage, setCurrentPage] = useState('chatList');
-  const [activeChat, setActiveChat] = useState(null);
-  const [activeUserId, setActiveUserId] = useState(null);
-  const [chatUserId, setChatUserId] = useState(null);
-
-  const initializeUsers = (users) => {
-    localStorage.setItem('users', JSON.stringify(users));
-  };
-
   useEffect(() => {
-    initializeUsers(USERS);
+    localStorage.setItem('users', JSON.stringify(USERS));
   }, []);
 
-  const goToChatList = () => {
-    setCurrentPage('chatList');
+
+  const handleChatClick = (chatId, userId) => {
+    console.log("handleChatClick called with chatId:", chatId, "userId:", userId); 
   };
-
-  const goHome = () => {
-    setCurrentPage('home');
-  };
-
-  const handleChatClick = (chatId, chatUserId) => {
-    setActiveChat(chatId);
-    setChatter(chatUserId);
-    setCurrentPage('chatPage');
-  };
-
-  const openExactChat = (chatID, userID) => {
-    setActiveChat(chatID);
-    setActiveUserId(userID)
-    setCurrentPage('chatPage')
-  }
-
-  const pageContent =
-    currentPage === 'chatList' ? (
-      <ChatList onChatClick={openExactChat} goHome={goHome} />
-    ) : (
-      <ChatPage chatId={activeChat} userId={chatUserId} goToChatList={goToChatList} />
-    );
-
-  const chatUser = chatUserId ? getByID(chatUserId) : null;
-
-
-  const headerContent = currentPage === 'chatList' ?
-    (
-      {
-        leftPlace: <MenuIcon className="menu-icon" sx={{ fontSize: 40 }} />,
-        centerPlace: <span className='messenger'>Messenger</span>,
-        rightPlace: <SearchIcon className="search-icon" sx={{ fontSize: 40 }} />,
-        userPic: null,
-        userName: null
-      }
-
-    ) : (
-      {
-        leftPlace: <ArrowBackIcon className="arrow"
-          sx={{ fontSize: 40 }}
-          onClick={goToChatList} />,
-        centerPlace: null,
-        rightPlace: null,
-        userPic: chatUser?.chatUser.avatar ?? null,
-        userName: chatUser?.chatUser.name ?? 'Unknown'
-      }
-    );
-
-
   return (
-    <div className='constent'>
-      <HeadBar {...headerContent} />
-      {pageContent}
+    <Router>
+    <div className={styles.constent}>
+      <Routes>
+          <Route path="/" element={<ChatList onChatClick={handleChatClick}/>}/>
+          <Route path="/chat/:chatId/:userId" element={<ChatPage/>}/>
+          <Route path="/profile/:userId" element={<ProfilePage/>}/>
+      </Routes>
     </div>
+    </Router>
   );
 }
 
-export default App
+export default App;
