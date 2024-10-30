@@ -27,20 +27,21 @@
 
 /* Кнопка отправки */
 .sendButton {
-  color: rgb(208, 110, 235);
-  ;
+  color: rgb(210, 97, 241);
   border: 2px solid rgba(141, 36, 170, 0);
   padding: 10px;
   margin-left: 5px;
   border-radius: 50%;
+  background-color: rgb(120, 31, 155);
   transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: rgb(224, 211, 250);
+    cursor: pointer;
+    animation: pulseHover 0.6s infinite;
+  }
 }
 
-.sendButton:hover {
-  background-color: rgb(201, 177, 248);
-  cursor: pointer;
-  animation: pulseHover 0.6s infinite;
-}
 
 @keyframes pulseHover {
   0% {

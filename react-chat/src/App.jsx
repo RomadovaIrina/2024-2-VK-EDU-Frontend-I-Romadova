@@ -8,23 +8,30 @@ import ChatPage from './components/pages/ChatPage/ChatPage';
 import ProfilePage from './components/pages/ProfilePage/ProfilePage';
 
 import { getByID, USERS } from './mockUsers.js';
+import { initUsers } from './api/users/users.js';
+
+
+const ROUTES = {
+  ROOT:"/",
+  CHAT:"/chat/:chatId",
+  PROFILE:"/profile/:userId"
+}
+
 
 function App() {
   useEffect(() => {
-    localStorage.setItem('users', JSON.stringify(USERS));
+    initUsers(USERS);
   }, []);
 
 
-  const handleChatClick = (chatId, userId) => {
-    console.log("handleChatClick called with chatId:", chatId, "userId:", userId); 
-  };
+
   return (
     <Router>
     <div className={styles.constent}>
       <Routes>
-          <Route path="/" element={<ChatList onChatClick={handleChatClick}/>}/>
-          <Route path="/chat/:chatId/:userId" element={<ChatPage/>}/>
-          <Route path="/profile/:userId" element={<ProfilePage/>}/>
+          <Route path={ROUTES.ROOT} element={<ChatList />} />
+          <Route path={ROUTES.CHAT} element={<ChatPage />} />
+          <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
       </Routes>
     </div>
     </Router>

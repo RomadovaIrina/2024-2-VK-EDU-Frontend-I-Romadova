@@ -1,6 +1,6 @@
 
 const saveMessage = (newMessage) => {
-    const storedMessages = JSON.parse(localStorage.getItem("chatMessages")) || [];
+    const storedMessages = getAllMessages();
     const updatedMessages = Array.isArray(newMessage)
         ? [...storedMessages, ...newMessage] 
         : [...storedMessages, newMessage]; 

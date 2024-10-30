@@ -18,10 +18,9 @@
     border-radius: 4px;
     transition: border-color 0.3s ease;
     width: 100%;
+
+    &:focus {
+      border-color: #007bff;
+      outline: none;
+    }
   }
-  
-  .input:focus {
-    border-color: #007bff;
-    outline: none;
-  }
-  

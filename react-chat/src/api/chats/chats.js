@@ -5,6 +5,11 @@ const getChats = () => {
     localStorage.setItem("chats", JSON.stringify(chats));
   };
 
+  const getChatById = (chatId) => {
+    const chats = getChats();
+    const foundChat = chats.find(chat => chat.chatId === parseInt(chatId));
+    return foundChat;
+  }
 
 
-export{ getChats, saveChats};
+export{ getChats, saveChats, getChatById};

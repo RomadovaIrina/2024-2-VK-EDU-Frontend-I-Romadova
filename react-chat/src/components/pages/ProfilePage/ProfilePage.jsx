@@ -12,32 +12,42 @@ import { getUser, saveUser } from "../../../api/users/users.js";
 import EditInput from "../../EditInput/EditInput.jsx";
 
 const ProfilePage = () => {
-  const { chatId, userId } = useParams();
+  const {userId } = useParams();
   const [user, setUser] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const navigate = useNavigate();
-  const [tempUser, setTempUser] = useState({});
+  const [editingUser, setEditingUser] = useState({
+    name: "Пользователь",
+    username: "username",
+    description: "Напишите немного о себе",
+    avatar: DEFAULT_AVATAR
+  });
 
+  const makeChangeHandle = (feildParam) => (value) => handleChange(feildParam, value);
 
   useEffect(() => {
     const savedUser = getUser(userId);
     if (savedUser) {
       setUser(savedUser);
-      setTempUser(savedUser);
+      setEditingUser(savedUser);
     }
   }, [userId]);
 
   const handleEdit = () => {
     if (isEditing) {
-      setUser(tempUser);
-      saveUser(userId, tempUser);
+      setUser(editingUser);
+      saveUser(userId, editingUser);
     }
     setIsEditing(!isEditing);
   };
 
   const handleChange = (field, value) => {
-    setTempUser((prev) => ({ ...prev, [field]: value }));
+    setEditingUser((prev) => ({ ...prev, [field]: value }));
   };
+
+  const userPic = user?.avatar || DEFAULT_AVATAR;
+  const headerName = !isEditing ? user?.name : 'Edit the profile';
+  const handleNavigate = () => navigate('/');
 
   return (
     <div>
@@ -47,51 +57,51 @@ const ProfilePage = () => {
           <ArrowBackIcon
             className={styles.arrow}
             sx={{ fontSize: 40 }}
-            onClick={() => navigate('/')} />
+            onClick={handleNavigate} />
         }
         centerPlace={
           <div className={styles.userInfo}>
-            <span className={styles.messenger}>{!isEditing ? user?.name : 'Edit the profile'}</span>
+            <span className={styles.messenger}>{headerName}</span>
           </div>}
         rightPlace={
           isEditing ? (
-            <CheckIcon onClick={handleEdit} style={{ cursor: 'pointer' }} />
+            <CheckIcon className = {styles.checkIcon} onClick={handleEdit} />
           ) : (
-            <EditIcon onClick={handleEdit} style={{ cursor: 'pointer' }} />
+            <EditIcon className = {styles.editIcon} onClick={handleEdit} />
           )
         }
       />
-      <main className={styles.profileContainer}>
+      <main>
         <div className={styles.profileContent}>
 
           <div className={styles.pictureContent}>
-            <img src={user?.avatar || DEFAULT_AVATAR} className={styles.avatar} alt="avatar" />
+            <img src={userPic} className={styles.avatar} alt="avatar" />
             <div className={styles.cameraIcon}>
               <CameraAltIcon />
             </div>
           </div>
 
           <EditInput
-            className={styles.editInputContainer} /* Добавьте этот класс к EditInput */
+            className={styles.editInputContainer}
             labelName="Full name"
-            value={tempUser?.name}
-            onChange={value => handleChange('name', value)}
+            value={editingUser?.name}
+            onChange={makeChangeHandle('name')}
             readOnly={!isEditing}
           />
 
           <EditInput
             className={styles.editInputContainer}
             labelName="Username"
-            value={`@${tempUser.username ?? ''}`}
-            onChange={value => handleChange('username', value.replace('@', ''))}
+            value={`@${editingUser.username ?? ''}`}
+            onChange={makeChangeHandle('username')}
             readOnly={!isEditing}
           />
 
           <EditInput
             className={styles.editInputContainer}
             labelName="Bio"
-            value={tempUser?.description}
-            onChange={value => handleChange('description', value)}
+            value={editingUser?.description}
+            onChange={makeChangeHandle('description')}
             readOnly={!isEditing}
           />
 

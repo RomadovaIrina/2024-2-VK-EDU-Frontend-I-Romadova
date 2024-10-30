@@ -25,7 +25,7 @@ const ChatPlace = (props) => {
                 <div className={styles.lastSent}>{lastMessage}</div>
                 <div className={styles.chatFooter}>
                     <div className={styles.chatTime}>{time}</div>
-                    {isRead && <DoneAllIcon className={styles.readStatus} style={{ color: 'green' }} />}
+                    {isRead && <DoneAllIcon className={styles.readStatus} />}
                 </div>
             </div>
         </div>

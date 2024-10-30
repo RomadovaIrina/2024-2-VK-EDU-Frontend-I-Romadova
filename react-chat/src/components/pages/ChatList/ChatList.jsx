@@ -9,9 +9,10 @@ import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import { getChats, saveChats } from "../../../api/chats/chats.js";
 import { Link, useNavigate } from 'react-router-dom';
+import classNames from 'classnames';
+
 
 const ChatList = (props) => {
-  const { onChatClick } = props;
   const [chats, setChats] = useState([]);
   const navigate = useNavigate();
 
@@ -51,15 +52,15 @@ const ChatList = (props) => {
   };
 
   const handleChatClick = (chatID) => {
-    const foundChat = chats.find(chat => chat.chatId === chatID);
-    onChatClick(chatID, foundChat.userId);
-    navigate(`/chat/${chatID}/${foundChat.userId}`);
+    navigate(`/chat/${chatID}`);
   };
 
   const handleMenuClick = () => {
       const userId = 1; 
       navigate(`/profile/${userId}`);
   }
+
+  const createLink = (chatId) => `/chat/${chatId}`;
 
   return (
     <main>
@@ -71,7 +72,7 @@ const ChatList = (props) => {
       <div className={styles.chatList}>
         <ul>
           {chats.map((chat) => (
-            <Link key={chat.chatId} to={`/chat/${chat.chatId}/${chat.userId}`}>
+            <Link key={chat.chatId} to={createLink(chat.chatId)}>
               <ChatPlace
                 chatId={chat.chatId}
                 avatar={chat.avatar}
@@ -85,8 +86,8 @@ const ChatList = (props) => {
           ))}
         </ul>
         <div className={styles.chatListButton}>
-          <button type="button" className={`${styles.addChat} ${styles.pulse}`} onClick={handleAddChat}>
-            <EditIcon className={styles.editIcon} />
+          <button type="button" className={classNames(styles.addChat, styles.pulse)} onClick={handleAddChat}>
+            <EditIcon className={styles.editIcon} sx={{ fontSize: 36 }}/>
           </button>
         </div>
       </div>

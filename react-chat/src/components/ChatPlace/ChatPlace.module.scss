@@ -13,13 +13,14 @@
     width: 90%;
     margin-left: 2%;
     height: 9vh;
+
+    &:hover{
+        background-color: rgb(173, 151, 209);
+        cursor: pointer;
+        transform: scale(1.05);
+    }
 }
 
-.chatPlace:hover {
-    background-color: rgb(173, 151, 209);
-    cursor: pointer;
-    transform: scale(1.05);
-}
 
 .chatImage {
     border-radius: 50%;

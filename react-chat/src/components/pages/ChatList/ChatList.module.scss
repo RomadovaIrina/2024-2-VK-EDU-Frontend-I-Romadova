@@ -11,6 +11,11 @@
     box-shadow: 0 2px 5px rgba(39, 13, 56, 0.514);
     transition: background-color 0.3s ease, transform 0.3s;
     position: fixed;
+
+    &:hover {
+        background-color: #a358c4;
+        animation: pulseBlue 1s infinite;
+    }
 }
 
 .pulse {
@@ -39,14 +44,7 @@
     }
 }
 
-.addChat .editIcon {
-    font-size: 38px;
-}
 
-.addChat:hover {
-    background-color: #a358c4;
-    animation: pulseBlue 1s infinite;
-}
 
 .messenger {
     font-size: 30px;
@@ -63,16 +61,6 @@
     color: white;
     box-shadow: 0 2px 5px rgba(39, 13, 56, 0.514);
     transition: background-color 0.3s ease, transform 0.7s;
-}
-
-.goBack:hover {
-    background-color: #bc65e0;
-    animation: pulse 0.6 infinite;
-    transform: rotate(1turn);
-}
-
-.goBack {
-    font-size: 30px;
 }
 
 .chatListButton {

@@ -8,10 +8,11 @@ import { getByID } from "../../../mockUsers.js"
 
 import HeadBar from "../../HeadBar/HeadBar.jsx";
 import { useParams, useNavigate } from 'react-router-dom';
-import DEFAULT_AVATAR from '../../../../public/temp.png'
+import DEFAULT_AVATAR from '../../../../public/temp.png';
+import { getChats, getChatById } from "../../../api/chats/chats.js";
 
 const ChatPage = () => {
-  const { chatId, userId } = useParams();
+  const { chatId} = useParams();
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const inputPalce = useRef(null);
@@ -22,13 +23,18 @@ const ChatPage = () => {
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
-    console.log("ChatPage mounted with userId:", userId, "chatId:", chatId);
-    const foundUser = getByID(userId);
-    setUser(foundUser);
-  }, [userId]);
+    const foundChat = getChatById(chatId);
+    if (foundChat) {
+      const foundUser = getByID(foundChat.userId);
+      setUser(foundUser);
+    }
+    else {
+      navigate('/');
+    }
+  }, [chatId, navigate]);
 
   useEffect(() => {
-    const loadedMessages = getMessages(chatId); // Загружаем сообщения из localStorage
+    const loadedMessages = getMessages(chatId); 
     setMessages(loadedMessages);
   }, [chatId]);
 
@@ -65,6 +71,10 @@ const ChatPage = () => {
     inputPalce.current?.focus();
   };
 
+  const handleInputChange = (e) => setInputValue(e.target.value);
+  const userPic = user?.avatar || DEFAULT_AVATAR;
+  const chatUserName = user?.name ?? 'Unknown'
+  const handleNavigate = () => navigate('/');  
 
   return (
     <div className={styles.chatContent}>
@@ -72,12 +82,12 @@ const ChatPage = () => {
         userPic={user?.avatar ?? null}
         userName={user?.name ?? 'Unknown'}
         leftPlace={
-          <ArrowBackIcon className={styles.arrow} sx={{ fontSize: 40 }} onClick={() => navigate('/')} />
+          <ArrowBackIcon className={styles.arrow} sx={{ fontSize: 40 }} onClick= {handleNavigate} />
         }
         centerPlace={
           <div className={styles.userInfo}>
-            <img src={user?.avatar || DEFAULT_AVATAR} className={styles.chatAvatar} alt="avatar" />
-            <span className={styles.messenger}>{user?.name ?? 'Unknown'}</span>
+            <img src={userPic} className={styles.chatAvatar} alt="avatar" />
+            <span className={styles.messenger}>{chatUserName}</span>
           </div>}
       />
       <main>
@@ -95,7 +105,7 @@ const ChatPage = () => {
             type="text"
             className={styles.formInput}
             value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
+            onChange={handleInputChange}
             placeholder="Введите сообщение..."
           />
           <button className={styles.sendButton} type="submit">
