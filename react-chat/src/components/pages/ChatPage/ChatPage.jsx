@@ -3,16 +3,16 @@ import styles from './ChatPage.module.scss';
 import MakeMessage from "../../MakeMessage";
 import SendIcon from '@mui/icons-material/Send';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { getMessages, saveMessage } from "../../../api/messages/messages.js"
+import { getMessages, saveMessage } from "../../../api_service/messages/messages.js"
 import { getByID } from "../../../mockUsers.js"
 
 import HeadBar from "../../HeadBar/HeadBar.jsx";
 import { useParams, useNavigate } from 'react-router-dom';
 import DEFAULT_AVATAR from '../../../../public/temp.png';
-import { getChats, getChatById } from "../../../api/chats/chats.js";
+import { getChatById } from "../../../api_service/chats/chats.js";
 
 const ChatPage = () => {
-  const { chatId} = useParams();
+  const { chatId } = useParams();
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const inputPalce = useRef(null);
@@ -34,7 +34,7 @@ const ChatPage = () => {
   }, [chatId, navigate]);
 
   useEffect(() => {
-    const loadedMessages = getMessages(chatId); 
+    const loadedMessages = getMessages(chatId);
     setMessages(loadedMessages);
   }, [chatId]);
 
@@ -74,7 +74,7 @@ const ChatPage = () => {
   const handleInputChange = (e) => setInputValue(e.target.value);
   const userPic = user?.avatar || DEFAULT_AVATAR;
   const chatUserName = user?.name ?? 'Unknown'
-  const handleNavigate = () => navigate('/');  
+  const handleNavigate = () => navigate('/');
 
   return (
     <div className={styles.chatContent}>
@@ -82,7 +82,7 @@ const ChatPage = () => {
         userPic={user?.avatar ?? null}
         userName={user?.name ?? 'Unknown'}
         leftPlace={
-          <ArrowBackIcon className={styles.arrow} sx={{ fontSize: 40 }} onClick= {handleNavigate} />
+          <ArrowBackIcon className={styles.arrow} sx={{ fontSize: 40 }} onClick={handleNavigate} />
         }
         centerPlace={
           <div className={styles.userInfo}>
