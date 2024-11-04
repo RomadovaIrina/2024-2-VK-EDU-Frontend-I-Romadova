@@ -8,7 +8,7 @@ import HeadBar from "../../HeadBar/HeadBar.jsx";
 import { useParams, useNavigate } from 'react-router-dom';
 import styles from "./ProfilePage.module.scss";
 import DEFAULT_AVATAR from "../../../../public/temp.png"
-import { getUser, saveUser } from "../../../api_service/users/users.js";
+import { getUser, saveUser } from "../../../apiService/users/users.js";
 import EditInput from "../../EditInput/EditInput.jsx";
 
 const ProfilePage = () => {

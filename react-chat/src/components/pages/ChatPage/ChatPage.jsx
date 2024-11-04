@@ -3,13 +3,13 @@ import styles from './ChatPage.module.scss';
 import MakeMessage from "../../MakeMessage";
 import SendIcon from '@mui/icons-material/Send';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { getMessages, saveMessage } from "../../../api_service/messages/messages.js"
+import { getMessages, saveMessage } from "../../../apiService/messages/messages.js"
 import { getByID } from "../../../mockUsers.js"
 
 import HeadBar from "../../HeadBar/HeadBar.jsx";
 import { useParams, useNavigate } from 'react-router-dom';
 import DEFAULT_AVATAR from '../../../../public/temp.png';
-import { getChatById } from "../../../api_service/chats/chats.js";
+import { getChatById } from "../../../apiService/chats/chats.js";
 
 const ChatPage = () => {
   const { chatId } = useParams();

@@ -1,10 +1,11 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8000/api';
+// const API_URL = 'https://vkedu-fullstack-div2.ru/api';
+const API_URL = import.meta.env.VITE_API_URL;
 
 const getChats = async (headers) => {
     try {
-        const response = await axios.get(`${API_URL}/chats`, { headers });
+        const response = await axios.get(`${API_URL}chats`, { headers });
         return response.data.results;
     } catch (error) {
         console.error("Error fetching chats:", error);
@@ -14,7 +15,7 @@ const getChats = async (headers) => {
 
 const saveChat = async (chatData, authHeaders) => {
   try {
-    const response = await axios.post(`${API_URL}/chats/`, chatData, {
+    const response = await axios.post(`${API_URL}chats/`, chatData, {
       headers: authHeaders,
     });
     return response.data; 
@@ -26,7 +27,7 @@ const saveChat = async (chatData, authHeaders) => {
 
 const getChatById = async (chatId, headers) => {
     try {
-        const response = await axios.get(`${API_URL}/chats/${chatId}`, { headers });
+        const response = await axios.get(`${API_URL}chats/${chatId}`, { headers });
         return response.data;
     } catch (error) {
         console.error(`Error fetching chat with ID ${chatId}:`, error);

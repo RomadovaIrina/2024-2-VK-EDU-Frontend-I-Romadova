@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8000/api';
+// const API_BASE_URL = 'https://vkedu-fullstack-div2.ru/api';
+const API_URL = import.meta.env.VITE_API_URL;
+
 let accessToken = '';
 
 export const setAccessToken = (token) => {
@@ -10,6 +12,8 @@ export const setAccessToken = (token) => {
 const getAuthHeaders = () => ({
   'Authorization': `Bearer ${accessToken}`,
 });
+
+
 
 export async function registerUser({ username, password, first_name, last_name, bio, avatar }) {
   const formData = new FormData();
@@ -21,20 +25,25 @@ export async function registerUser({ username, password, first_name, last_name, 
   if (avatar) formData.append('avatar', avatar);
 
   try {
-    const response = await axios.post(`${API_BASE_URL}/register/`, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
+    const response = await axios.post(`${API_URL}register/`, formData, {
+      headers: { 
+        
+        'Authorization': `Bearer ${accessToken}`
+      },
     });
+
     return response.data;
   } catch (error) {
-    console.error('Ошибка регистрации:', error);
+    console.error('Ошибка регистрации:', error.response ? error.response.data : error.message);
     throw error;
   }
 }
 
+
 export async function loginUser({ username, password }) {
   try {
     const response = await axios.post(
-      `${API_BASE_URL}/auth/`,
+      `${API_URL}auth/`,
       { username, password },
       { headers: { 'Content-Type': 'application/json' } }
     );
@@ -43,10 +52,13 @@ export async function loginUser({ username, password }) {
     localStorage.setItem('refreshToken', refresh);
     return response.data;
   } catch (error) {
-    console.error('Ошибка входа:', error);
+    console.error('Ошибка входа:', error.response ? error.response.data : error.message);
     throw error;
   }
 }
+
+
+
 
 export async function refreshToken() {
   const refresh = localStorage.getItem('refreshToken');
@@ -55,7 +67,7 @@ export async function refreshToken() {
   }
   try {
     const response = await axios.post(
-      `${API_BASE_URL}/auth/refresh/`,
+      `${API_URL}auth/refresh/`,
       { refresh },
       { headers: { 'Content-Type': 'application/json' } }
     );
