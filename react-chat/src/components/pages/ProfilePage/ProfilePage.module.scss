@@ -1,0 +1,85 @@
+@use '../../../styles/variables' as vars;
+
+
+.editIcon,
+.arrow {
+  color: rgb(255, 195, 255);
+  cursor: pointer;
+}
+
+.messenger {
+  font-weight: 500;
+  font-size: 28px;
+  font-family: "Montserrat";
+}
+
+
+.userInfo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: 10px;
+  flex-grow: 1;
+  margin-left: 50px;
+}
+
+
+.profileContent {
+    padding: 20px;
+    display: flex;
+    height: 100hv;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 50%;
+    background-color: #fdf6ef;
+    border-radius: 16px;
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.281);
+    margin: auto;
+  }
+
+  
+  .requirementsInput {
+    font-size: 12px;
+    color: #888;
+    margin-top: 5px;
+  }
+
+
+
+.pictureContent {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .cameraIcon {
+    position: absolute;
+    bottom: 0;
+    right: 10px;
+    background-color: rgb(126, 32, 126);
+    border-radius: 50%;
+    padding: 4px;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: vars.$background-color-top-light;
+    }
+  }
+  
+
+  .checkIcon, .editIcon {
+    cursor: pointer;
+  }

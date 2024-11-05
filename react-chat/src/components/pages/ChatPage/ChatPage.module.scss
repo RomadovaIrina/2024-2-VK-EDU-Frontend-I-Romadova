@@ -1,0 +1,113 @@
+@use '../../../styles/variables' as vars;
+
+/* Форма отправки сообщения */
+.messageForm {
+  display: flex;
+  padding: 15px;
+  margin-top: 10px;
+  width: 100%;
+  align-items: center;
+  background-color: rgb(201, 177, 248);
+  border-top: 2px solid rgb(192, 171, 231);
+  box-shadow: 0px -2px 5px rgb(201, 177, 248);
+
+}
+
+/* Поле ввода */
+.formInput {
+  flex: 1;
+  padding: 15px;
+  border-radius: 20px;
+  background-color: #ebe9ea;
+  font-size: 20px;
+  border: none;
+  outline: none;
+  color: rgb(84, 84, 92);
+}
+
+/* Кнопка отправки */
+.sendButton {
+  color: rgb(210, 97, 241);
+  border: 2px solid rgba(141, 36, 170, 0);
+  padding: 10px;
+  margin-left: 5px;
+  border-radius: 50%;
+  background-color: rgb(120, 31, 155);
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: rgb(224, 211, 250);
+    cursor: pointer;
+    animation: pulseHover 0.6s infinite;
+  }
+}
+
+
+@keyframes pulseHover {
+  0% {
+    transform: scale(1);
+    border-color: rgba(141, 36, 170, 0.007);
+  }
+
+  50% {
+    transform: scale(1.05);
+    border-color: rgba(159, 22, 197, 0.308);
+  }
+
+  100% {
+    transform: scale(1);
+    border-color: rgba(141, 36, 170, 0);
+  }
+}
+
+
+
+
+.messagePos {
+  list-style-type: none;
+  padding: 0 10px;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.chatContent {
+  height: calc(100vh - 10vh);
+  ;
+}
+
+
+.menuIcon,
+.searchIcon,
+.arrow {
+  color: rgb(255, 195, 255);
+  cursor: pointer;
+}
+
+.messenger {
+  font-weight: 500;
+  font-size: 28px;
+  font-family: "Montserrat";
+}
+
+
+.chatAvatar {
+  width: 55px;
+  height: 55px;
+  border-radius: vars.$round-radius;
+  margin-right: 10px;
+  object-fit: cover;
+  border: 1px solid vars.$border-line-color;
+  box-shadow: 1px 2px vars.$background-color-top;
+}
+
+
+.userInfo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: 10px;
+  flex-grow: 1;
+  margin-left: 50px;
+}

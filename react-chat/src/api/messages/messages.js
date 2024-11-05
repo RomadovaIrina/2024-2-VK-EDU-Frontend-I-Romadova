@@ -1,7 +1,11 @@
 
-const saveMessage = (messages) => {
-    localStorage.setItem('chatMessages', JSON.stringify(messages));
-};
+const saveMessage = (newMessage) => {
+    const storedMessages = getAllMessages();
+    const updatedMessages = Array.isArray(newMessage)
+        ? [...storedMessages, ...newMessage] 
+        : [...storedMessages, newMessage]; 
+    localStorage.setItem("chatMessages", JSON.stringify(updatedMessages));
+}
 
 const getAllMessages = () => {
     return JSON.parse(localStorage.getItem('chatMessages')) || [];
