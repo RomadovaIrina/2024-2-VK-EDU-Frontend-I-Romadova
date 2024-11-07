@@ -1,34 +1,32 @@
-import axios from 'axios';
+import apiService from "../apiService";
 
-// const API_URL = 'https://vkedu-fullstack-div2.ru/api';
-const API_URL = import.meta.env.VITE_API_URL;
-
-const saveMessage = async (newMessage) => {
+async function saveMessage(newMessage) {
     try {
-        await axios.post(`${API_URL}messages`, newMessage);
+      await apiService.post('messages', newMessage);
     } catch (error) {
-        console.error("Error saving message:", error);
+      console.error("Error saving message:", error);
     }
-};
-
-const getAllMessages = async () => {
+  }
+  
+   async function getAllMessages() {
     try {
-        const response = await axios.get(`${API_URL}messages`);
-        return response.data;
+      const response = await apiService.get('messages');
+      return response.data;
     } catch (error) {
-        console.error("Error fetching messages:", error);
-        return [];
+      console.error("Error fetching messages:", error);
+      return [];
     }
-};
-
-const getMessages = async (chatId) => {
+  }
+  
+   async function getMessages(chatId) {
     try {
-        const response = await axios.get(`${API_URL}messages?chatId=${chatId}`);
-        return response.data;
+      const response = await apiService.get(`messages?chatId=${chatId}`);
+      return response.data;
     } catch (error) {
-        console.error(`Error fetching messages for chat ID ${chatId}:`, error);
-        return [];
+      console.error(`Error fetching messages for chat ID ${chatId}:`, error);
+      return [];
     }
-};
+  }
 
-export { saveMessage, getAllMessages, getMessages };
+
+export {getAllMessages, saveMessage, getMessages};

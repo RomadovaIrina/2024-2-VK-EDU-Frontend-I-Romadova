@@ -1,38 +1,36 @@
-import axios from 'axios';
+import apiService from "../apiService";
 
-// const API_URL = 'https://vkedu-fullstack-div2.ru/api';
-const API_URL = import.meta.env.VITE_API_URL;
-
-const getChats = async (headers) => {
-    try {
-        const response = await axios.get(`${API_URL}chats`, { headers });
-        return response.data.results;
-    } catch (error) {
-        console.error("Error fetching chats:", error);
-        return [];
-    }
-};
-
-const saveChat = async (chatData, authHeaders) => {
+async function getChats() {
   try {
-    const response = await axios.post(`${API_URL}chats/`, chatData, {
-      headers: authHeaders,
-    });
-    return response.data; 
+    const response = await apiService.get('chats');
+    return response.data.results;
+  } catch (error) {
+    console.error("Error fetching chats:", error);
+    return [];
+  }
+}
+
+
+ async function saveChat(chatData) {
+  try {
+    const response = await apiService.post('chats/', chatData);
+    return response.data;
   } catch (error) {
     console.error("Error saving chat:", error);
     return null;
   }
-};
+}
 
-const getChatById = async (chatId, headers) => {
-    try {
-        const response = await axios.get(`${API_URL}chats/${chatId}`, { headers });
-        return response.data;
-    } catch (error) {
-        console.error(`Error fetching chat with ID ${chatId}:`, error);
-        return null;
-    }
-};
 
-export { getChats, saveChat, getChatById };
+ async function getChatById(chatId) {
+  try {
+    const response = await apiService.get(`chats/${chatId}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching chat with ID ${chatId}:`, error);
+    return null;
+  }
+}
+
+
+export {getChatById, getChats, saveChat};

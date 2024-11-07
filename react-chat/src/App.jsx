@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { HashRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { HashRouter as Router, Route, Routes, Navigate, useNavigate } from 'react-router-dom';
 
 import styles from './App.module.scss';
 import ChatList from './components/pages/ChatList/ChatList';
@@ -18,26 +18,38 @@ const ROUTES = {
   AUTH: "/auth",
 };
 
-const TempAuth = ({ isRegistering, onLogin, onRegister, toggleRegister }) => (
+const TempAuth = ({ isRegistering, onRegister, toggleRegister }) => {
+  const navigate = useNavigate();
+  const handleLogin = async (credentials) => {
+    try {
+      await loginUser(credentials);
+      navigate(ROUTES.ROOT);
+    } catch (error) {
+      alert("Ошибка при авторизации");
+    }
+  };
+  return (
   <div>
     {isRegistering ? (
       <TempRegister onRegister={onRegister} />
     ) : (
-      <TempLogin onLogin={onLogin} />
+      <TempLogin onLogin={handleLogin} />
     )}
     <button onClick={toggleRegister}>
       {isRegistering ? 'Уже есть аккаунт? Войти' : 'Нет аккаунта? Зарегистрироваться'}
     </button>
   </div>
-);
+  )
+};
 
 function App() {
   const [isRegistering, setIsRegistering] = useState(false);
 
-  const handleLogin = async (credentials) => {
+
+  const handleLogin = async (credentials, navigate) => {
     try {
       await loginUser(credentials);
-      window.location.reload();
+      navigate(ROUTES.ROOT);
     } catch (error) {
       alert("Ошибка при авторизации");
     }
@@ -61,13 +73,13 @@ function App() {
         <Routes>
           <Route
             path={ROUTES.AUTH}
-            element = {
+            element={
               <TempAuth
-              isRegistering={isRegistering}
-              onLogin={handleLogin}
-              onRegister={handleRegister}
-              toggleRegister={toggleRegister}
-            />
+                isRegistering={isRegistering}
+                onLogin={handleLogin}
+                onRegister={handleRegister}
+                toggleRegister={toggleRegister}
+              />
             }
           />
           <Route
