@@ -9,6 +9,7 @@ import { getChats, saveChat } from "../../../apiService/chats/chats.js";
 import EditIcon from '@mui/icons-material/Edit';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
+import { getAccessToken, checkOnLogin } from "../../../apiService/tokens/tokenManager.js";
 
 const ChatList = () => {
   const [chats, setChats] = useState([]);
@@ -17,7 +18,8 @@ const ChatList = () => {
   useEffect(() => {
     const loadChats = async () => {
       try {
-        const chatBox = await getChats(getAuthHeaders());
+        const accessToken = await checkOnLogin();
+        const chatBox = await getChats(accessToken);
         setChats(chatBox.results || []);
       } catch (error) {
         console.error("Error fetching chats:", error);
@@ -61,7 +63,7 @@ const ChatList = () => {
   };
 
   const handleMenuClick = () => {
-    navigate(`/profile/1`);
+    navigate(`/profile`);
   };
 
   const createLink = (chatId) => `/chat/${chatId}`;

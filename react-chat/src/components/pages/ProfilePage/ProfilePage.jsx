@@ -1,42 +1,56 @@
-import React, { useEffect, useState, useRef } from "react";
+
+import React, { useEffect, useState } from "react";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import CheckIcon from '@mui/icons-material/Check';
 import EditIcon from '@mui/icons-material/Edit';
 
 import HeadBar from "../../HeadBar/HeadBar.jsx";
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styles from "./ProfilePage.module.scss";
 import DEFAULT_AVATAR from "../../../../public/temp.png"
-import { getUser, saveUser } from "../../../apiService/users/users.js";
+import { getCurrentUser, updateUser } from "../../../apiService/users/users.js";
 import EditInput from "../../EditInput/EditInput.jsx";
 
 const ProfilePage = () => {
-  const {userId } = useParams();
   const [user, setUser] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const navigate = useNavigate();
   const [editingUser, setEditingUser] = useState({
-    name: "Пользователь",
-    username: "username",
-    description: "Напишите немного о себе",
+    first_name: "",
+    last_name: "",
+    username: "",
+    bio: "Расскажите о себе",
     avatar: DEFAULT_AVATAR
   });
 
-  const makeChangeHandle = (feildParam) => (value) => handleChange(feildParam, value);
+  const makeChangeHandle = (fieldParam) => (value) => handleChange(fieldParam, value);
 
   useEffect(() => {
-    const savedUser = getUser(userId);
-    if (savedUser) {
-      setUser(savedUser);
-      setEditingUser(savedUser);
-    }
-  }, [userId]);
+    const loadUser = async () => {
+      const currentUser = await getCurrentUser();
+      if (currentUser) {
+        setUser(currentUser);
+        setEditingUser({
+          first_name: currentUser.first_name || "",
+          last_name: currentUser.last_name || "",
+          username: currentUser.username || "",
+          bio: currentUser.bio || "",
+          avatar: currentUser.avatar || DEFAULT_AVATAR
+        });
+      }
+    };
+    loadUser();
+  }, []);
 
-  const handleEdit = () => {
+  const handleEdit = async () => {
     if (isEditing) {
-      setUser(editingUser);
-      saveUser(userId, editingUser);
+      try {
+        const updatedUser = await updateUser(editingUser);
+        setUser(updatedUser);
+      } catch (error) {
+        console.error('Error updating user:', error);
+      }
     }
     setIsEditing(!isEditing);
   };
@@ -45,29 +59,32 @@ const ProfilePage = () => {
     setEditingUser((prev) => ({ ...prev, [field]: value }));
   };
 
-  const userPic = user?.avatar || DEFAULT_AVATAR;
-  const headerName = !isEditing ? user?.name : 'Edit the profile';
+  const userPic = editingUser.avatar;
+  const headerName = isEditing ? "Edit the profile" : user?.first_name;
+
   const handleNavigate = () => navigate('/');
 
   return (
     <div>
       <HeadBar
-        userName={user?.name}
+        userName={headerName}
         leftPlace={
           <ArrowBackIcon
             className={styles.arrow}
             sx={{ fontSize: 40 }}
-            onClick={handleNavigate} />
+            onClick={handleNavigate}
+          />
         }
         centerPlace={
           <div className={styles.userInfo}>
             <span className={styles.messenger}>{headerName}</span>
-          </div>}
+          </div>
+        }
         rightPlace={
           isEditing ? (
-            <CheckIcon className = {styles.checkIcon} onClick={handleEdit} />
+            <CheckIcon className={styles.checkIcon} onClick={handleEdit} />
           ) : (
-            <EditIcon className = {styles.editIcon} onClick={handleEdit} />
+            <EditIcon className={styles.editIcon} sx={{ fontSize: 40 }} onClick={handleEdit} />
           )
         }
       />
@@ -83,16 +100,24 @@ const ProfilePage = () => {
 
           <EditInput
             className={styles.editInputContainer}
-            labelName="Full name"
-            value={editingUser?.name}
-            onChange={makeChangeHandle('name')}
+            labelName="First Name"
+            value={editingUser.first_name}
+            onChange={makeChangeHandle('first_name')}
+            readOnly={!isEditing}
+          />
+
+          <EditInput
+            className={styles.editInputContainer}
+            labelName="Last Name"
+            value={editingUser.last_name}
+            onChange={makeChangeHandle('last_name')}
             readOnly={!isEditing}
           />
 
           <EditInput
             className={styles.editInputContainer}
             labelName="Username"
-            value={`@${editingUser.username ?? ''}`}
+            value={`@${editingUser.username}`}
             onChange={makeChangeHandle('username')}
             readOnly={!isEditing}
           />
@@ -100,8 +125,8 @@ const ProfilePage = () => {
           <EditInput
             className={styles.editInputContainer}
             labelName="Bio"
-            value={editingUser?.description}
-            onChange={makeChangeHandle('description')}
+            value={editingUser.bio}
+            onChange={makeChangeHandle('bio')}
             readOnly={!isEditing}
           />
 

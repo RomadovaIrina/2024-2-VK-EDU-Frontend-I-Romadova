@@ -1,18 +1,18 @@
 import axios from "axios";
+import { getAccessToken } from "./tokens/tokenManager";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 class ApiService {
     constructor() {
-        this.accessToken = '';
+        this.accessToken = getAccessToken();
         this.instance = axios.create({
             baseURL: API_URL,
             headers: {
                 'Content-Type': 'application/json',
             },
         });
-
-        // Attach an interceptor to include the authorization header automatically
+        // Нашла где то на просторах интернета я не на 100 процентов пока разобралась что к чему
         this.instance.interceptors.request.use((config) => {
             if (this.accessToken) {
                 config.headers.Authorization = `Bearer ${this.accessToken}`;
@@ -31,6 +31,17 @@ class ApiService {
 
     async post(url, data, config = {}) {
         return this.instance.post(url, data, config);
+    }
+    async patch(url, data, config = {}) {
+        if (data instanceof FormData) {
+            config.headers = {
+                ...config.headers,
+                'Content-Type': 'multipart/form-data',
+            };
+        }
+
+        // Send the PATCH request
+        return this.instance.patch(url, data, config);
     }
 
     async put(url, data, config = {}) {

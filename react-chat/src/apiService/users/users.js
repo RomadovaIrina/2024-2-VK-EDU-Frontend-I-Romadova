@@ -29,4 +29,36 @@
   }
 
 
-  export {initUsers, saveUser, getUser};
+  const getCurrentUser = async() =>{
+    try{
+        const response = await apiService.get('user/current/');
+        return response.data;
+    } catch(error){
+        console.error('Error fetching user:', error);
+        throw error;
+    }
+  };
+
+  const updateUser = async (newData) => {
+    try {
+        const formData = new FormData();
+        formData.append("first_name", newData.first_name);
+        formData.append("last_name", newData.last_name);
+        formData.append("username", newData.username);
+        formData.append("bio", newData.bio);
+        if (newData.avatar instanceof File) {
+            formData.append("avatar", newData.avatar);
+        }
+        const response = await apiService.patch('user/current/', formData, {
+            headers: {
+
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error updating user:', error.response ? error.response.data : error.message);
+        throw error;
+    }
+};
+  
+  export {initUsers, saveUser, getUser, getCurrentUser, updateUser};

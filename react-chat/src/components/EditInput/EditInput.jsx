@@ -1,9 +1,10 @@
 import React from "react";
 import styles from "./EditInput.module.scss";
 
-const handleChange = (e) => onChange(e.target.value)
 
 const EditInput = ({ labelName, value, onChange, readOnly }) => {
+  
+const handleChange = (e) => onChange(e.target.value)
     return (
       <div className={styles.inputPlace}>
         <label className={styles.label}>{labelName}
