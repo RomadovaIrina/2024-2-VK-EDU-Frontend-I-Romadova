@@ -3,6 +3,9 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   base: 'https://romadovairina.github.io/2024-2-VK-EDU-Frontend-I-Romadova',
+  build: {
+    outDir: 'build'
+  },
   server: {
     proxy: {
       '/api': {
