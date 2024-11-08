@@ -20,7 +20,11 @@ async function saveMessage(newMessage) {
   
    async function getMessages(chatId) {
     try {
-      const response = await apiService.get(`messages?chatId=${chatId}`);
+      const response = await apiService.get(`messages`, {
+        params:{
+          chat: chatId,
+        },
+      });
       return response.data;
     } catch (error) {
       console.error(`Error fetching messages for chat ID ${chatId}:`, error);

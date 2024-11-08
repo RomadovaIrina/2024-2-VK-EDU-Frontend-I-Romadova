@@ -4,8 +4,8 @@ import MakeMessage from "../../MakeMessage";
 import SendIcon from '@mui/icons-material/Send';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { getMessages, saveMessage } from "../../../apiService/messages/messages.js"
-import { getByID } from "../../../mockUsers.js"
-
+import { getByID } from "../../../mockUsers.js";
+import { getUser } from "../../../apiService/users/users.js";
 import HeadBar from "../../HeadBar/HeadBar.jsx";
 import { useParams, useNavigate } from 'react-router-dom';
 import DEFAULT_AVATAR from '../../../../public/temp.png';
@@ -25,7 +25,7 @@ const ChatPage = () => {
   useEffect(() => {
     const foundChat = getChatById(chatId);
     if (foundChat) {
-      const foundUser = getByID(foundChat.userId);
+      const foundUser = getUser(foundChat.userId);
       setUser(foundUser);
     }
     else {
@@ -92,7 +92,7 @@ const ChatPage = () => {
       />
       <main>
         <ul className={styles.messagePos} ref={messagesEndRef}>
-          {messages.map(({ message_id, ...props }) => (
+          {Array.isArray(messages) && messages.map(({ message_id, ...props }) => (
             <MakeMessage key={message_id}
               isLastMessage={message_id === lastMessageId}
               {...props} />

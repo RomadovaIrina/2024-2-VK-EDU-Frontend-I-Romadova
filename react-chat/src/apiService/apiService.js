@@ -39,8 +39,6 @@ class ApiService {
                 'Content-Type': 'multipart/form-data',
             };
         }
-
-        // Send the PATCH request
         return this.instance.patch(url, data, config);
     }
 

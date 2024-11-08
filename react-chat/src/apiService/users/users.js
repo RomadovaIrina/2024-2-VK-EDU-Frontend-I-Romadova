@@ -2,7 +2,7 @@
  
  async function getUser(userId) {
     try {
-      const response = await apiService.get(`users/${userId}`);
+      const response = await apiService.get(`users/${userId}/`);
       return response.data;
     } catch (error) {
       console.error(`Error fetching user with ID ${userId}:`, error);
@@ -49,16 +49,27 @@
         if (newData.avatar instanceof File) {
             formData.append("avatar", newData.avatar);
         }
-        const response = await apiService.patch('user/current/', formData, {
-            headers: {
-
-            }
-        });
+        const response = await apiService.patch('user/current/', formData, {});
         return response.data;
     } catch (error) {
         console.error('Error updating user:', error.response ? error.response.data : error.message);
         throw error;
     }
 };
-  
-  export {initUsers, saveUser, getUser, getCurrentUser, updateUser};
+
+const getUserByUsername = async (username) => {
+  try {
+    const response = await apiService.get(`users/?search=${username}`);
+    const users = response.data.results;
+
+    // Filter for exact username match
+    const exactUser = users.find(user => user.username === username);
+    return exactUser || null;
+  } catch (error) {
+    console.error("Error fetching user by username:", error);
+    return null;
+  }
+};
+
+
+  export {initUsers, saveUser, getUser, getCurrentUser, updateUser, getUserByUsername};

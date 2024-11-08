@@ -9,29 +9,38 @@ import { getChats, saveChat } from "../../../apiService/chats/chats.js";
 import EditIcon from '@mui/icons-material/Edit';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
+import { getUserByUsername } from "../../../apiService/users/users.js";
 import { getAccessToken, checkOnLogin } from "../../../apiService/tokens/tokenManager.js";
 
 const ChatList = () => {
   const [chats, setChats] = useState([]);
+  const [page, setPage] = useState(1); 
+  const [pageSize] = useState(10);
+  const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const loadChats = async () => {
-      try {
-        const accessToken = await checkOnLogin();
-        const chatBox = await getChats(accessToken);
+  const loadChats = async (search = '', pageSize = 10, page = 1) => {
+    try {
+      const accessToken = await checkOnLogin(); // Получите токен доступа
+      const chatBox = await getChats(search, page, pageSize);
+      if (chatBox) {
         setChats(chatBox.results || []);
-      } catch (error) {
-        console.error("Error fetching chats:", error);
+        // Вы можете использовать chatBox.count, chatBox.next, и chatBox.previous для пагинации
+      } else {
+        console.error("Chat data not loaded");
       }
-    };
-
-    loadChats();
-  }, []);
+    } catch (error) {
+      console.error("Error fetching chats:", error);
+    }
+  };
+  useEffect(() => {
+    loadChats(search, pageSize, page); // Передаем значения явно
+  }, [page, search]); 
 
   const handleAddChat = async () => {
     const newChatName = prompt("Введите название нового чата:");
-    if (!newChatName) return;
+    // пока что на 2 пользователя
+    const isPrivate = true;
   
     const username = prompt("Введите username пользователя:");
     if (!username) {
@@ -40,14 +49,18 @@ const ChatList = () => {
     }
   
     try {
+      const user = await getUserByUsername(username);
+      if (!user) {
+        alert("Пользователь не найден!");
+        return;
+      }
+  
       const newChatData = {
-        members: [username],
-        is_private: true,
-        title: newChatName
+        members: [user.id],
+        is_private: isPrivate,
+        title: newChatName,
       };
-  
       const createdChat = await saveChat(newChatData, getAuthHeaders());
-  
       if (createdChat) {
         setChats((prevChats) => [createdChat, ...prevChats]);
       } else {
