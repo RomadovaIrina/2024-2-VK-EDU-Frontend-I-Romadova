@@ -5,6 +5,7 @@ const TempLogin = ({ onLogin }) => {
   const [password, setPassword] = useState('');
 
   const handleSubmit = (e) => {
+    debugger;
     e.preventDefault();
     onLogin({ username, password });
   };

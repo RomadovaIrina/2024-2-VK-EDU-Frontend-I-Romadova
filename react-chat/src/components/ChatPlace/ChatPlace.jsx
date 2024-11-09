@@ -6,19 +6,17 @@ import DoneAllIcon from '@mui/icons-material/DoneAll';
 
 const ChatPlace = (props) => {
     const {
-        chatId,
         avatar = DEFAULT_AVATAR,
         name,
         lastMessage,
         time,
-        isRead,
-        onClick,
+        isRead
     } = props;
 
     const userPicture = avatar || DEFAULT_AVATAR;
 
     return (
-        <div className={styles.chatPlace} onClick={() => onClick(chatId)}>
+        <div className={styles.chatPlace}>
             <img src={userPicture} className={styles.chatImage} alt="User avatar" />
             <div className={styles.chatComponents}>
                 <div className={styles.chatName}>{name}</div>

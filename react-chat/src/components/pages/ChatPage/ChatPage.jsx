@@ -4,7 +4,6 @@ import MakeMessage from "../../MakeMessage";
 import SendIcon from '@mui/icons-material/Send';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { getMessages, saveMessage } from "../../../apiService/messages/messages.js"
-import { getByID } from "../../../mockUsers.js";
 import { getUser } from "../../../apiService/users/users.js";
 import HeadBar from "../../HeadBar/HeadBar.jsx";
 import { useParams, useNavigate } from 'react-router-dom';
@@ -23,19 +22,43 @@ const ChatPage = () => {
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
-    const foundChat = getChatById(chatId);
-    if (foundChat) {
-      const foundUser = getUser(foundChat.userId);
-      setUser(foundUser);
-    }
-    else {
-      navigate('/');
-    }
+    const loadChatData = async () => {
+      const foundChat = await getChatById(chatId);
+      if (foundChat) {
+        // ищем наших собеседников
+        const otherUser = foundChat.members.find(
+          // заглушка пока что только для одного юзера
+          (member) => member.username !== "aa" 
+        );
+        
+        if (otherUser) {
+          const foundUser = await getUser(otherUser.id);
+          setUser(foundUser);
+        }
+      } else {
+        navigate('/');
+      }
+    };
+    loadChatData();
   }, [chatId, navigate]);
 
   useEffect(() => {
-    const loadedMessages = getMessages(chatId);
-    setMessages(loadedMessages);
+    const fetchMessages = async () => {
+      try {
+        const response = await getMessages(chatId);
+        const data = response.results; 
+        if (Array.isArray(data)) {
+          setMessages(data);
+        } else {
+          setMessages([]);
+          console.error("Unexpected data format:", data);
+        }
+      } catch (error) {
+        console.error("Error fetching messages:", error);
+      }
+    };
+    
+    fetchMessages();
   }, [chatId]);
 
   useEffect(() => {
@@ -44,32 +67,32 @@ const ChatPage = () => {
     }
   }, [messages]);
 
-
-  const makeNewMessage = (content) => {
-    const messageTime = new Date().toLocaleString();
-    const messageData = {
-      message_id: Date.now(),
-      chatId: chatId,
-      sender: user?.name ?? 'Вы',
-      text: content,
-      time: messageTime
-    };
-    return messageData;
-  }
-
-  const handleSubmit = (event) => {
+const makeNewMessage = (content) => {
+          return {
+            chat: chatId,
+            text: content
+          };
+        }
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const messageText = inputValue.trim();
-    if (!messageText) {
-      return;
-    }
+    if (!messageText) return;
+
     const newMessage = makeNewMessage(messageText);
-    saveMessage(newMessage);
-    setMessages(allMessages => [...allMessages, newMessage]);
-    setInputValue('');
-    setLastMessageId(newMessage.message_id);
-    inputPalce.current?.focus();
+
+    try {
+      const savedMessage = await saveMessage(newMessage);
+      if (savedMessage) {
+        setMessages(allMessages => [...allMessages, savedMessage]);
+        setLastMessageId(savedMessage.id);
+        setInputValue('');
+        inputPalce.current?.focus();
+      }
+    } catch (error) {
+      console.error("Ошибка при отправке сообщения:", error);
+    }
   };
+
 
   const handleInputChange = (e) => setInputValue(e.target.value);
   const userPic = user?.avatar || DEFAULT_AVATAR;
@@ -91,11 +114,15 @@ const ChatPage = () => {
           </div>}
       />
       <main>
-        <ul className={styles.messagePos} ref={messagesEndRef}>
-          {Array.isArray(messages) && messages.map(({ message_id, ...props }) => (
-            <MakeMessage key={message_id}
-              isLastMessage={message_id === lastMessageId}
-              {...props} />
+      <ul className={styles.messagePos} ref={messagesEndRef}>
+          {Array.isArray(messages) && messages.map((message) => (
+            <MakeMessage
+              key={message.message_id}
+              sender={message.sender?.username ?? 'Unknown'}
+              text={message.text}
+              time={message.time}
+              isLastMessage={message.id === lastMessageId}
+            />
           ))}
         </ul>
       </main>

@@ -2,7 +2,7 @@
  
  async function getUser(userId) {
     try {
-      const response = await apiService.get(`users/${userId}/`);
+      const response = await apiService.get(`user/${userId}/`);
       return response.data;
     } catch (error) {
       console.error(`Error fetching user with ID ${userId}:`, error);
@@ -61,8 +61,6 @@ const getUserByUsername = async (username) => {
   try {
     const response = await apiService.get(`users/?search=${username}`);
     const users = response.data.results;
-
-    // Filter for exact username match
     const exactUser = users.find(user => user.username === username);
     return exactUser || null;
   } catch (error) {

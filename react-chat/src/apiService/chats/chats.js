@@ -12,10 +12,10 @@ const getChats = async (search = '', pageNum = 1, pageSize = 10) => {
         page_size: pageSize,
       },
     });
-    return response.data; // Вернем весь объект ответа, а не только results
+    return response.data; 
   } catch (error) {
     console.error("Failed to load chats:", error.response?.data || error.message);
-    return null; // Вернем null, чтобы проверить наличие ошибок при вызове
+    return null; 
   }
 };
 
@@ -31,15 +31,21 @@ async function saveChat(chatData, config) {
   }
 }
 
- async function getChatById(chatId) {
+async function getChatById(chatId) {
+  console.log("Fetching chat with ID:", chatId); 
   try {
-    const response = await apiService.get(`chats/${chatId}`);
+    const response = await apiService.get(`chat/${chatId}`);
     return response.data;
   } catch (error) {
-    console.error(`Error fetching chat with ID ${chatId}:`, error);
+    if (error.response && error.response.status === 404) {
+      console.error(`Chat with ID ${chatId} not found.`);
+    } else {
+      console.error(`Error fetching chat with ID ${chatId}:`, error);
+    }
     return null;
   }
 }
+
 
 
 export {getChatById, getChats, saveChat};

@@ -21,11 +21,9 @@ const ChatList = () => {
 
   const loadChats = async (search = '', pageSize = 10, page = 1) => {
     try {
-      const accessToken = await checkOnLogin(); // Получите токен доступа
       const chatBox = await getChats(search, page, pageSize);
       if (chatBox) {
         setChats(chatBox.results || []);
-        // Вы можете использовать chatBox.count, chatBox.next, и chatBox.previous для пагинации
       } else {
         console.error("Chat data not loaded");
       }
@@ -34,7 +32,7 @@ const ChatList = () => {
     }
   };
   useEffect(() => {
-    loadChats(search, pageSize, page); // Передаем значения явно
+    loadChats(search, pageSize, page);
   }, [page, search]); 
 
   const handleAddChat = async () => {
@@ -72,7 +70,11 @@ const ChatList = () => {
   };
 
   const handleChatClick = (chatId) => {
-    navigate(`/chat/${chatId}`);
+    if (chatId) {
+      navigate(`/chat/${chatId}`);
+    } else {
+      console.error("Chat ID is undefined!");
+    }
   };
 
   const handleMenuClick = () => {
@@ -91,15 +93,13 @@ const ChatList = () => {
       <div className={styles.chatList}>
         <ul>
           {chats.map((chat) => (
-            <Link key={chat.id} to={createLink(chat.id)}>
+            <Link key={chat.id} to={createLink(chat.id)} className={styles.chatLink}>
               <ChatPlace
-                chatId={chat.id}
                 avatar={chat.avatar}
                 name={chat.title}
                 lastMessage={chat.last_message?.text || ""}
                 time={chat.last_message?.created_at || ""}
-                isRead={false} 
-                onClick={handleChatClick}
+                isRead={false}
               />
             </Link>
           ))}
