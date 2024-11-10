@@ -1,6 +1,6 @@
  import apiService from "../apiService";
  
- async function getUser(userId) {
+const getUser = async(userId)=> {
     try {
       const response = await apiService.get(`user/${userId}/`);
       return response.data;
@@ -11,7 +11,7 @@
   }
   
 
-   async function saveUser(userId, userData) {
+const saveUser = async(userId, userData)=> {
     try {
       await apiService.put(`users/${userId}`, userData);
     } catch (error) {
@@ -19,15 +19,6 @@
     }
   }
   
-
-   async function initUsers(users) {
-    try {
-      await apiService.post('users/init', users);
-    } catch (error) {
-      console.error("Error initializing users:", error);
-    }
-  }
-
 
   const getCurrentUser = async() =>{
     try{
@@ -70,4 +61,20 @@ const getUserByUsername = async (username) => {
 };
 
 
-  export {initUsers, saveUser, getUser, getCurrentUser, updateUser, getUserByUsername};
+const getUsers = async ({ search = "", page = 1, page_size = 10 } = {}) => {
+  try {
+    const response = await apiService.get('users/', {
+      params: {
+        search,
+        page,
+        page_size
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    return null;
+  }
+};
+
+  export {saveUser, getUser, getUsers, getCurrentUser, updateUser, getUserByUsername};

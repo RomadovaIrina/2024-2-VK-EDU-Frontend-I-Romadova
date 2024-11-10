@@ -4,7 +4,7 @@ import MakeMessage from "../../MakeMessage";
 import SendIcon from '@mui/icons-material/Send';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { getMessages, saveMessage } from "../../../apiService/messages/messages.js"
-import { getUser } from "../../../apiService/users/users.js";
+import { getUser, getCurrentUser } from "../../../apiService/users/users.js";
 import HeadBar from "../../HeadBar/HeadBar.jsx";
 import { useParams, useNavigate } from 'react-router-dom';
 import DEFAULT_AVATAR from '../../../../public/temp.png';
@@ -17,18 +17,23 @@ const ChatPage = () => {
   const inputPalce = useRef(null);
   const [lastMessageId, setLastMessageId] = useState(null);
   const [user, setUser] = useState(null);
+  const [looggedUser, setLoggedUser] = useState(null);
+  const [chat, setChat] = useState(null);
   const navigate = useNavigate();
+
 
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
     const loadChatData = async () => {
       const foundChat = await getChatById(chatId);
+      const loggedUser = await getCurrentUser();
+      setLoggedUser(loggedUser);
+      setChat(foundChat);
       if (foundChat) {
         // ищем наших собеседников
         const otherUser = foundChat.members.find(
-          // заглушка пока что только для одного юзера
-          (member) => member.username !== "aa" 
+          (member) => member.username !== loggedUser.username
         );
         
         if (otherUser) {
@@ -83,6 +88,7 @@ const makeNewMessage = (content) => {
     try {
       const savedMessage = await saveMessage(newMessage);
       if (savedMessage) {
+        savedMessage.sender = looggedUser;
         setMessages(allMessages => [...allMessages, savedMessage]);
         setLastMessageId(savedMessage.id);
         setInputValue('');
@@ -95,23 +101,24 @@ const makeNewMessage = (content) => {
 
 
   const handleInputChange = (e) => setInputValue(e.target.value);
-  const userPic = user?.avatar || DEFAULT_AVATAR;
-  const chatUserName = user?.name ?? 'Unknown'
+  const userPic = chat?.avatar ?? DEFAULT_AVATAR
+  const chatUserName = chat?.name ?? 'Chat'
   const handleNavigate = () => navigate('/');
 
   return (
     <div className={styles.chatContent}>
       <HeadBar
-        userPic={user?.avatar ?? null}
-        userName={user?.name ?? 'Unknown'}
+        userPic={userPic} 
+        userName={chatUserName}          
         leftPlace={
           <ArrowBackIcon className={styles.arrow} sx={{ fontSize: 40 }} onClick={handleNavigate} />
         }
         centerPlace={
           <div className={styles.userInfo}>
-            <img src={userPic} className={styles.chatAvatar} alt="avatar" />
-            <span className={styles.messenger}>{chatUserName}</span>
-          </div>}
+            <img src={chat?.avatar ?? DEFAULT_AVATAR} className={styles.chatAvatar} alt="avatar" />
+            <span className={styles.messenger}>{chat?.title ?? 'Chat'}</span>
+          </div>
+        }
       />
       <main>
       <ul className={styles.messagePos} ref={messagesEndRef}>

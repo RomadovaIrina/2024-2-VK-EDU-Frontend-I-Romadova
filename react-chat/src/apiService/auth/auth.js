@@ -44,7 +44,7 @@ const loginUser = async ({ username, password }) => {
 
 
 
- async function refreshToken() {
+const refreshToken = async() =>{
   const refresh = localStorage.getItem('refreshToken');
   if (!refresh) throw new Error('Refresh token not found');
   try {

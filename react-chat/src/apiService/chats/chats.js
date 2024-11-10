@@ -20,7 +20,7 @@ const getChats = async (search = '', pageNum = 1, pageSize = 10) => {
 };
 
 
-async function saveChat(chatData, config) {
+const saveChat = async(chatData, config) => {
   try {
     const response = await apiService.post('chats/', chatData, config);
     return response.data;
@@ -30,8 +30,7 @@ async function saveChat(chatData, config) {
     return null;
   }
 }
-
-async function getChatById(chatId) {
+const  getChatById = async(chatId)=> {
   console.log("Fetching chat with ID:", chatId); 
   try {
     const response = await apiService.get(`chat/${chatId}`);

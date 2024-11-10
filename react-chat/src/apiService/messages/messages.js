@@ -1,26 +1,7 @@
 import apiService from "../apiService";
 import { getAccessToken } from "../tokens/tokenManager";
 
-// async function saveMessage(newMessage) {
-//   debugger;
-//   try {
-//     const formData = new FormData();
-//     const accessToken = getAccessToken();
-//     formData.append("text", newMessage.text);
-//     formData.append("chat", newMessage.chat);
 
-//     const response = await apiService.post('messages/', formData, {
-//       headers: {
-//         'Content-Type': 'multipart/form-data',
-//         'Authorization': `Bearer ${accessToken}`,
-//       }
-//     });
-//     return response.data;
-//   } catch (error) {
-//     console.error("Error saving message:", error.response?.data || error.message);
-//     return null;
-//   }
-// }
 const saveMessage = async (messageData) => {
   try {
       const response = await apiService.post(`messages/`, messageData);
@@ -31,7 +12,7 @@ const saveMessage = async (messageData) => {
   }
 };
 
-async function getAllMessages() {
+const getAllMessages = async()=> {
   try {
     const response = await apiService.get('messages');
     return response.data;
@@ -41,7 +22,7 @@ async function getAllMessages() {
   }
 }
 
-async function getMessages(chatId) {
+const getMessages = async(chatId) =>{
   try {
     const response = await apiService.get('messages/', {
       params: {
@@ -50,7 +31,10 @@ async function getMessages(chatId) {
         page: 1
       }
     });
-    return response.data;
+    const sortedMessages = response.data.results.sort((a, b) => 
+      new Date(a.created_at) - new Date(b.created_at)
+    );
+    return { ...response.data, results: sortedMessages };
   } catch (error) {
     console.error(`Error fetching messages for chat ID ${chatId}:`, error.response?.data || error.message);
     return { results: [] };
