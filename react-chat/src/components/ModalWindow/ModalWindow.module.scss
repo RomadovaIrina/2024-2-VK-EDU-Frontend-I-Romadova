@@ -23,7 +23,6 @@
 }
 
 .modalTitle {
-  margin-bottom: 5px;
   font-size: 24px;
   color: #333;
   text-align: center;
@@ -33,8 +32,32 @@
   background: none;
   border: none;
   position: relative;
-  top: 10px;
-  left: 10px;
   cursor: pointer;
   color: #333;
+}
+
+
+.confirmButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  color: #333;
+}
+
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  padding: 0 10px;
+  margin-bottom: 20px;
 }

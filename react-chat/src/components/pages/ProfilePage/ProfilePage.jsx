@@ -117,7 +117,7 @@ const ProfilePage = () => {
           <EditInput
             className={styles.editInputContainer}
             labelName="Username"
-            value={`@${editingUser.username}`}
+            value={`${editingUser.username}`}
             onChange={makeChangeHandle('username')}
             readOnly={!isEditing}
           />

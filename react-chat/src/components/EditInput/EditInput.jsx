@@ -21,3 +21,4 @@ const handleChange = (e) => onChange(e.target.value)
   }
 
 export default EditInput;
+

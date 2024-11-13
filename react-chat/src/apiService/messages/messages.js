@@ -2,9 +2,25 @@ import apiService from "../apiService";
 import { getAccessToken } from "../tokens/tokenManager";
 
 
-const saveMessage = async (messageData) => {
+const saveMessage = async (messageData, files = [], voice = null) => {
   try {
-      const response = await apiService.post(`messages/`, messageData);
+    const formData = new FormData();
+    formData.append('chat', messageData.chat);
+
+    if (voice) {
+      formData.append('voice', voice, 'voice.mp3');
+    } else if (files.length > 0) {
+      files.forEach((file) => formData.append('files', file)); 
+      if (messageData.text) formData.append('text', messageData.text); 
+    } else {
+      formData.append('text', messageData.text); 
+    }
+    const response = await apiService.post('messages/', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${getAccessToken()}`
+      }
+    });
       return response.data;
   } catch (error) {
       console.error("Ошибка при сохранении сообщения:", error);
