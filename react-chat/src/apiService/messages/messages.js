@@ -12,7 +12,7 @@ const saveMessage = async (messageData, files = [], voice = null) => {
     } else if (files.length > 0) {
       files.forEach((file) => formData.append('files', file));
       files.forEach((file, index) => {
-        console.log(`File ${index + 1} - Name: ${file.name}, Size: ${file.size}, Type: ${file.type}`);
+        console.log(`File ${index + 1} - Name: ${file.url}`);
       });
     if (messageData.text) formData.append('text', messageData.text);
     } else {
