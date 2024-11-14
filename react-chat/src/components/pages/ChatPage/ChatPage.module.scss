@@ -114,7 +114,7 @@
 
 
 
-.cameraIcon, .micIcon {
+.cameraIcon, .micIcon, .locatonIcon {
   position: flex;
   align-items: center;
   background-color: rgb(120, 31, 155);
@@ -165,4 +165,17 @@
   cursor: pointer;
   width: 25px;
   height: 25px;
+}
+
+
+.buttons {
+ display: flex;
+ flex-direction: row; 
+}
+
+
+.geoLink {
+  color: rgb(84, 84, 92);
+  text-decoration: underline;
+  cursor: pointer;
 }

@@ -13,6 +13,7 @@ import ModalWindow from "../../ModalWindow/ModalWindow.jsx";
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import MicIcon from '@mui/icons-material/Mic';
 import StopIcon from '@mui/icons-material/Stop';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 
 
 const ChatPage = () => {
@@ -35,6 +36,11 @@ const ChatPage = () => {
 
   const messagesEndRef = useRef(null);
 
+  const getLocLink = (long, lat) => {
+    return `https://www.openstreetmap.org/#map=18/${lat}/${long}`
+  }
+
+
   const FileView = ({ files, onRemobe }) => {
     return (
       <div className={styles.previewContainer}>
@@ -47,6 +53,7 @@ const ChatPage = () => {
       </div>
     )
   }
+
 
   useEffect(() => {
     const loadChatData = async () => {
@@ -96,20 +103,42 @@ const ChatPage = () => {
     }
   }, [messages]);
 
-  const makeNewMessage = (content, files = [], voice = null) => {
+  const sendLocation = async () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          handleSubmit(new Event("submit"), {
+            isLoc: true,
+            locationData: { latitude, longitude }
+          });
+        },
+        (error) => {
+          console.error("Ошибка при получении координат:", error);
+        }
+      );
+    }
+  };
+
+  const makeNewMessage = (content, files = [], voice = null,) => {
     return {
       chat: chatId,
       text: content,
       files,
-      voice
+      voice,
     };
   }
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event, options = {}) => {
+    debugger;
     event.preventDefault();
+    const {isLoc, locationData} = options;
     const messageText = inputValue.trim();
-    if (!messageText && confirmFiles.length === 0 && !voiceUpload) return;
-
-    const newMessage = makeNewMessage(messageText, confirmFiles, voiceUpload);
+    if (!messageText && confirmFiles.length === 0 && !voiceUpload &&!isLoc) return;
+    const textContent = isLoc? `Моя локация: ${getLocLink(locationData.longitude, locationData.latitude)}` : messageText;
+    const newMessage = makeNewMessage(
+      textContent,
+      confirmFiles, 
+      voiceUpload);
 
     try {
       const savedMessage = await saveMessage(newMessage, confirmFiles, voiceUpload);
@@ -180,6 +209,11 @@ const ChatPage = () => {
   const stopRecording = () => {
     recorderRef.current.stop();
   }
+  const handleInputKeyPress = (event) => {
+    if (event.key === 'Enter' && !isRecording) {
+      handleSubmit(event);
+    }
+  };
 
   const handleInputChange = (e) => setInputValue(e.target.value);
   const userPic = chat?.avatar ?? DEFAULT_AVATAR
@@ -225,25 +259,31 @@ const ChatPage = () => {
             className={styles.formInput}
             value={inputValue}
             onChange={handleInputChange}
+            onKeyDown={handleInputKeyPress}
             placeholder="Введите сообщение..."
           />
-          <button type="button" className={styles.cameraIcon} onClick={() => document.getElementById('fileUpload').click()}>
-            <CameraAltIcon sx={{ fontSize: 36 }} />
-          </button>
-          <input
-            type="file"
-            id="fileUpload"
-            multiple
-            accept="image/*"
-            style={{ display: 'none' }}
-            onChange={handleFiles}
-          />
-          <button onClick={isRecording ? stopRecording : handleRecording} className={styles.micIcon}>
-            {isRecording ? <StopIcon sx={{ fontSize: 36 }}  /> : <MicIcon sx={{ fontSize: 36 }} />}
-          </button>
-          <button className={styles.sendButton} type="submit">
-            <SendIcon sx={{ fontSize: 36 }} />
-          </button>
+          <div className={styles.buttons}>
+            <button type="button" className={styles.cameraIcon} onClick={() => document.getElementById('fileUpload').click()}>
+              <CameraAltIcon sx={{ fontSize: 36 }} />
+            </button>
+            <input
+              type="file"
+              id="fileUpload"
+              multiple
+              accept="image/*"
+              style={{ display: 'none' }}
+              onChange={handleFiles}
+            />
+            <button onClick={isRecording ? stopRecording : handleRecording} className={styles.micIcon}>
+              {isRecording ? <StopIcon sx={{ fontSize: 36 }} /> : <MicIcon sx={{ fontSize: 36 }} />}
+            </button>
+            <button type="button" className={styles.locatonIcon} onClick={sendLocation}>
+  <LocationOnIcon sx={{ fontSize: 36 }} />
+</button>
+            <button className={styles.sendButton} type="submit">
+              <SendIcon sx={{ fontSize: 36 }} />
+            </button>
+          </div>
         </form>
         {filesUpload?.length > 0 && (
           <ModalWindow

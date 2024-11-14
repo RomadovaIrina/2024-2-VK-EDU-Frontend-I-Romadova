@@ -10,25 +10,30 @@ const saveMessage = async (messageData, files = [], voice = null) => {
     if (voice) {
       formData.append('voice', voice, 'voice.mp3');
     } else if (files.length > 0) {
-      files.forEach((file) => formData.append('files', file)); 
-      if (messageData.text) formData.append('text', messageData.text); 
+      files.forEach((file) => formData.append('files', file));
+      files.forEach((file, index) => {
+        console.log(`File ${index + 1} - Name: ${file.name}, Size: ${file.size}, Type: ${file.type}`);
+      });
+    if (messageData.text) formData.append('text', messageData.text);
     } else {
-      formData.append('text', messageData.text); 
+      formData.append('text', messageData.text);
     }
+
     const response = await apiService.post('messages/', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${getAccessToken()}`
       }
     });
-      return response.data;
+    return response.data;
   } catch (error) {
-      console.error("Ошибка при сохранении сообщения:", error);
-      throw error;
+    console.error("Ошибка при сохранении сообщения:", error);
+    throw error;
   }
 };
 
-const getAllMessages = async()=> {
+
+const getAllMessages = async () => {
   try {
     const response = await apiService.get('messages');
     return response.data;
@@ -38,7 +43,7 @@ const getAllMessages = async()=> {
   }
 }
 
-const getMessages = async(chatId) =>{
+const getMessages = async (chatId) => {
   try {
     const response = await apiService.get('messages/', {
       params: {
@@ -47,7 +52,7 @@ const getMessages = async(chatId) =>{
         page: 1
       }
     });
-    const sortedMessages = response.data.results.sort((a, b) => 
+    const sortedMessages = response.data.results.sort((a, b) =>
       new Date(a.created_at) - new Date(b.created_at)
     );
     return { ...response.data, results: sortedMessages };
