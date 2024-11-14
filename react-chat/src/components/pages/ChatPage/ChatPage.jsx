@@ -8,7 +8,7 @@ import { getUser, getCurrentUser } from "../../../apiService/users/users.js";
 import HeadBar from "../../HeadBar/HeadBar.jsx";
 import { useParams, useNavigate } from 'react-router-dom';
 import DEFAULT_AVATAR from '../../../../public/temp.png';
-import { getChatById } from "../../../apiService/chats/chats.js";
+import { getChats, getChatById } from "../../../apiService/chats/chats.js";
 import ModalWindow from "../../ModalWindow/ModalWindow.jsx";
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import MicIcon from '@mui/icons-material/Mic';
@@ -32,13 +32,21 @@ const ChatPage = () => {
   const [confirmFiles, setConfirmFiles] = useState([]);
   const [isRecording, setIsRecording] = useState(false);
   const recorderRef = useRef(null);
+  const [isNotified, setIsNotified] = useState(false);
 
 
   const messagesEndRef = useRef(null);
+  const notificationSound = useRef(new Audio(''));
 
   const getLocLink = (long, lat) => {
     return `https://www.openstreetmap.org/#map=18/${lat}/${long}`
   }
+
+  useEffect(()=>{
+    if(Notification.permission !== "granted"){
+      Notification.requestPermission();
+    }
+  })
 
 
   const FileView = ({ files, onRemobe }) => {
@@ -53,6 +61,34 @@ const ChatPage = () => {
       </div>
     )
   }
+  const NotificationView = ({ message }) => {
+    return (
+      <div className={styles.notification}>
+        <img src={message.sender.avatar || DEFAULT_AVATAR} alt="avatar" />
+        <span>{`${message.sender.userName} ${message.text}`}</span>
+      </div>
+    );
+  };
+
+  const notifyMessage = (message) => {
+    if (chatId !== message.chatId) {
+      if (Notification.permission === "granted"){
+        new Notification("У вас новое сообщение!",{
+          body: `${message.sender.userName}  ${message.text}`,
+          icon: message.sender.avatar || DEFAULT_AVATAR
+        });
+        setIsNotified(true);
+      }
+      // notificationSound.current.play();
+    }
+  }
+
+  useEffect(() => {
+    if (messages.length > 0) {
+      const newMessage = messages[messages.length - 1];
+      notifyMessage(newMessage);
+    }
+  }, [messages]);
 
 
   useEffect(() => {

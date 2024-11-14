@@ -7,12 +7,25 @@ const MakeMessage = ({ sender, text, time, isLastMessage, images = [], voice}) =
     [styles.messageFly]: isLastMessage
   });
 
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  const parseLink = (link) => {
+    return link.split(urlRegex).map((part) => 
+      urlRegex.test(part) ? (
+        <a  href={part} target="_blank" rel="noopener noreferrer" className={styles.geoLink}>
+          {part}
+        </a>
+      ) : (
+        part
+      )
+    );
+  };
+
   return (
     <li className={classParamsLIB}>
       <div className={styles.messageHeader}>{sender}</div>
       <div className={styles.messageBody}>
         {text && (
-          <div className={styles.textContainer}>{text}</div>
+          <div className={styles.textContainer}>{parseLink(text)}</div>
         )}
         {images.length > 0 && (
           <div className={styles.imageContainer}>

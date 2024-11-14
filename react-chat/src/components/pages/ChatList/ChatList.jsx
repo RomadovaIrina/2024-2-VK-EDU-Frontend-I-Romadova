@@ -33,6 +33,8 @@ const ChatList = () => {
   };
   const navigate = useNavigate();
 
+
+
   const loadChats = async (search = '', pageSize = 10, page = 1) => {
     try {
       const chatBox = await getChats(search, page, pageSize);

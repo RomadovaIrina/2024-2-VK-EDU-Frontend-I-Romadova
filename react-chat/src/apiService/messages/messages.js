@@ -10,7 +10,7 @@ const saveMessage = async (messageData, files = [], voice = null) => {
     if (voice) {
       formData.append('voice', voice, 'voice.mp3');
     } else if (files.length > 0) {
-      files.forEach((file) => formData.append('files', file));
+      files.forEach((file) => formData.append('files', file.file));
       files.forEach((file, index) => {
         console.log(`File ${index + 1} - Name: ${file.url}`);
       });
