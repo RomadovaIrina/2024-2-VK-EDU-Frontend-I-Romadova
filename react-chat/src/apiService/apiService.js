@@ -24,6 +24,7 @@ class ApiService {
     setAccessToken(token) {
         this.accessToken = token;
     }
+    
 
     async get(url, config = {}) {
         return this.instance.get(url, config);

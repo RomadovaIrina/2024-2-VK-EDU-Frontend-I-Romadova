@@ -11,6 +11,7 @@ import styles from "./ProfilePage.module.scss";
 import DEFAULT_AVATAR from "../../../../public/temp.png"
 import { getCurrentUser, updateUser } from "../../../apiService/users/users.js";
 import EditInput from "../../EditInput/EditInput.jsx";
+import { ROUTES } from "../../../routes.js";
 
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
@@ -62,7 +63,7 @@ const ProfilePage = () => {
   const userPic = editingUser.avatar;
   const headerName = isEditing ? "Edit the profile" : user?.first_name;
 
-  const handleNavigate = () => navigate('/');
+  const handleNavigate = () => navigate(ROUTES.ROOT);
 
   return (
     <div>

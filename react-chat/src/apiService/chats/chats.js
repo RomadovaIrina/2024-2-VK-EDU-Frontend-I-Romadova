@@ -1,15 +1,12 @@
 import apiService from "../apiService";
-import { getAuthHeaders } from "../auth/auth";
 
-const getChats = async (search = '', pageNum = 1, pageSize = 10) => {
-  const headers = getAuthHeaders();
+const getChats = async ({ search = '', page = 1, page_size = 10 } = {}) => {
   try {
     const response = await apiService.get('/chats/', {
-      headers,
       params: {
         search,
-        page: pageNum,
-        page_size: pageSize,
+        page,
+        page_size
       },
     });
     return response.data; 
@@ -20,9 +17,9 @@ const getChats = async (search = '', pageNum = 1, pageSize = 10) => {
 };
 
 
-const saveChat = async(chatData, config) => {
+const saveChat = async(chatData) => {
   try {
-    const response = await apiService.post('chats/', chatData, config);
+    const response = await apiService.post('chats/', chatData);
     return response.data;
   } catch (error) {
     console.error("Ошибка при создании чата:", error.response?.data || error.message);
@@ -31,7 +28,6 @@ const saveChat = async(chatData, config) => {
   }
 }
 const  getChatById = async(chatId)=> {
-  console.log("Fetching chat with ID:", chatId); 
   try {
     const response = await apiService.get(`chat/${chatId}`);
     return response.data;

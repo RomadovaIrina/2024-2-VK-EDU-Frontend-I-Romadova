@@ -2,13 +2,7 @@ import apiService from "../apiService";
 import { setTokens, checkOnLogin } from "../tokens/tokenManager";
 
 
-const getAuthHeaders = () => {
-  const token = apiService.accessToken; 
-  if (!token) {
-    throw new Error("Access token is not defined");
-  }
-  return { 'Authorization': `Bearer ${token}` };
-};
+
 const registerUser = async({ username, password, first_name, last_name, bio, avatar })=> {
   const formData = new FormData();
   formData.append('username', username);
@@ -60,4 +54,4 @@ const refreshToken = async() =>{
 }
 
 
-export { getAuthHeaders, loginUser, refreshToken, registerUser };
+export { loginUser, refreshToken, registerUser };

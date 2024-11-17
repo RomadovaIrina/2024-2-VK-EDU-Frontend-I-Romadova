@@ -14,12 +14,7 @@ const removeTokens = () => {
     localStorage.removeItem('refreshToken');
 }
 
-const isValid = (token) => {
-    if (!token){
-        return false;
-    }
-    return true
-}
+
 
 const refreshOnRequest = async () => {
     const accessToken = getAccessToken();

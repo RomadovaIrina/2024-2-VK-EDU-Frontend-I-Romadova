@@ -9,6 +9,7 @@ import HeadBar from "../../HeadBar/HeadBar.jsx";
 import { useParams, useNavigate } from 'react-router-dom';
 import DEFAULT_AVATAR from '../../../../public/temp.png';
 import { getChatById } from "../../../apiService/chats/chats.js";
+import { ROUTES } from "../../../routes.js";
 
 const ChatPage = () => {
   const { chatId } = useParams();
@@ -21,29 +22,28 @@ const ChatPage = () => {
   const [chat, setChat] = useState(null);
   const navigate = useNavigate();
   const pollingRef = useRef(null);
-
-
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
     const loadChatData = async () => {
       const foundChat = await getChatById(chatId);
+      if (!foundChat){
+        navigate(ROUTES.ROOT);
+        return;
+      }
       const loggedUser = await getCurrentUser();
       setLoggedUser(loggedUser);
       setChat(foundChat);
-      if (foundChat) {
         // ищем наших собеседников
         const otherUser = foundChat.members.find(
-          (member) => member.username !== loggedUser.username
+          (member) => member.id !== loggedUser.id
         );
-        
-        if (otherUser) {
-          const foundUser = await getUser(otherUser.id);
-          setUser(foundUser);
+        if (!otherUser) {
+          navigate(ROUTES.ROOT)
+          return;
         }
-      } else {
-        navigate('/');
-      }
+        const foundUser = await getUser(otherUser.id);
+        setUser(foundUser);
     };
     loadChatData();
   }, [chatId, navigate]);
@@ -73,7 +73,7 @@ const ChatPage = () => {
   const beginPoll = () => {
     pollingRef.current = setInterval(()=>{
       fetchMessages();
-    }, 3000);
+    }, 1000);
   }
 
 
@@ -132,7 +132,7 @@ const makeNewMessage = (content) => {
   const handleInputChange = (e) => setInputValue(e.target.value);
   const userPic = chat?.avatar ?? DEFAULT_AVATAR
   const chatUserName = chat?.name ?? 'Chat'
-  const handleNavigate = () => navigate('/');
+  const handleNavigate = () => navigate(ROUTES.ROOT);
 
   return (
     <div className={styles.chatContent}>

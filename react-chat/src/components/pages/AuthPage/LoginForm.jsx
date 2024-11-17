@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const TempLogin = ({ onLogin }) => {
+const LoginForm = ({ onLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -29,4 +29,4 @@ const TempLogin = ({ onLogin }) => {
   );
 };
 
-export default TempLogin;
+export default LoginForm;

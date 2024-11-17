@@ -22,13 +22,13 @@ const getAllMessages = async()=> {
   }
 }
 
-const getMessages = async(chatId) =>{
+const getMessages = async(chatId, page = 1, pageSize = 20) =>{
   try {
     const response = await apiService.get('messages/', {
       params: {
         chat: chatId,
-        page_size: 20,
-        page: 1
+        page_size: pageSize,
+        page: page
       }
     });
     const sortedMessages = response.data.results.sort((a, b) => 
