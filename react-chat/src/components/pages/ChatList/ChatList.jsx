@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styles from './ChatList.module.scss';
 import HeadBar from "../../HeadBar/HeadBar.jsx";
 import ChatPlace from "../../ChatPlace/ChatPlace";
@@ -25,6 +25,8 @@ const ChatList = () => {
   const [userSearch, setUserSearch] = useState('');
   const [selected, setSelected] = useState(false);
   const [isLoadingUsers, setIsLoadingUsers] = useState(false);
+  const [isPolling, setIsPolling] = useState(true); 
+  const pollingRef = useRef(null);
 
   const toggleModal = () => {
     setIsModalOpened(!isModalOpened);
@@ -50,6 +52,25 @@ const ChatList = () => {
   useEffect(() => {
     loadChats(search, pageSize, page);
   }, [page, search]);
+
+
+  const beginPoll = async () => {
+    if (!isModalOpened) {
+      await loadChats();
+    }
+    pollingRef.current = setTimeout(beginPoll, 10000);
+  };
+  const endPoll = () => {
+    if (pollingRef.current) {
+      clearTimeout(pollingRef.current);
+      pollingRef.current = null;
+    }
+  };
+
+  useEffect(() => {
+    beginPoll();
+    return endPoll;
+  }, []);
 
   const handleAddChat = async () => {
     try {

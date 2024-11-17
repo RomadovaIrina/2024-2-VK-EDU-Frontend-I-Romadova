@@ -21,8 +21,76 @@ const ChatPage = () => {
   const [chat, setChat] = useState(null);
   const navigate = useNavigate();
 
+<<<<<<< Updated upstream
 
   const messagesEndRef = useRef(null);
+=======
+  const [filesUpload, setFilesUpload] = useState([]);
+  const [voiceUpload, setVoiceUpload] = useState(null);
+  const [confirmFiles, setConfirmFiles] = useState([]);
+  const [isRecording, setIsRecording] = useState(false);
+  const recorderRef = useRef(null);
+  const [isNotified, setIsNotified] = useState(false);
+  const pollingRef = useRef(null);
+
+
+
+  const messagesEndRef = useRef(null);
+  const notificationSound = useRef(new Audio(''));
+
+  const getLocLink = (long, lat) => {
+    return `https://www.openstreetmap.org/#map=18/${lat}/${long}`
+  }
+
+  useEffect(() => {
+    if (Notification.permission !== "granted") {
+      Notification.requestPermission();
+    }
+  })
+
+
+  const FileView = ({ files, onRemobe }) => {
+    return (
+      <div className={styles.previewContainer}>
+        {files.map((image, index) => (
+          <div key={index} className={styles.previewImageContainer}>
+            <img src={image.url} alt={`preview`} className={styles.previewImage} />
+            <button onClick={() => onRemobe(index)} className={styles.removeButton}>×</button>
+          </div>
+        ))}
+      </div>
+    )
+  }
+  const NotificationView = ({ message }) => {
+    return (
+      <div className={styles.notification}>
+        <img src={message.sender.avatar || DEFAULT_AVATAR} alt="avatar" />
+        <span>{`${message.sender.userName} ${message.text}`}</span>
+      </div>
+    );
+  };
+
+  const notifyMessage = (message) => {
+    if (chatId !== message.chatId) {
+      if (Notification.permission === "granted") {
+        new Notification("У вас новое сообщение!", {
+          body: `${message.sender.userName}  ${message.text}`,
+          icon: message.sender.avatar || DEFAULT_AVATAR
+        });
+        setIsNotified(true);
+      }
+      // notificationSound.current.play();
+    }
+  }
+
+  useEffect(() => {
+    if (messages.length > 0) {
+      const newMessage = messages[messages.length - 1];
+      notifyMessage(newMessage);
+    }
+  }, [messages]);
+
+>>>>>>> Stashed changes
 
   useEffect(() => {
     const loadChatData = async () => {
@@ -33,7 +101,7 @@ const ChatPage = () => {
       if (foundChat) {
         // ищем наших собеседников
         const otherUser = foundChat.members.find(
-          (member) => member.username !== loggedUser.username
+          (member) => member.id !== loggedUser.id
         );
         
         if (otherUser) {
@@ -47,6 +115,7 @@ const ChatPage = () => {
     loadChatData();
   }, [chatId, navigate]);
 
+<<<<<<< Updated upstream
   useEffect(() => {
     const fetchMessages = async () => {
       try {
@@ -64,7 +133,54 @@ const ChatPage = () => {
     };
     
     fetchMessages();
+=======
+
+  const fetchMessages = async () => {
+    try {
+      const response = await getMessages(chatId);
+      const data = response.results;
+      if (Array.isArray(data)) {
+        const lastFetchedMessage = data[data.length - 1];
+        if (!lastMessageId || lastMessageId !== lastFetchedMessage.id) {
+          setMessages(data);
+          setLastMessageId(lastFetchedMessage.id);
+        }
+      } else {
+        setMessages([]);
+        console.error("Unexpected data format:", data);
+      }
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+    }
+  };
+
+  const beginPoll = () => {
+    pollingRef.current = setInterval(()=>{
+      fetchMessages();
+    }, 3000);
+  }
+
+
+  const endPoll = () => {
+    if (pollingRef.current){
+      clearInterval(pollingRef.current);
+    }
+  }
+
+
+  useEffect(()=>{
+    if(chatId){
+      fetchMessages();
+      beginPoll();
+    }
+
+    return () => {
+      endPoll();
+    };
+>>>>>>> Stashed changes
   }, [chatId]);
+
+
 
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -78,12 +194,37 @@ const makeNewMessage = (content) => {
             text: content
           };
         }
+<<<<<<< Updated upstream
   const handleSubmit = async (event) => {
     event.preventDefault();
     const messageText = inputValue.trim();
     if (!messageText) return;
 
     const newMessage = makeNewMessage(messageText);
+=======
+      );
+    }
+  };
+
+  const makeNewMessage = (content, files = [], voice = null,) => {
+    return {
+      chat: chatId,
+      text: content,
+      files,
+      voice,
+    };
+  }
+  const handleSubmit = async (event, options = {}) => {
+    event.preventDefault();
+    const { isLoc, locationData } = options;
+    const messageText = inputValue.trim();
+    if (!messageText && confirmFiles.length === 0 && !voiceUpload && !isLoc) return;
+    const textContent = isLoc ? `Моя локация: ${getLocLink(locationData.longitude, locationData.latitude)}` : messageText;
+    const newMessage = makeNewMessage(
+      textContent,
+      confirmFiles,
+      voiceUpload);
+>>>>>>> Stashed changes
 
     try {
       const savedMessage = await saveMessage(newMessage);
@@ -142,9 +283,34 @@ const makeNewMessage = (content) => {
             onChange={handleInputChange}
             placeholder="Введите сообщение..."
           />
+<<<<<<< Updated upstream
           <button className={styles.sendButton} type="submit">
             <SendIcon sx={{ fontSize: 36 }} />
           </button>
+=======
+          <div className={styles.buttons}>
+            <button type="button" className={styles.cameraIcon} onClick={() => document.getElementById('fileUpload').click()}>
+              <CameraAltIcon sx={{ fontSize: 36 }} />
+            </button>
+            <input
+              type="file"
+              id="fileUpload"
+              multiple
+              accept="image/*"
+              style={{ display: 'none' }}
+              onChange={handleFiles}
+            />
+            <button onClick={isRecording ? stopRecording : handleRecording} className={styles.micIcon}>
+              {isRecording ? <StopIcon sx={{ fontSize: 36 }} /> : <MicIcon sx={{ fontSize: 36 }} />}
+            </button>
+            <button type="button" className={styles.locatonIcon} onClick={sendLocation}>
+              <LocationOnIcon sx={{ fontSize: 36 }} />
+            </button>
+            <button className={styles.sendButton} type="submit">
+              <SendIcon sx={{ fontSize: 36 }} />
+            </button>
+          </div>
+>>>>>>> Stashed changes
         </form>
       </footer>
     </div>
