@@ -18,7 +18,6 @@ const TempRegister = ({ onRegister }) => {
         bio,
         avatar,
       };
-      console.log('Отправляемые данные:', formData);
 
       onRegister(formData);
     };
