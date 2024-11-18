@@ -11,7 +11,7 @@ import { getUsers } from "../../../service/usersService.js";
 import { ROUTES } from "../../../routes.js";
 import RenderModal from './RenderModal.jsx';
 import { saveChat } from "../../../service/chatsService.js";
-import ChatListHooks from '../../hooks/ChatlistHooks.js'
+import ChatListHooks from "../../hooks/ChatlistHooks.jsx";
 
 const ChatList = () => {
   const { chats, setChats, setSearch, page, setPage } = ChatListHooks();
