@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { HashRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { HashRouter as Router, Route, Routes, Navigate, useParams } from 'react-router-dom';
 import { createContext, useContext } from 'react';
 import styles from './App.module.scss';
 import ChatList from './components/pages/ChatList/ChatList';
@@ -17,7 +17,6 @@ function App() {
 
   return (
     <Router>
-                <ChatWrapper>
       <div className={styles.content}>
         <Routes>
           <Route
@@ -51,14 +50,15 @@ function App() {
             path={ROUTES.CHAT}
             element={
               <AuthGuard>
+                <ChatWrapper>
                 <ChatPage />
+                </ChatWrapper>
               </AuthGuard>
             }
           />
           <Route path="*" element={<Navigate to={ROUTES.LOGIN} />} />
         </Routes>
       </div>
-      </ChatWrapper>
     </Router>
   );
 }

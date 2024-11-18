@@ -1,4 +1,6 @@
 import apiService from "../apiService";
+import { getRefreshToken } from "../tokens/tokenManager";
+import { setTokens } from "../tokens/tokenManager";
 
 
 const registerUser = async(formData)=> {
@@ -39,5 +41,19 @@ const refreshToken = async(refresh) =>{
   }
 }
 
+const refreshAccessToken = async () => {
+  try {
+      const response = await apiService.post('/auth/refresh/', {
+          refresh_token: getRefreshToken(), 
+      });
+      const { access_token, refresh_token } = response.data;
+      setTokens(access_token, refresh_token);
+      return access_token;
+  } catch (error) {
+      console.error("Ошибка обновления токена:", error.response?.data || error.message);
+      return null;
+  }
+};
 
-export { loginUser, refreshToken, registerUser };
+
+export { loginUser, refreshToken, registerUser, refreshAccessToken };

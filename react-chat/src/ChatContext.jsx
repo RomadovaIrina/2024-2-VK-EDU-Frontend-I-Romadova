@@ -2,6 +2,7 @@ import React, { Children } from "react";
 import { createContext, useContext, useState, useEffect } from "react";
 import { getChatById } from "./service/chatsService";
 import { getCurrentUser } from "./service/usersService";
+import { useParams } from "react-router-dom";
 
 const ChatContext = createContext();
 
@@ -9,7 +10,8 @@ const useChatContext = () => {
     return useContext(ChatContext);
 }
 
-const ChatWrapper = ({children, chatId}) => {
+const ChatWrapper = ({children}) => {
+    const { chatId } = useParams();
     const [chat, setChat] = useState(null);
     const [user, setUser] = useState(null);
     const [loggedUser, setLoggedUser] = useState(null);
@@ -32,7 +34,7 @@ const ChatWrapper = ({children, chatId}) => {
       if (chatId) {
         loadChatData(chatId);
       }
-    }, []);
+    }, [chatId]);
     return (
         <ChatContext.Provider value={{ chat, user, loggedUser, setChat }}>
           {children}
