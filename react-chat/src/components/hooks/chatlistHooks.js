@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { getChats } from "../../service/chatsService";
 
-const chatListHooks = () => {
+const ChatListHooks = () => {
     const [chats, setChats] = useState([]);
     const [page, setPage] = useState(1);
     const [pageSize] = useState(10);
@@ -57,4 +57,4 @@ const chatListHooks = () => {
 
 };
 
-export default chatListHooks;
+export default ChatListHooks;

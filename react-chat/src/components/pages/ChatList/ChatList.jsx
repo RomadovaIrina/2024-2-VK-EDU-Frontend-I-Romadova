@@ -11,10 +11,10 @@ import { getUsers } from "../../../service/usersService.js";
 import { ROUTES } from "../../../routes.js";
 import RenderModal from './RenderModal.jsx';
 import { saveChat } from "../../../service/chatsService.js";
-import chatListHooks from '../../hooks/chatlistHooks.js'
+import ChatListHooks from '../../hooks/ChatlistHooks.js'
 
 const ChatList = () => {
-  const { chats, setChats, setSearch, page, setPage } = chatListHooks();
+  const { chats, setChats, setSearch, page, setPage } = ChatListHooks();
   const [isModalOpened, setIsModalOpened] = useState(false);
   const [newChatTitle, setNewChatTitle] = useState("");
   const [users, setUsers] = useState([]);
