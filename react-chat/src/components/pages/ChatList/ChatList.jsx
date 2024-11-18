@@ -9,9 +9,9 @@ import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import { getUsers } from "../../../service/usersService.js";
 import { ROUTES } from "../../../routes.js";
-import RenderModal from './RenderModal.jsx'
-import chatListHooks from "../../hooks/ChatlistHooks.js";
+import RenderModal from './RenderModal.jsx';
 import { saveChat } from "../../../service/chatsService.js";
+import chatListHooks from '../../hooks/chatlistHooks.js'
 
 const ChatList = () => {
   const { chats, setChats, setSearch, page, setPage } = chatListHooks();
