@@ -1,5 +1,4 @@
 import apiService from "../apiService";
-import { refreshToken } from "../auth/auth";
 
 const setTokens = ({ accessToken, refreshToken }) => {
     localStorage.setItem('accessToken', accessToken);

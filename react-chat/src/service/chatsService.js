@@ -2,7 +2,8 @@ import { getChatsApi, getChatByIdApi, saveChatApi } from "../apiService/chats/ch
 
 const getChats = async (filters) => {
   try {
-    return await getChatsApi(filters);
+    const ans =  await getChatsApi(filters);
+    return ans
   } catch (error) {
     alert("Не удалось загрузить чаты. Попробуйте позже.");
     return null; 

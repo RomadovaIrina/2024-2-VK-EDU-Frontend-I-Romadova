@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { HashRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-
+import { createContext, useContext } from 'react';
 import styles from './App.module.scss';
 import ChatList from './components/pages/ChatList/ChatList';
 import ChatPage from './components/pages/ChatPage/ChatPage';
@@ -8,6 +8,7 @@ import ProfilePage from './components/pages/ProfilePage/ProfilePage';
 import AuthGuard from './components/AuthGuard';
 import { ROUTES } from './routes';
 import AuthPage from './components/pages/AuthPage/AuthPage';
+import { ChatWrapper } from './ChatContext';
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
 
   return (
     <Router>
+                <ChatWrapper>
       <div className={styles.content}>
         <Routes>
           <Route
@@ -44,6 +46,7 @@ function App() {
               </AuthGuard>
             }
           />
+
           <Route
             path={ROUTES.CHAT}
             element={
@@ -55,6 +58,7 @@ function App() {
           <Route path="*" element={<Navigate to={ROUTES.LOGIN} />} />
         </Routes>
       </div>
+      </ChatWrapper>
     </Router>
   );
 }

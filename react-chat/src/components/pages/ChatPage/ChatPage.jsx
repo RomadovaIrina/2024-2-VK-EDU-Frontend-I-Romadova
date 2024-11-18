@@ -10,43 +10,44 @@ import { useParams, useNavigate } from 'react-router-dom';
 import DEFAULT_AVATAR from '../../../../public/temp.png';
 import { getChatById } from "../../../service/chatsService.js";
 import { ROUTES } from "../../../routes.js";
+import { useChatContext } from "../../../ChatContext.jsx";
 
 const ChatPage = () => {
   const { chatId } = useParams();
   const [messages, setMessages] = useState([]);
+  const { chat, user, loggedUser } = useChatContext(); 
   const [inputValue, setInputValue] = useState('');
   const inputPalce = useRef(null);
   const [lastMessageId, setLastMessageId] = useState(null);
-  const [user, setUser] = useState(null);
   const [looggedUser, setLoggedUser] = useState(null);
-  const [chat, setChat] = useState(null);
   const navigate = useNavigate();
   const pollingRef = useRef(null);
   const messagesEndRef = useRef(null);
 
-  useEffect(() => {
-    const loadChatData = async () => {
-      const foundChat = await getChatById(chatId);
-      if (!foundChat){
-        navigate(ROUTES.ROOT);
-        return;
-      }
-      const loggedUser = await getCurrentUser();
-      setLoggedUser(loggedUser);
-      setChat(foundChat);
-        // ищем наших собеседников
-        const otherUser = foundChat.members.find(
-          (member) => member.id !== loggedUser.id
-        );
-        if (!otherUser) {
-          navigate(ROUTES.ROOT)
-          return;
-        }
-        const foundUser = await getUser(otherUser.id);
-        setUser(foundUser);
-    };
-    loadChatData();
-  }, [chatId, navigate]);
+  // useEffect(() => {
+  //   const loadChatData = async () => {
+  //     const foundChat = await getChatById(chatId);
+  //     if (!foundChat){
+  //       navigate(ROUTES.ROOT);
+  //       return;
+  //     }
+  //     const loggedUser = await getCurrentUser();
+  //     setLoggedUser(loggedUser);
+  //     setChat(foundChat);
+  //       // ищем наших собеседников
+  //       const otherUser = foundChat.members.find(
+  //         (member) => member.id !== loggedUser.id
+  //       );
+  //       if (!otherUser) {
+  //         navigate(ROUTES.ROOT)
+  //         return;
+  //       }
+  //       const foundUser = await getUser(otherUser.id);
+  //       setUser(foundUser);
+  //   };
+  //   loadChatData();
+  // }, [chatId, navigate]);
+
 
   const fetchMessages = async () => {
     try {
