@@ -27,7 +27,6 @@ class ApiService {
             (response) => response, 
             async (error) => {
                 if (error.response?.status === 401) {
-                    console.warn("Токен истёк, пробуем обновить...");
                     const newAccessToken = await refreshAccessToken(); 
                     if (newAccessToken) {
                         this.setAccessToken(newAccessToken); 

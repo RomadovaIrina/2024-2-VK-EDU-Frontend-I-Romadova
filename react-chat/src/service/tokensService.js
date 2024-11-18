@@ -1,6 +1,9 @@
-import { setTokens, getAccessToken, getRefreshToken, removeTokens, refreshTokenApi} from "../apiService/tokens/tokenManager.js"
+import { setTokens, getAccessToken, getRefreshToken, removeTokens, refreshTokenApi} from "../apiService/tokens/tokenManager.js";
+
+
 
 const refreshOnRequest = async () => {
+    const naviage = useNavigate();
   const accessToken = getAccessToken();
   const refreshToken = getRefreshToken();
 
@@ -18,7 +21,7 @@ const refreshOnRequest = async () => {
     setTokens({ accessToken: access, refreshToken: refresh });
     return access;
   } catch (error) {
-    removeTokens();
+    window.location.href('/login');
     throw error;
   }
 };
