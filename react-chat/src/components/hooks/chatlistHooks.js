@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { getChats } from "../../apiService/chats/chats";
-
+import { getChats } from "../../service/chatsService";
 
 const chatListHooks = () => {
     const [chats, setChats] = useState([]);
@@ -50,6 +49,7 @@ const chatListHooks = () => {
         chats,
         search,
         setSearch,
+        setChats,
         page,
         setPage,
         pageSize,

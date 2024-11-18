@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { HashRouter as Router, Route, Routes, Navigate, useNavigate } from 'react-router-dom';
+import { HashRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 
 import styles from './App.module.scss';
 import ChatList from './components/pages/ChatList/ChatList';

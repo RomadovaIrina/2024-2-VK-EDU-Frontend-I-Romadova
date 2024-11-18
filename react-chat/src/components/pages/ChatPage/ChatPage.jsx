@@ -3,12 +3,12 @@ import styles from './ChatPage.module.scss';
 import MakeMessage from "../../MakeMessage";
 import SendIcon from '@mui/icons-material/Send';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { getMessages, saveMessage } from "../../../apiService/messages/messages.js"
-import { getUser, getCurrentUser } from "../../../apiService/users/users.js";
+import { getMessages, saveMessage } from "../../../service/messagesService.js";
+import { getUser, getCurrentUser } from "../../../service/usersService.js";
 import HeadBar from "../../HeadBar/HeadBar.jsx";
 import { useParams, useNavigate } from 'react-router-dom';
 import DEFAULT_AVATAR from '../../../../public/temp.png';
-import { getChatById } from "../../../apiService/chats/chats.js";
+import { getChatById } from "../../../service/chatsService.js";
 import { ROUTES } from "../../../routes.js";
 
 const ChatPage = () => {

@@ -67,4 +67,5 @@ Thumbs.db
 !.nvmrc
 !.phpcs.xml.dist
 !.env.development
+!.env.production
 .env

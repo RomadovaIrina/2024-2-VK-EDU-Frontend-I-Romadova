@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { checkOnLogin } from '../apiService/tokens/tokenManager';
+import { checkOnLogin } from '../service/tokensService';
 import { ROUTES } from '../routes';
 
 const AuthGuard = ({ children }) => {

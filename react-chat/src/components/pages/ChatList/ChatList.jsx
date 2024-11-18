@@ -7,13 +7,14 @@ import classNames from 'classnames';
 import EditIcon from '@mui/icons-material/Edit';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
-import { getUsers } from "../../../apiService/users/users.js";
+import { getUsers } from "../../../service/usersService.js";
 import { ROUTES } from "../../../routes.js";
 import RenderModal from './RenderModal.jsx'
 import chatListHooks from "../../hooks/ChatlistHooks.js";
+import { saveChat } from "../../../service/chatsService.js";
 
 const ChatList = () => {
-  const {chats, setSearch, page, setPage} = chatListHooks();
+  const { chats, setChats, setSearch, page, setPage } = chatListHooks();
   const [isModalOpened, setIsModalOpened] = useState(false);
   const [newChatTitle, setNewChatTitle] = useState("");
   const [users, setUsers] = useState([]);
@@ -51,6 +52,8 @@ const ChatList = () => {
       alert("Не удалось создать чат");
     }
   };
+
+  
 
 
   const handleUserSearch = async () => {

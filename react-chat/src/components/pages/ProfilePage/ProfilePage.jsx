@@ -9,7 +9,7 @@ import HeadBar from "../../HeadBar/HeadBar.jsx";
 import { useNavigate } from 'react-router-dom';
 import styles from "./ProfilePage.module.scss";
 import DEFAULT_AVATAR from "../../../../public/temp.png"
-import { getCurrentUser, updateUser } from "../../../apiService/users/users.js";
+import { getCurrentUser, updateUser } from "../../../service/usersService.js";
 import EditInput from "../../EditInput/EditInput.jsx";
 import { ROUTES } from "../../../routes.js";
 

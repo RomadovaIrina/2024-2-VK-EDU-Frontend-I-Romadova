@@ -14,40 +14,14 @@ const removeTokens = () => {
     localStorage.removeItem('refreshToken');
 }
 
-
-
-const refreshOnRequest = async () => {
-    const accessToken = getAccessToken();
-    const refreshToken = getRefreshToken();
-    if (accessToken) {
-        return accessToken;
-    }
-    if (!refreshToken) {
-        removeTokens();
-        throw new Error('Tokens are expired. log in again');
-    }
-
-
+const refreshTokenApi = async (refreshToken) => {
     try {
-        const response = await apiService.post('auth/refresh/', { refresh: refreshToken });
-        const { access, refresh } = response.data;
-        setTokens({ accessToken: access, refreshToken: refresh });
-        return access;
+      const response = await apiService.post('auth/refresh/', { refresh: refreshToken });
+      return response.data;
     } catch (error) {
-        console.error('Error refreshing token:', error);
-        removeTokens();
-        throw error;
+      console.error('Error refreshing token:', error);
+      throw error;
     }
+  };
 
-};
-
-
-const checkOnLogin = async () => {
-    const accessToken = await refreshOnRequest();
-    if(!accessToken){
-        throw new Error ('User is not logged in');
-    }
-    return accessToken;
-}
-
-export {checkOnLogin, refreshOnRequest, getAccessToken, getRefreshToken, setTokens, removeTokens};
+  export { setTokens, getAccessToken, getRefreshToken, removeTokens, refreshTokenApi };

@@ -2,17 +2,18 @@ import apiService from "../apiService";
 import { getAccessToken } from "../tokens/tokenManager";
 
 
-const saveMessage = async (messageData) => {
+const saveMessageApi = async (messageData) => {
   try {
-      const response = await apiService.post(`messages/`, messageData);
-      return response.data;
+    const response = await apiService.post('messages/', messageData);
+    return response.data;
   } catch (error) {
-      console.error("Ошибка при сохранении сообщения:", error);
-      throw error;
+    console.error("Ошибка при сохранении сообщения:", error.response?.data || error.message);
+    throw error;
   }
 };
 
-const getAllMessages = async()=> {
+
+const getAllMessagesApi = async()=> {
   try {
     const response = await apiService.get('messages');
     return response.data;
@@ -22,24 +23,21 @@ const getAllMessages = async()=> {
   }
 }
 
-const getMessages = async(chatId, page = 1, pageSize = 20) =>{
+const getMessagesApi = async ({ chatId, page = 1, page_size = 20 } = {}) => {
   try {
     const response = await apiService.get('messages/', {
       params: {
         chat: chatId,
-        page_size: pageSize,
-        page: page
-      }
+        page,
+        page_size,
+      },
     });
-    const sortedMessages = response.data.results.sort((a, b) => 
-      new Date(a.created_at) - new Date(b.created_at)
-    );
-    return { ...response.data, results: sortedMessages };
+    return response.data;
   } catch (error) {
     console.error(`Error fetching messages for chat ID ${chatId}:`, error.response?.data || error.message);
-    return { results: [] };
+    throw error;
   }
-}
+};
 
 
-export { getAllMessages, saveMessage, getMessages };
+export { getAllMessagesApi, saveMessageApi, getMessagesApi };

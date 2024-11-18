@@ -1,14 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
-import { loginUser, registerUser } from '../../../apiService/auth/auth';
+import { registerUserProcess, loginUserProcess } from '../../../service/authService';
 import { ROUTES } from '../../../routes';
 const AuthPage = ({ isRegistering }) => {
   const navigate = useNavigate();
 
   const handleLogin = async (credentials) => {
     try {
-      await loginUser(credentials);
+      await loginUserProcess(credentials);
       navigate(ROUTES.ROOT);
     } catch (error) {
       alert('Ошибка при авторизации. Ошибка логина или пароля.');
@@ -17,7 +17,7 @@ const AuthPage = ({ isRegistering }) => {
 
   const handleRegister = async (formData) => {
     try {
-      await registerUser(formData);
+      await registerUserProcess(formData);
       alert('Регистрация успешна! Войдите в систему.');
       navigate(ROUTES.LOGIN);
     } catch (error) {
