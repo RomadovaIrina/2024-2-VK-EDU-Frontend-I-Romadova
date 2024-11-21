@@ -33,7 +33,7 @@ const refreshToken = async(refresh) =>{
 
   if (!refresh) throw new Error('Refresh token not found');
   try {
-    const response = await apiService.post('auth/refresh/', { refresh });
+    const response = await apiService.post('refresh/', { refresh });
     return response.data;
   } catch (error) {
     console.error('Token refresh error:', error);
@@ -41,19 +41,5 @@ const refreshToken = async(refresh) =>{
   }
 }
 
-const refreshAccessToken = async () => {
-  try {
-      const response = await apiService.post('/auth/refresh/', {
-          refresh_token: getRefreshToken(), 
-      });
-      const { access_token, refresh_token } = response.data;
-      setTokens(access_token, refresh_token);
-      return access_token;
-  } catch (error) {
-      console.error("Ошибка обновления токена:", error.response?.data || error.message);
-      return null;
-  }
-};
 
-
-export { loginUser, refreshToken, registerUser, refreshAccessToken };
+export { loginUser, refreshToken, registerUser};

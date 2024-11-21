@@ -7,8 +7,9 @@ import ChatPage from './components/pages/ChatPage/ChatPage';
 import ProfilePage from './components/pages/ProfilePage/ProfilePage';
 import AuthGuard from './components/AuthGuard';
 import { ROUTES } from './routes';
-import AuthPage from './components/pages/AuthPage/AuthPage';
 import { ChatWrapper } from './ChatContext';
+import LoginPage from './components/pages/AuthPage/LoginPage';
+import RegisterPage from './components/pages/AuthPage/RegisterPage';
 
 
 function App() {
@@ -22,12 +23,12 @@ function App() {
           <Route
             path={ROUTES.LOGIN}
             element={
-              <AuthPage isRegistering={false} />}
+              <LoginPage isRegistering={false} />}
           />
           <Route
             path={ROUTES.REGISTER}
             element={
-              <AuthPage isRegistering={true} />}
+              <RegisterPage isRegistering={true} />}
           />
           <Route
             path={ROUTES.ROOT}

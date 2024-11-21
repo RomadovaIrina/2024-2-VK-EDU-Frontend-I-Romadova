@@ -1,9 +1,9 @@
-import { setTokens, getAccessToken, getRefreshToken, removeTokens, refreshTokenApi} from "../apiService/tokens/tokenManager.js";
+import { setTokens, getAccessToken, getRefreshToken, removeTokens} from "../apiService/tokens/tokenManager.js";
+import { refreshToken } from "../apiService/auth/auth.js";
 
 
 
 const refreshOnRequest = async () => {
-    const naviage = useNavigate();
   const accessToken = getAccessToken();
   const refreshToken = getRefreshToken();
 
@@ -17,7 +17,7 @@ const refreshOnRequest = async () => {
   }
 
   try {
-    const { access, refresh } = await refreshTokenApi(refreshToken);
+    const { access, refresh } = await refreshToken(refreshToken);
     setTokens({ accessToken: access, refreshToken: refresh });
     return access;
   } catch (error) {
@@ -32,6 +32,10 @@ const checkOnLogin = async () => {
     throw new Error('User is not logged in.');
   }
   return accessToken;
+};
+
+export const logOutUser = async () => {
+  localStorage.removeItem("accessToken"); 
 };
 
 export { refreshOnRequest, checkOnLogin };

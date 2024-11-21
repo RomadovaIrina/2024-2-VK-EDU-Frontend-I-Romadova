@@ -1,7 +1,6 @@
 import axios from "axios";
 import { getAccessToken } from "./tokens/tokenManager";
 import { refreshToken } from "./auth/auth";
-import { refreshAccessToken } from "./auth/auth";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -27,7 +26,7 @@ class ApiService {
             (response) => response, 
             async (error) => {
                 if (error.response?.status === 401) {
-                    const newAccessToken = await refreshAccessToken(); 
+                    const newAccessToken = await refreshToken(); 
                     if (newAccessToken) {
                         this.setAccessToken(newAccessToken); 
                         error.config.headers.Authorization = `Bearer ${newAccessToken}`;

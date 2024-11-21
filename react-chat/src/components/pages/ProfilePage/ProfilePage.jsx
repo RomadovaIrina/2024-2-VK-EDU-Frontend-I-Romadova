@@ -13,6 +13,8 @@ import { getCurrentUser, updateUser } from "../../../service/usersService.js";
 import EditInput from "../../EditInput/EditInput.jsx";
 import { ROUTES } from "../../../routes.js";
 
+import { logOutUser } from "../../../service/tokensService.js";
+
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -64,6 +66,15 @@ const ProfilePage = () => {
   const headerName = isEditing ? "Edit the profile" : user?.first_name;
 
   const handleNavigate = () => navigate(ROUTES.ROOT);
+
+  const handleLogOut = async()=>{
+    try {
+      await logOutUser();
+      navigate(ROUTES.LOGIN);
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
+  }
 
   return (
     <div>
@@ -132,6 +143,9 @@ const ProfilePage = () => {
           />
 
         </div>
+        <button onClick={handleLogOut}>
+            Log Out
+          </button>
       </main>
     </div>
   );

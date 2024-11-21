@@ -6,7 +6,6 @@ const ChatListHooks = () => {
     const [page, setPage] = useState(1);
     const [pageSize] = useState(10);
     const [search, setSearch] = useState("");
-    const pollingRef = useRef(null);
 
     
 
@@ -28,22 +27,22 @@ const ChatListHooks = () => {
         loadChats(search, pageSize, page);
       }, [page, search]);
     
-      const beginPoll = async () => {
-          await loadChats();
-        pollingRef.current = setTimeout(beginPoll, 1000);
-      };
-      
-      const endPoll = () => {
-        if (pollingRef.current) {
-          clearTimeout(pollingRef.current);
-          pollingRef.current = null;
-        }
-      };
       
       useEffect(() => {
+        let timer = null;
+        const beginPoll = async() =>{
+            await loadChats(search, pageSize, page);
+            timer = setTimeout(beginPoll, 10000);
+        };
+
         beginPoll();
-        return endPoll;
-      }, []);
+
+        return () => {
+          if(timer){
+            clearTimeout(timer);
+          }
+        }
+      }, [search, pageSize, page]);
 
       return {
         chats,

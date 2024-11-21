@@ -17,62 +17,13 @@ const ChatList = () => {
   const { chats, setChats, setSearch, page, setPage } = ChatListHooks();
   const [isModalOpened, setIsModalOpened] = useState(false);
   const [newChatTitle, setNewChatTitle] = useState("");
-  const [users, setUsers] = useState([]);
-  const [userSearch, setUserSearch] = useState('');
-  const [selected, setSelected] = useState(false);
-  const [isLoadingUsers, setIsLoadingUsers] = useState(false);
 
 
   const toggleModal = () => {
-    setIsModalOpened(!isModalOpened);
-    setUserSearch('');
-    setSelected(null);
+    setIsModalOpened((prev) => !prev);
   };
   const navigate = useNavigate();
 
-  const handleAddChat = async () => {
-    try {
-      if (!selected) {
-        alert("Пользователь не найден!");
-        return;
-      }
-      const newChatData = {
-        members: [selected],
-        is_private: true,
-        title: newChatTitle,
-      };
-      const createdChat = await saveChat(newChatData);
-      if (createdChat) {
-        setChats((prevChats) => [createdChat, ...prevChats]);
-      } else {
-        alert("Не удалось создать чат");
-      }
-      toggleModal();
-    } catch (error) {
-      alert("Не удалось создать чат");
-    }
-  };
-
-  
-
-
-  const handleUserSearch = async () => {
-    setIsLoadingUsers(true);
-    try {
-      const userinfo = await getUsers({ search: userSearch, page: 1, page_size: 20 });
-      setUsers(userinfo?.results || []);
-    } catch (error) {
-      console.error('Error fetching ursers:', error);
-    } finally {
-      setIsLoadingUsers(false);
-    }
-  };
-
-  useEffect(() => {
-    if (isModalOpened) {
-      handleUserSearch();
-    }
-  }, [userSearch, isModalOpened]);
 
 
   const handleMenuClick = () => {
@@ -110,19 +61,13 @@ const ChatList = () => {
           </button>
         </div>
       </div>
-      <RenderModal
-      isOpen={isModalOpened}
-      onClose={toggleModal}
-      newChatTitle={newChatTitle}
-      setNewChatTitle={setNewChatTitle}
-      userSearch={userSearch}
-      setUserSearch={setUserSearch}
-      users={users}
-      selected={selected}
-      setSelected={setSelected}
-      isLoadingUsers={isLoadingUsers}
-      handleAddChat={handleAddChat}
-    />
+      {isModalOpened && (
+  <RenderModal
+    isOpen={isModalOpened}
+    onClose={toggleModal}
+    onChatCreated={(newChat) => setChats((prev) => [newChat, ...prev])}
+  />
+)}
     </main>
   );
 };

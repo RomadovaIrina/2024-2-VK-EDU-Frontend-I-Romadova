@@ -12,7 +12,7 @@
     transition: background-color 0.3s, transform 0.3s;
     width: 90%;
     margin-left: 2%;
-    height: 9vh;
+    height: 10vh;
 
     &:hover{
         background-color: rgb(173, 151, 209);
@@ -31,6 +31,8 @@
 }
 
 .chatComponents {
+    padding-top: 7px;
+    padding-bottom: 5px;
     display: flex;
     flex-direction: column;
     justify-content: center;

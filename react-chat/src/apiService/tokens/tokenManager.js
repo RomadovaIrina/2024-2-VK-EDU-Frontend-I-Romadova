@@ -13,14 +13,5 @@ const removeTokens = () => {
     localStorage.removeItem('refreshToken');
 }
 
-const refreshTokenApi = async (refreshToken) => {
-    try {
-      const response = await apiService.post('auth/refresh/', { refresh: refreshToken });
-      return response.data;
-    } catch (error) {
-      console.error('Error refreshing token:', error);
-      throw error;
-    }
-  };
 
-  export { setTokens, getAccessToken, getRefreshToken, removeTokens, refreshTokenApi };
+  export { setTokens, getAccessToken, getRefreshToken, removeTokens};

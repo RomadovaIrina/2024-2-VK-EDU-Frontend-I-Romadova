@@ -44,33 +44,31 @@ const ChatPage = () => {
       console.error("Error fetching messages:", error);
     }
   };
-
-  const beginPoll = () => {
-    pollingRef.current = setInterval(()=>{
-      fetchMessages();
-    }, 1000);
-  }
-
-
-  const endPoll = () => {
-    if (pollingRef.current){
-      clearInterval(pollingRef.current);
-    }
-  }
-
-
-  useEffect(()=>{
-    if(chatId){
-      fetchMessages();
+  useEffect(() => {
+    let timer = null;
+  
+    const beginPoll = async () => {
+      try {
+        await fetchMessages();
+      } catch (error) {
+        console.error(error);
+      }
+      timer = setTimeout(beginPoll, 1000); 
+    };
+  
+    if (chatId) {
       beginPoll();
     }
-
+  
     return () => {
-      endPoll();
+      if (timer) {
+        clearTimeout(timer);
+      }
     };
   }, [chatId]);
+  
 
-  useEffect(() => {
+useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
     }
