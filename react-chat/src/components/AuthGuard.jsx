@@ -1,40 +1,39 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { refreshToken } from '../apiService/auth/auth';
+import { checkOnLogin } from '../service/tokensService';
+import { ROUTES } from '../routes';
 
 const AuthGuard = ({ children }) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [authStatus, setAuthStatus] = useState('loading');
   const navigate = useNavigate();
 
   useEffect(() => {
     const checkAuthStatus = async () => {
-      const refToken = localStorage.getItem('refreshToken');
-      if (refToken) {
-        try {
-          await refreshToken();
-          setIsLoggedIn(true);
-        } catch (error) {
-          console.error('Ошибка обновления токена:', error);
-          localStorage.removeItem('refreshToken'); 
-          setIsLoggedIn(false);
-          navigate('/auth'); 
+      try {
+        const isLoggedIn = await checkOnLogin();
+        if (isLoggedIn) {
+          setAuthStatus('success');
+        } else {
+          throw new Error('Unauthorized');
+          navigate(ROUTES.LOGIN); 
         }
-      } else {
-        setIsLoggedIn(false);
-        navigate('/auth');
-      }
-      setIsLoading(false);
+      } catch (error) {
+        console.error('Ошибка авторизации:', error);
+        setAuthStatus('error');
+        navigate(ROUTES.LOGIN); 
+      } 
     };
 
     checkAuthStatus();
   }, [navigate]);
 
-  if (isLoading) {
+  if (authStatus === 'loading') {
     return <div>Загрузка...</div>;
   }
-
-  return isLoggedIn ? children : null;
+  else if (authStatus === 'error') {
+    return null;
+  }
+  return children;
 };
 
 export default AuthGuard;

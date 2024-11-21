@@ -3,28 +3,27 @@ import styles from './ChatPage.module.scss';
 import MakeMessage from "../../MakeMessage";
 import SendIcon from '@mui/icons-material/Send';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { getMessages, saveMessage } from "../../../apiService/messages/messages.js"
-import { getUser, getCurrentUser } from "../../../apiService/users/users.js";
+import { getMessages, saveMessage } from "../../../service/messagesService.js";
 import HeadBar from "../../HeadBar/HeadBar.jsx";
 import { useParams, useNavigate } from 'react-router-dom';
 import DEFAULT_AVATAR from '../../../../public/temp.png';
-import { getChats, getChatById } from "../../../apiService/chats/chats.js";
 import ModalWindow from "../../ModalWindow/ModalWindow.jsx";
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import MicIcon from '@mui/icons-material/Mic';
 import StopIcon from '@mui/icons-material/Stop';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 
+import { ROUTES } from "../../../routes.js";
+import { useChatContext } from "../../../ChatContext.jsx";
 
 const ChatPage = () => {
   const { chatId } = useParams();
   const [messages, setMessages] = useState([]);
+  const { chat, user, loggedUser } = useChatContext(); 
   const [inputValue, setInputValue] = useState('');
   const inputPalce = useRef(null);
   const [lastMessageId, setLastMessageId] = useState(null);
-  const [user, setUser] = useState(null);
   const [looggedUser, setLoggedUser] = useState(null);
-  const [chat, setChat] = useState(null);
   const navigate = useNavigate();
 
   const [filesUpload, setFilesUpload] = useState([]);
@@ -35,6 +34,7 @@ const ChatPage = () => {
   const [isNotified, setIsNotified] = useState(false);
 
 
+  const pollingRef = useRef(null);
   const messagesEndRef = useRef(null);
   const notificationSound = useRef(new Audio(''));
 
@@ -91,46 +91,52 @@ const ChatPage = () => {
   }, [messages]);
 
 
-  useEffect(() => {
-    const loadChatData = async () => {
-      const foundChat = await getChatById(chatId);
-      const loggedUser = await getCurrentUser();
-      setLoggedUser(loggedUser);
-      setChat(foundChat);
-      if (foundChat) {
-        // ищем наших собеседников
-        const otherUser = foundChat.members.find(
-          (member) => member.username !== loggedUser.username
-        );
 
-        if (otherUser) {
-          const foundUser = await getUser(otherUser.id);
-          setUser(foundUser);
+  const fetchMessages = async () => {
+    try {
+      const response = await getMessages(chatId);
+      const data = response.results;
+      if (Array.isArray(data)) {
+        const isNewMessage = 
+          data.length > messages.length || 
+          (data.length > 0 && data[data.length - 1].id !== lastMessageId);
+  
+        if (isNewMessage) {
+          setMessages(data);
+          setLastMessageId(data[data.length - 1].id);
         }
       } else {
-        navigate('/');
+        setMessages([]);
+        console.error("Unexpected data format:", data);
       }
-    };
-    loadChatData();
-  }, [chatId, navigate]);
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+    }
+  };
 
-  useEffect(() => {
-    const fetchMessages = async () => {
-      try {
-        const response = await getMessages(chatId);
-        const data = response.results;
-        if (Array.isArray(data)) {
-          setMessages(data);
-        } else {
-          setMessages([]);
-          console.error("Unexpected data format:", data);
-        }
-      } catch (error) {
-        console.error("Error fetching messages:", error);
-      }
-    };
+  const beginPoll = () => {
+    pollingRef.current = setInterval(()=>{
+      fetchMessages();
+    }, 1000);
+  }
 
-    fetchMessages();
+
+  const endPoll = () => {
+    if (pollingRef.current){
+      clearInterval(pollingRef.current);
+    }
+  }
+
+
+  useEffect(()=>{
+    if(chatId){
+      fetchMessages();
+      beginPoll();
+    }
+
+    return () => {
+      endPoll();
+    };
   }, [chatId]);
 
   useEffect(() => {
@@ -254,7 +260,7 @@ const ChatPage = () => {
   const handleInputChange = (e) => setInputValue(e.target.value);
   const userPic = chat?.avatar ?? DEFAULT_AVATAR
   const chatUserName = chat?.name ?? 'Chat'
-  const handleNavigate = () => navigate('/');
+  const handleNavigate = () => navigate(ROUTES.ROOT);
 
   return (
     <div className={styles.chatContent}

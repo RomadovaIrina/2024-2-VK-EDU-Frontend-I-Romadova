@@ -1,86 +1,33 @@
 import { useState } from 'react';
-import { HashRouter as Router, Route, Routes, Navigate, useNavigate } from 'react-router-dom';
-
+import { HashRouter as Router, Route, Routes, Navigate, useParams } from 'react-router-dom';
+import { createContext, useContext } from 'react';
 import styles from './App.module.scss';
 import ChatList from './components/pages/ChatList/ChatList';
 import ChatPage from './components/pages/ChatPage/ChatPage';
 import ProfilePage from './components/pages/ProfilePage/ProfilePage';
 import AuthGuard from './components/AuthGuard';
+import { ROUTES } from './routes';
+import AuthPage from './components/pages/AuthPage/AuthPage';
+import { ChatWrapper } from './ChatContext';
 
-import TempLogin from './components/TempLogin';
-import TempRegister from './components/TempRegister';
-import { loginUser, registerUser } from './apiService/auth/auth';
-
-const ROUTES = {
-  ROOT: "/",
-  CHAT: "/chat/:chatId",
-  PROFILE: "/profile",
-  AUTH: "/auth",
-};
-
-const TempAuth = ({ isRegistering, onRegister, toggleRegister }) => {
-  const navigate = useNavigate();
-  const handleLogin = async (credentials) => {
-    try {
-      await loginUser(credentials);
-      navigate(ROUTES.ROOT);
-    } catch (error) {
-      alert("Ошибка при авторизации");
-    }
-  };
-  return (
-  <div>
-    {isRegistering ? (
-      <TempRegister onRegister={onRegister} />
-    ) : (
-      <TempLogin onLogin={handleLogin} />
-    )}
-    <button onClick={toggleRegister}>
-      {isRegistering ? 'Уже есть аккаунт? Войти' : 'Нет аккаунта? Зарегистрироваться'}
-    </button>
-  </div>
-  )
-};
 
 function App() {
   const [isRegistering, setIsRegistering] = useState(false);
 
-
-  const handleLogin = async (credentials, navigate) => {
-    try {
-      await loginUser(credentials);
-      navigate(ROUTES.ROOT);
-    } catch (error) {
-      alert("Ошибка при авторизации");
-    }
-  };
-
-  const handleRegister = async (formData) => {
-    try {
-      await registerUser(formData);
-      setIsRegistering(false);
-      alert("Регистрация успешна. Пожалуйста, войдите.");
-    } catch (error) {
-      alert("Ошибка при регистрации");
-    }
-  };
-
-  const toggleRegister = () => setIsRegistering(!isRegistering);
 
   return (
     <Router>
       <div className={styles.content}>
         <Routes>
           <Route
-            path={ROUTES.AUTH}
+            path={ROUTES.LOGIN}
             element={
-              <TempAuth
-                isRegistering={isRegistering}
-                onLogin={handleLogin}
-                onRegister={handleRegister}
-                toggleRegister={toggleRegister}
-              />
-            }
+              <AuthPage isRegistering={false} />}
+          />
+          <Route
+            path={ROUTES.REGISTER}
+            element={
+              <AuthPage isRegistering={true} />}
           />
           <Route
             path={ROUTES.ROOT}
@@ -98,15 +45,18 @@ function App() {
               </AuthGuard>
             }
           />
+
           <Route
             path={ROUTES.CHAT}
             element={
               <AuthGuard>
+                <ChatWrapper>
                 <ChatPage />
+                </ChatWrapper>
               </AuthGuard>
             }
           />
-          <Route path="*" element={<Navigate to={ROUTES.AUTH} />} />
+          <Route path="*" element={<Navigate to={ROUTES.LOGIN} />} />
         </Routes>
       </div>
     </Router>

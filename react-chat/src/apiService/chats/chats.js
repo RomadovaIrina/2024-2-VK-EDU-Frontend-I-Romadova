@@ -1,50 +1,39 @@
 import apiService from "../apiService";
-import { getAuthHeaders } from "../auth/auth";
 
-const getChats = async (search = '', pageNum = 1, pageSize = 10) => {
-  const headers = getAuthHeaders();
+const getChatsApi = async ({ search = '', page = 1, page_size = 10 } = {}) => {
   try {
     const response = await apiService.get('/chats/', {
-      headers,
       params: {
         search,
-        page: pageNum,
-        page_size: pageSize,
+        page,
+        page_size,
       },
     });
     return response.data; 
   } catch (error) {
     console.error("Failed to load chats:", error.response?.data || error.message);
-    return null; 
+    throw error; 
   }
 };
 
-
-const saveChat = async(chatData, config) => {
+const saveChatApi = async (chatData) => {
   try {
-    const response = await apiService.post('chats/', chatData, config);
+    const response = await apiService.post('chats/', chatData);
     return response.data;
   } catch (error) {
     console.error("Ошибка при создании чата:", error.response?.data || error.message);
-    alert("Не удалось создать чат");
-    return null;
+    throw error; 
   }
-}
-const  getChatById = async(chatId)=> {
-  console.log("Fetching chat with ID:", chatId); 
+};
+
+const getChatByIdApi = async (chatId) => {
   try {
     const response = await apiService.get(`chat/${chatId}`);
     return response.data;
   } catch (error) {
-    if (error.response && error.response.status === 404) {
-      console.error(`Chat with ID ${chatId} not found.`);
-    } else {
-      console.error(`Error fetching chat with ID ${chatId}:`, error);
-    }
-    return null;
+    console.error(`Error fetching chat with ID ${chatId}:`, error.response?.data || error.message);
+    throw error; 
   }
-}
+};
 
-
-
-export {getChatById, getChats, saveChat};
+export { getChatsApi, saveChatApi, getChatByIdApi };

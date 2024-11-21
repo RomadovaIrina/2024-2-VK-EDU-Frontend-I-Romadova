@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const TempRegister = ({ onRegister }) => {
+const RegisterForm = ({ onRegister }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [firstName, setFirstName] = useState('');
@@ -18,11 +18,12 @@ const TempRegister = ({ onRegister }) => {
         bio,
         avatar,
       };
-      console.log('Отправляемые данные:', formData);
+
 
       onRegister(formData);
     };
   
+    
     return (
       <form onSubmit={handleSubmit}>
         <h2>Регистрация</h2>
@@ -64,4 +65,4 @@ const TempRegister = ({ onRegister }) => {
     );
   };
 
-export default TempRegister ;
+export default RegisterForm ;
