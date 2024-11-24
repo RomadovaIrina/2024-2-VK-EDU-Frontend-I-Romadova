@@ -1,0 +1,40 @@
+.notification {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #ffffff;
+    color: #333;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 10px 15px;
+    max-width: 100px;
+    font-family: Arial, sans-serif;
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+  
+    &.hidden {
+      opacity: 0;
+      transform: translateY(20px);
+      pointer-events: none;
+    }
+
+    &.hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+      }
+  }
+  
+  .notification img {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover;
+  }
+  
+  .notification span {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  
