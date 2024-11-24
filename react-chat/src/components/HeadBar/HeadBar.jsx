@@ -1,8 +1,6 @@
 import React from 'react';
 import styles from "./HeadBar.module.scss";
-
-const HeadBar = ({ leftPlace, centerPlace, rightPlace, userPic, userName }) => {
-
+const HeadBar = ({ leftPlace, centerPlace, rightPlace }) => {
     return (
         <header className={styles.topBar}>
             <div className={styles.leftPlace}>{leftPlace}</div>

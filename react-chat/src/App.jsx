@@ -1,39 +1,65 @@
-import { useState, useEffect } from 'react';
-import {HashRouter as Router, Link, Route, Routes} from 'react-router-dom'
-
+import { useState } from 'react';
+import { HashRouter as Router, Route, Routes, Navigate, useParams } from 'react-router-dom';
+import { createContext, useContext } from 'react';
 import styles from './App.module.scss';
-
 import ChatList from './components/pages/ChatList/ChatList';
 import ChatPage from './components/pages/ChatPage/ChatPage';
 import ProfilePage from './components/pages/ProfilePage/ProfilePage';
-
-import { getByID, USERS } from './mockUsers.js';
-import { initUsers } from './api/users/users.js';
-
-
-const ROUTES = {
-  ROOT:"/",
-  CHAT:"/chat/:chatId",
-  PROFILE:"/profile/:userId"
-}
+import AuthGuard from './components/AuthGuard';
+import { ROUTES } from './routes';
+import { ChatWrapper } from './ChatContext';
+import LoginPage from './components/pages/AuthPage/LoginPage';
+import RegisterPage from './components/pages/AuthPage/RegisterPage';
 
 
 function App() {
-  useEffect(() => {
-    initUsers(USERS);
-  }, []);
-
+  const [isRegistering, setIsRegistering] = useState(false);
 
 
   return (
     <Router>
-    <div className={styles.constent}>
-      <Routes>
-          <Route path={ROUTES.ROOT} element={<ChatList />} />
-          <Route path={ROUTES.CHAT} element={<ChatPage />} />
-          <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
-      </Routes>
-    </div>
+      <div className={styles.content}>
+        <Routes>
+          <Route
+            path={ROUTES.LOGIN}
+            element={
+              <LoginPage isRegistering={false} />}
+          />
+          <Route
+            path={ROUTES.REGISTER}
+            element={
+              <RegisterPage isRegistering={true} />}
+          />
+          <Route
+            path={ROUTES.ROOT}
+            element={
+              <AuthGuard>
+                <ChatList />
+              </AuthGuard>
+            }
+          />
+          <Route
+            path={ROUTES.PROFILE}
+            element={
+              <AuthGuard>
+                <ProfilePage />
+              </AuthGuard>
+            }
+          />
+
+          <Route
+            path={ROUTES.CHAT}
+            element={
+              <AuthGuard>
+                <ChatWrapper>
+                <ChatPage />
+                </ChatWrapper>
+              </AuthGuard>
+            }
+          />
+          <Route path="*" element={<Navigate to={ROUTES.LOGIN} />} />
+        </Routes>
+      </div>
     </Router>
   );
 }

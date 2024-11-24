@@ -3,99 +3,135 @@ import styles from './ChatPage.module.scss';
 import MakeMessage from "../../MakeMessage";
 import SendIcon from '@mui/icons-material/Send';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { getMessages, saveMessage } from "../../../api/messages/messages.js"
-import { getByID } from "../../../mockUsers.js"
-
+import { getMessages, saveMessage } from "../../../service/messagesService.js";
 import HeadBar from "../../HeadBar/HeadBar.jsx";
 import { useParams, useNavigate } from 'react-router-dom';
 import DEFAULT_AVATAR from '../../../../public/temp.png';
-import { getChats, getChatById } from "../../../api/chats/chats.js";
+import { ROUTES } from "../../../routes.js";
+import { useChatContext } from "../../../ChatContext.jsx";
 
 const ChatPage = () => {
-  const { chatId} = useParams();
+  const { chatId } = useParams();
   const [messages, setMessages] = useState([]);
+  const { chat, user, loggedUser } = useChatContext(); 
   const [inputValue, setInputValue] = useState('');
   const inputPalce = useRef(null);
   const [lastMessageId, setLastMessageId] = useState(null);
-  const [user, setUser] = useState(null);
+  const [looggedUser, setLoggedUser] = useState(null);
   const navigate = useNavigate();
-
+  const pollingRef = useRef(null);
   const messagesEndRef = useRef(null);
 
-  useEffect(() => {
-    const foundChat = getChatById(chatId);
-    if (foundChat) {
-      const foundUser = getByID(foundChat.userId);
-      setUser(foundUser);
-    }
-    else {
-      navigate('/');
-    }
-  }, [chatId, navigate]);
 
+  const fetchMessages = async () => {
+    try {
+      const response = await getMessages(chatId);
+      const data = response.results;
+      if (Array.isArray(data)) {
+        const isNewMessage = 
+          data.length > messages.length || 
+          (data.length > 0 && data[data.length - 1].id !== lastMessageId);
+  
+        if (isNewMessage) {
+          setMessages(data);
+          setLastMessageId(data[data.length - 1].id);
+        }
+      } else {
+        setMessages([]);
+        console.error("Unexpected data format:", data);
+      }
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+    }
+  };
   useEffect(() => {
-    const loadedMessages = getMessages(chatId); 
-    setMessages(loadedMessages);
+    let timer = null;
+  
+    const beginPoll = async () => {
+      try {
+        await fetchMessages();
+      } catch (error) {
+        console.error(error);
+      }
+      timer = setTimeout(beginPoll, 1000); 
+    };
+  
+    if (chatId) {
+      beginPoll();
+    }
+  
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
   }, [chatId]);
+  
 
-  useEffect(() => {
+useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
     }
   }, [messages]);
 
-
-  const makeNewMessage = (content) => {
-    const messageTime = new Date().toLocaleString();
-    const messageData = {
-      message_id: Date.now(),
-      chatId: chatId,
-      sender: user?.name ?? 'Вы',
-      text: content,
-      time: messageTime
-    };
-    return messageData;
-  }
-
-  const handleSubmit = (event) => {
+const makeNewMessage = (content) => {
+          return {
+            chat: chatId,
+            text: content
+          };
+        }
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const messageText = inputValue.trim();
-    if (!messageText) {
-      return;
-    }
+    if (!messageText) return;
+
     const newMessage = makeNewMessage(messageText);
-    saveMessage(newMessage);
-    setMessages(allMessages => [...allMessages, newMessage]);
-    setInputValue('');
-    setLastMessageId(newMessage.message_id);
-    inputPalce.current?.focus();
+
+    try {
+      const savedMessage = await saveMessage(newMessage);
+      if (savedMessage) {
+        savedMessage.sender = looggedUser;
+        setMessages(allMessages => [...allMessages, savedMessage]);
+        setLastMessageId(savedMessage.id);
+        setInputValue('');
+        inputPalce.current?.focus();
+      }
+    } catch (error) {
+      console.error("Ошибка при отправке сообщения:", error);
+    }
   };
 
+
   const handleInputChange = (e) => setInputValue(e.target.value);
-  const userPic = user?.avatar || DEFAULT_AVATAR;
-  const chatUserName = user?.name ?? 'Unknown'
-  const handleNavigate = () => navigate('/');  
+  const userPic = chat?.avatar ?? DEFAULT_AVATAR
+  const chatUserName = chat?.name ?? 'Chat'
+  const handleNavigate = () => navigate(ROUTES.ROOT);
 
   return (
     <div className={styles.chatContent}>
       <HeadBar
-        userPic={user?.avatar ?? null}
-        userName={user?.name ?? 'Unknown'}
+        userPic={userPic} 
+        userName={chatUserName}          
         leftPlace={
-          <ArrowBackIcon className={styles.arrow} sx={{ fontSize: 40 }} onClick= {handleNavigate} />
+          <ArrowBackIcon className={styles.arrow} sx={{ fontSize: 40 }} onClick={handleNavigate} />
         }
         centerPlace={
           <div className={styles.userInfo}>
-            <img src={userPic} className={styles.chatAvatar} alt="avatar" />
-            <span className={styles.messenger}>{chatUserName}</span>
-          </div>}
+            <img src={chat?.avatar ?? DEFAULT_AVATAR} className={styles.chatAvatar} alt="avatar" />
+            <span className={styles.messenger}>{chat?.title ?? 'Chat'}</span>
+          </div>
+        }
       />
       <main>
-        <ul className={styles.messagePos} ref={messagesEndRef}>
-          {messages.map(({ message_id, ...props }) => (
-            <MakeMessage key={message_id}
-              isLastMessage={message_id === lastMessageId}
-              {...props} />
+      <ul className={styles.messagePos} ref={messagesEndRef}>
+          {Array.isArray(messages) && messages.map((message) => (
+            <MakeMessage
+              key={message.message_id}
+              sender={message.sender?.username ?? 'Unknown'}
+              text={message.text}
+              time={message.time}
+              isLastMessage={message.id === lastMessageId}
+            />
           ))}
         </ul>
       </main>
